@@ -9,39 +9,40 @@ from datetime import datetime
 
 client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
 #updated
-# def create_message_with_ai(db: Session, message: MessageCreate):
-#     try:
-#         # Step 1: Pass user message to OpenAI API (NEW SYNTAX)
-#         response = client.chat.completions.create(
-#             model="gpt-4o-mini",  # Use the GPT-4o mini model
-#             messages=[{"role": "user", "content": message.request}]
-#         )
+def create_message_with_ai(db: Session, message: MessageCreate):
+    try:
+        # Step 1: Pass user message to OpenAI API (NEW SYNTAX)
+        # response = client.chat.completions.create(
+        #     model="gpt-4o-mini",  # Use the GPT-4o mini model
+        #     messages=[{"role": "user", "content": message.request}]
+        # )
         
-#         # Debugging: Print full response
-#         print(response)
+        # # Debugging: Print full response
+        # print(response)
 
-#         # Extract AI response
-#         ai_response = response.choices[0].message.content  
-#         print(ai_response)  # Debugging: Print extracted response
+        # # Extract AI response
+        # ai_response = response.choices[0].message.content  
+        ai_response = "I do not have OpenAi key"
+        print(ai_response)  # Debugging: Print extracted response
 
-#         # Step 2: Store AI response in DB
-#         user_message = Message(
-#             chat_id=message.chat_id,
-#             request=message.request,
-#             response=ai_response,
-#             created_at=datetime.utcnow(),
-#             updated_at=datetime.utcnow(),
-#         )
-#         db.add(user_message)
-#         db.commit()
-#         db.refresh(user_message)
+        # Step 2: Store AI response in DB
+        user_message = Message(
+            chat_id=message.chat_id,
+            request=message.request,
+            response=ai_response,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow(),
+        )
+        db.add(user_message)
+        db.commit()
+        db.refresh(user_message)
 
-#         return {"user_message": user_message}
+        return {"user_message": user_message}
 
-#     except Exception as e:
-#         db.rollback()  # Rollback in case of failure
-#         print(f"Error: {e}")  # Debugging: Print error
-#         return {"error": str(e)}
+    except Exception as e:
+        db.rollback()  # Rollback in case of failure
+        print(f"Error: {e}")  # Debugging: Print error
+        return {"error": str(e)}
 
 #old
 # def create_message_with_ai(db: Session, message: MessageCreate):
