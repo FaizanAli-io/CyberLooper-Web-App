@@ -2,6 +2,7 @@ import enum
 from database import Base
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Enum, DateTime
+from sqlalchemy.orm import relationship
 
 
 class UserRole(enum.Enum):
@@ -18,3 +19,5 @@ class User(Base):
     role = Column(Enum(UserRole), default=UserRole.STANDARD, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    chats = relationship("Chat", back_populates="user", cascade="all, delete-orphan")
