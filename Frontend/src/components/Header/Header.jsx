@@ -48,6 +48,12 @@ export default function Header() {
                 Chat
               </Link>
             </MDBNavbarItem>
+
+            <MDBNavbarItem>
+              <Link to="/blogs" className='nav-link header-nav-buttons'>
+                Blogs
+              </Link>
+            </MDBNavbarItem>
             
             <MDBNavbarItem>
               <Link to="/FAQ" className='nav-link header-nav-buttons'>

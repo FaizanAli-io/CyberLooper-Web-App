@@ -12,7 +12,7 @@ import Signup from './components/Signup/signup.jsx'
 import Home from './components/Home/home.jsx'
 import FAQ from './components/FAQ/Faq.jsx'
 import Chat from './components/Chat/Chat.jsx'
-
+import Blogs from './components/Blogs/Blogs.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -41,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: '/Chat',
         element : <Chat/>
+      },
+      {
+        path: '/Blogs',
+        element : <Blogs/>
       }
     ]
   }
