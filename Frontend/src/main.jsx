@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import './index.css'
+
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
@@ -11,6 +11,7 @@ import Layout from './Layout.jsx'
 import Signup from './components/Signup/signup.jsx'
 import Home from './components/Home/home.jsx'
 import FAQ from './components/FAQ/Faq.jsx'
+import Chat from './components/Chat/Chat.jsx'
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,11 @@ const router = createBrowserRouter([
       {
         path: 'FAQ',
         element: <FAQ />
+      }
+      ,
+      {
+        path: '/Chat',
+        element : <Chat/>
       }
     ]
   }
