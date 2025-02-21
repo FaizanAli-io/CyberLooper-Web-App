@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MDBContainer, MDBTable, MDBTableHead, MDBTableBody, MDBBtn, MDBInput, MDBCard, MDBCardBody, MDBTypography } from "mdb-react-ui-kit";
+import { MDBContainer, MDBCard, MDBCardBody, MDBTypography, MDBBtn, MDBInput } from "mdb-react-ui-kit";
 import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_API_ENDPOINT}/blogs`;
@@ -17,7 +17,7 @@ const Blogs = () => {
   const fetchBlogs = async () => {
     try {
       const response = await axios.get(API_URL);
-      setBlogs(response.data);
+      setBlogs(response.data.reverse());
     } catch (error) {
       console.error("Error fetching blogs", error);
     }
@@ -64,41 +64,28 @@ const Blogs = () => {
           <MDBBtn onClick={createBlog} className="mt-3">Add Blog</MDBBtn>
         </MDBCardBody>
       </MDBCard>
-      <MDBTable className="mt-4">
-        <MDBTableHead>
-          <tr>
-            <th>ID</th>
-            <th>Caption</th>
-            <th>Created At</th>
-            <th>Updated At</th>
-            <th>Actions</th>
-          </tr>
-        </MDBTableHead>
-        <MDBTableBody>
-          {blogs.map((blog) => (
-            <tr key={blog.id}>
-              <td>{blog.id}</td>
-              <td>
-                {editId === blog.id ? (
-                  <MDBInput value={editCaption} onChange={(e) => setEditCaption(e.target.value)} />
-                ) : (
-                  blog.caption
-                )}
-              </td>
-              <td>{new Date(blog.created_at).toLocaleString()}</td>
-              <td>{new Date(blog.updated_at).toLocaleString()}</td>
-              <td>
+      <div className="mt-4">
+        {blogs.map((blog, index) => (
+          <MDBCard key={blog.id} className="mb-3 p-3">
+            <MDBCardBody>
+              <MDBTypography tag="h5">Blog {index + 1}:</MDBTypography>
+              <p>{blog.caption}</p>
+              <p className="text-muted">Created at: {new Date(blog.created_at).toLocaleString()}</p>
+              {editId === blog.id ? (
+                <MDBInput value={editCaption} onChange={(e) => setEditCaption(e.target.value)} className="mb-2" />
+              ) : null}
+              <div className="d-flex justify-content-between">
                 {editId === blog.id ? (
                   <MDBBtn size="sm" onClick={() => updateBlog(blog.id)}>Save</MDBBtn>
                 ) : (
                   <MDBBtn size="sm" onClick={() => { setEditId(blog.id); setEditCaption(blog.caption); }}>Edit</MDBBtn>
                 )}
                 <MDBBtn size="sm" color="danger" onClick={() => deleteBlog(blog.id)}>Delete</MDBBtn>
-              </td>
-            </tr>
-          ))}
-        </MDBTableBody>
-      </MDBTable>
+              </div>
+            </MDBCardBody>
+          </MDBCard>
+        ))}
+      </div>
     </MDBContainer>
   );
 };
