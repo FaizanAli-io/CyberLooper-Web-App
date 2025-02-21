@@ -6,9 +6,12 @@ from messages.schemas import MessageCreate, MessageResponse
 
 router = APIRouter()
 
-@router.post("")
+@router.post("", response_model=MessageResponse)
 def create_chat_message(message: MessageCreate, db: Session = Depends(get_db)):
-    return create_message_with_ai(db, message)
+    msg = create_message_with_ai(db, message)
+    if msg is None:
+        raise HTTPException(status_code=404, detail="Could not get OpenAI response")
+    return msg
 
 # @router.post("/messages/", response_model=MessageResponse)
 # def create_new_message(message: MessageCreate, db: Session = Depends(get_db)):
