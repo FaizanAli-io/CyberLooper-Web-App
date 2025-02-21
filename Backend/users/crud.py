@@ -9,7 +9,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
-
 def create_user(db: Session, user_data: UserCreate):
     hashed_password = hash_password(user_data.password)
     user = User(email=user_data.email, password=hashed_password, role=user_data.role)
@@ -17,6 +16,14 @@ def create_user(db: Session, user_data: UserCreate):
     db.commit()
     db.refresh(user)
     return user
+
+# def create_user(db: Session, user_data: UserCreate):
+#     hashed_password = hash_password(user_data.password)
+#     user = User(email=user_data.email, password=hashed_password, role=user_data.role)
+#     db.add(user)
+#     db.commit()
+#     db.refresh(user)
+#     return user
 
 
 def get_user(db: Session, user_id: int):
