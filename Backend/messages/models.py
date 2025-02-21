@@ -7,7 +7,7 @@ class Message(Base):
     __tablename__ = "messages"
 
     id = Column(Integer, primary_key=True, index=True)
-    chat_id = Column(Integer, ForeignKey("chats.id"), nullable=False)
+    chat_id = Column(Integer, ForeignKey("chats.id"), nullable=True)
     request = Column(String, nullable=False)
     response = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)

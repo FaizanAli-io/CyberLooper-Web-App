@@ -32,6 +32,8 @@ function Login() {
         setMessage("Login successful!"); // Show success message
         alert("Login successful!")
         navigate("/Chat")
+        console.log("User id",response.data.id);
+        localStorage.setItem("user_id", response.data.id);  
       }
       
       //localStorage.setItem("token", response.data.access_token); // Store JWT token

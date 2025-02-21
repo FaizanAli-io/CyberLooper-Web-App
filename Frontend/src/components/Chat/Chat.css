@@ -49,6 +49,39 @@
   overflow: hidden;
 }
 
+
+/* Wrapper for each message pair */
+.message-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ✅ Default aligns messages left */
+  width: 100%;
+}
+
+/* Align user messages to the right */
+.user-bubble {
+  align-self: flex-end; /* ✅ Moves user messages to the right */
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border-radius: 15px;
+  max-width: 60%;
+  word-wrap: break-word;
+  text-align: right;
+}
+
+/* Align bot messages to the left */
+.bot-bubble {
+  align-self: flex-start; /* ✅ Moves bot messages to the left */
+  background-color: #f1f1f1;
+  color: black;
+  padding: 10px;
+  border-radius: 15px;
+  max-width: 60%;
+  word-wrap: break-word;
+  text-align: left;
+}
+
 /* Chat Messages */
 .chat-messages {
   flex: 1;
@@ -57,28 +90,6 @@
   display: flex;
   flex-direction: column;
   height: calc(100vh - 80px); /* Adjust height for input field */
-}
-
-/* Chat Bubbles */
-.chat-bubble {
-  max-width: 70%;
-  padding: 12px;
-  margin: 6px 0;
-  border-radius: 12px;
-  word-wrap: break-word;
-  font-size: 16px;
-}
-
-.user-bubble {
-  background-color: #3182ce;
-  color: white;
-  align-self: flex-end;
-}
-
-.bot-bubble {
-  background-color: #e2e8f0;
-  color: black;
-  align-self: flex-start;
 }
 
 /* Chat Input */

@@ -24,11 +24,9 @@ def login_user(data: dict, db: Session = Depends(get_db)):
 
     return {
         "message": "Login successful",
-        "user": {
-            "email": user.email,
-            "role": user.role
-        }
+        "id": user.id
     }
+
 @router.post("", response_model=UserResponse)
 def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.email == user.email).first()
