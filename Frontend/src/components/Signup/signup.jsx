@@ -25,7 +25,7 @@ function Signup() {
     //lastName: '',
     email: '',
     password: '',
-    role : 'Admin'
+    role : 'STANDARD'
   });
 
   // State for error message
@@ -49,6 +49,7 @@ function Signup() {
 
       if (response.status === 201 || response.status === 200) {
         // Redirect to login on successful signup
+        alert("Successful Signup")
         navigate('/login');
       }
     } catch (err) {

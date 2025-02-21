@@ -1,13 +1,35 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from database import get_db
-from users.crud import create_user, get_user, get_users, update_user, delete_user
+from users.crud import authenticate_user,create_user, get_user, get_users, update_user, delete_user
 from users.schemas import UserCreate, UserUpdate, UserResponse
 from users.models import User
 
 router = APIRouter()
 
-@router.post("/", response_model=UserResponse)
+
+@router.post("/login", status_code=status.HTTP_201_CREATED)
+def login_user(data: dict, db: Session = Depends(get_db)):
+    """Login user by checking if they exist in the database."""
+    email = data.get("email")
+    password = data.get("password")
+
+    if not email or not password:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email and password are required")
+
+    user = authenticate_user(db, email, password)
+
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
+
+    return {
+        "message": "Login successful",
+        "user": {
+            "email": user.email,
+            "role": user.role
+        }
+    }
+@router.post("", response_model=UserResponse)
 def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.email == user.email).first()
     if existing_user:
