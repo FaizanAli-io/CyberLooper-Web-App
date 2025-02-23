@@ -4,7 +4,7 @@ from blogs.schemas import BlogCreate, BlogUpdate, BlogResponse
 from datetime import datetime
 
 def create_blog(db: Session, blog_data: BlogCreate):
-    blog = Blog(caption=blog_data.caption)
+    blog = Blog(caption=blog_data.caption, title=blog_data.title)
     db.add(blog)
     db.commit()
     db.refresh(blog)
@@ -26,6 +26,9 @@ def update_blog(db: Session, blog_id: int, blog_data: BlogUpdate):
     updated = False
     if blog_data.caption is not None:
         blog.caption = blog_data.caption
+        updated = True  # Track if something changed
+    if blog_data.title is not None:
+        blog.title = blog_data.title
         updated = True  # Track if something changed
 
     if updated:  # Commit only if changes were made
