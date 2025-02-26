@@ -43,6 +43,12 @@ def login_user(data: dict, db: Session = Depends(get_db)):
         "accessToken": access_token
     }
 
+@router.get("/verify", status_code=status.HTTP_200_OK)
+def verify(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return {
+        "message": "access granted"
+    }
+
 # @router.post("/login", status_code=status.HTTP_201_CREATED)
 # def login_user(data: dict, db: Session = Depends(get_db)):
 #     """Login user by checking if they exist in the database."""
