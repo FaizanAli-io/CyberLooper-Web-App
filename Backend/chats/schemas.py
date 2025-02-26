@@ -2,7 +2,6 @@ from datetime import datetime
 from pydantic import BaseModel
 
 class ChatBase(BaseModel):
-    user_id: int
     topic: str
 
 class ChatCreate(ChatBase):

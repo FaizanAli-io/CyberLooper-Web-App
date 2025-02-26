@@ -11,17 +11,21 @@ client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
 #updated
 def create_message_with_ai(db: Session, message: MessageCreate):
     try:
+        if inappropriate(message.request):
+            ai_response="I'm sorry, I can only assist with work-related topics. Ask me something else…"
+        else:
         # Step 1: Pass user message to OpenAI API (NEW SYNTAX)
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",  # Use the GPT-4o mini model
-            messages=[{"role": "user", "content": message.request}]
-        )
-        
-        # Debugging: Print full response
-        print(response)
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",  # Use the GPT-4o mini model
+                messages=[{"role": "user", "content": message.request}]
+            )
+            
+            # Debugging: Print full response
+            print(response)
 
-        # # Extract AI response
-        ai_response = response.choices[0].message.content  
+            # # Extract AI response
+            ai_response = response.choices[0].message.content
+          
         # ai_response = "I do not have OpenAi key"
         print(ai_response)  # Debugging: Print extracted response
 
@@ -43,6 +47,18 @@ def create_message_with_ai(db: Session, message: MessageCreate):
         db.rollback()  # Rollback in case of failure
         print(f"Error: {e}")  # Debugging: Print error
         return None
+
+blacklist = [
+    'insult', 'sex', 'illegal', 'inappropriate', 'violence', 'hate', 'nigger',
+    'offensive', 'harassment', 'profanity', 'discrimination', 'drugs', 'gambling',
+    'explicit', 'porn', 'slur', 'threat', 'abuse', 'vulgar', 'obscene'
+]  # Expanded list of blacklisted words
+
+def inappropriate(user_input):
+    lower_input = user_input.lower()
+    if any(word in lower_input for word in blacklist):
+        return True
+    return False
 
 #old
 # def create_message_with_ai(db: Session, message: MessageCreate):

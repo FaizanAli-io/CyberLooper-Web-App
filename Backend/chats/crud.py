@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from chats.models import Chat
 from chats.schemas import ChatCreate, ChatUpdate
 
-def create_chat(db: Session, chat_data: ChatCreate):
-    chat = Chat(user_id=chat_data.user_id, topic=chat_data.topic)
+def create_chat(db: Session, chat_data: ChatCreate, current_user):
+    chat = Chat(user_id=current_user.id, topic=chat_data.topic)
     db.add(chat)
     db.commit()
     db.refresh(chat)

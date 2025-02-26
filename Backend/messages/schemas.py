@@ -4,7 +4,6 @@ from typing import Optional
 
 # ✅ Input Schema (Only required fields for creating a message)
 class MessageCreate(BaseModel):
-    user_id: int
     chat_id: Optional[int] = None  # ✅ Allows missing chat_id for new chats
     request: str
 
