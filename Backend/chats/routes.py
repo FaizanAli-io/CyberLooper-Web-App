@@ -50,7 +50,7 @@ def delete_existing_chat(chat_id: int, db: Session = Depends(get_db), current_us
         raise HTTPException(status_code=404, detail="Chat not found")
     return {"detail": "Chat deleted successfully"}
 
-@router.get("/user", response_model=list[ChatResponse])
+@router.get("", response_model=list[ChatResponse])
 def fetch_chats(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """Get all chats corresponding to a user ID."""
     chats = get_chats_by_user(db, current_user.id)

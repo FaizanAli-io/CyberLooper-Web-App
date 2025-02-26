@@ -3,7 +3,7 @@ import { Outlet,useLocation } from "react-router-dom";
 import Header from "./components/Header/Header";
 function Layout() {
     const location = useLocation();
-    const hideNavbar = ["/signup",'/login','/Chat'].includes(location.pathname);
+    const hideNavbar = ["/signup",'/login'].includes(location.pathname);
     
 
     return (

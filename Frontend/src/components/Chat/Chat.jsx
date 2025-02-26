@@ -19,70 +19,87 @@ const ChatPage = () => {
   const [loadingChats, setLoadingChats] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
 
-  // ✅ Get userId from local storage
-  const userId = localStorage.getItem("user_id");
+  // ✅ Get user token from local storage
+  const token = localStorage.getItem("user_token");
 
   // ✅ Fetch user chats on page load
   useEffect(() => {
     const fetchChats = async () => {
-      if (!userId) return;
-
       try {
-        const response = await axios.get(`${API_ENDPOINT}/chats/user/${userId}`);
+        console.log("🔍 Fetching chats with token:", token);
+
+        const response = await axios.get(`${API_ENDPOINT}/chats`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
         const formattedChats = response.data.map(chat => ({
           id: chat.id,
-          topic: chat.topic
+          topic: chat.topic,
         }));
+
         setChats(formattedChats);
       } catch (error) {
-        console.error("Error fetching chats:", error);
+        console.error("❌ Error fetching chats:", error);
       } finally {
         setLoadingChats(false);
       }
     };
 
     fetchChats();
-  }, [userId]);
+  }, [token]);
 
   // ✅ Fetch messages when a chat is selected
   const fetchMessages = async (chatId) => {
     setLoadingMessages(true);
-    setMessages([]);
+    setMessages([]); // Clear previous messages
     setSelectedChatId(chatId);
 
     try {
-      const response = await axios.get(`${API_ENDPOINT}/messages/chat/${chatId}`);
+      const response = await axios.get(`${API_ENDPOINT}/messages/chat/${chatId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       setMessages(response.data);
     } catch (error) {
-      console.error("Error fetching messages:", error);
+      console.error("❌ Error fetching messages:", error);
     } finally {
       setLoadingMessages(false);
     }
   };
 
-  // ✅ Send message and create a new chat if necessary
+  // ✅ Send message and display it immediately
   const sendMessage = async () => {
     if (input.trim() === "") return;
 
-    try {
-      const response = await axios.post(`${API_ENDPOINT}/messages`, {
-        user_id: userId,
-        chat_id: selectedChatId, // Send existing chat_id if available
-        request: input
-      });
+    // ✅ Instantly show the sent message in the UI
+    const newMessage = {
+      request: input,
+      response: null, // Placeholder, backend will provide the response
+    };
 
-      const newMessage = response.data;
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+    try {
+      const response = await axios.post(
+        `${API_ENDPOINT}/messages`,
+        { chat_id: selectedChatId, request: input },
+        { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
+      );
+
+      // ✅ Update the message with response once received from backend
+      setMessages((prevMessages) =>
+        prevMessages.map((msg, index) =>
+          index === prevMessages.length - 1 ? response.data : msg
+        )
+      );
 
       // ✅ If it's a new chat, update selectedChatId
       if (!selectedChatId) {
-        setSelectedChatId(newMessage.chat_id);
-        setChats([...chats, { id: newMessage.chat_id, topic: "New Chat" }]);
+        setSelectedChatId(response.data.chat_id);
+        setChats([...chats, { id: response.data.chat_id, topic: "New Chat" }]);
       }
-
-      // ✅ Update UI with new message
-      setMessages([...messages, newMessage]);
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("❌ Error sending message:", error);
     } finally {
       setInput("");
     }
@@ -118,8 +135,10 @@ const ChatPage = () => {
         <MDBCol md="9" className="chat-main">
           <div className="chat-messages">
             {messages.map((msg, index) => (
-              <div key={index}>
+              <div key={index} className="message-wrapper">
+                {/* User message aligned right */}
                 <div className="chat-bubble user-bubble">{msg.request}</div>
+                {/* Bot response aligned left */}
                 {msg.response && <div className="chat-bubble bot-bubble">{msg.response}</div>}
               </div>
             ))}
