@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
+import { signInWithGoogle } from "../firebase/firebase"; // Import Google Sign-In function
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT; // Ensure this is set correctly in .env
 
@@ -10,7 +11,7 @@ function Login() {
     email: '',
     password: ''
   });
- const navigate = useNavigate();
+  const navigate = useNavigate();
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
@@ -19,7 +20,7 @@ function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
+  // Handle form submission (Manual login)
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
 
@@ -28,21 +29,24 @@ function Login() {
         headers: { 'Content-Type': 'application/json' }
       });
       if (response.status === 201 || response.status === 200) {
-        // Redirect to login on successful signup
-        setMessage("Login successful!"); // Show success message
-        alert("Login successful!")
+        setMessage("Login successful!");
+        alert("Login successful!");
         localStorage.setItem("user_token", response.data.accessToken);
-     
-       
-        navigate("/Chat")
-      
-       
-      
+        navigate("/Chat");
       }
-      
-      //localStorage.setItem("token", response.data.access_token); // Store JWT token
     } catch (err) {
-      setError("Invalid email or password."); // Display error message
+      setError("Invalid email or password.");
+    }
+  };
+
+  // Handle Google Sign-In
+  const handleGoogleSignIn = async () => {
+    const user = await signInWithGoogle();
+    if (user) {
+      console.log("Google Logged-in User:", user);
+      alert(`Welcome, ${user.displayName}!`);
+      localStorage.setItem("user_token", user.accessToken); // Store token
+      navigate("/Chat"); // Redirect to chat page
     }
   };
 
@@ -87,6 +91,15 @@ function Login() {
               </p>
             </div>
           </form>
+
+          <div className="text-center signup">
+            <p>or sign in with:</p>
+
+            <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: '#1266f1' }} onClick={handleGoogleSignIn}>
+              <MDBIcon fab icon='google' size="sm" /> Sign in with Google
+            </MDBBtn>
+          </div>
+
         </MDBCol>
       </MDBRow>
 
@@ -99,8 +112,8 @@ function Login() {
           <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }}>
             <MDBIcon fab icon='twitter' size="md"/>
           </MDBBtn>
-          <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }}>
-            <MDBIcon fab icon='google' size="md"/>
+          <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }} onClick={handleGoogleSignIn}>
+            <MDBIcon fab icon='google' size="md"/> Sign in with Google
           </MDBBtn>
           <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }}>
             <MDBIcon fab icon='linkedin-in' size="md"/>
