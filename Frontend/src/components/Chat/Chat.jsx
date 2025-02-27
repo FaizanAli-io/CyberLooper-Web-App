@@ -105,6 +105,12 @@ const ChatPage = () => {
     }
   };
 
+  // ✅ New Chat Handler (Clears Messages & Starts New Chat)
+  const startNewChat = () => {
+    setMessages([]); // Clear chat messages
+    setSelectedChatId(null); // Reset selected chat
+  };
+
   return (
     <MDBContainer fluid className="chat-container">
       <MDBRow className="h-100">
@@ -112,18 +118,24 @@ const ChatPage = () => {
         <MDBCol md="3" className="chat-sidebar">
           <h2 className="text-white">Previous Chats</h2>
 
+          {/* ✅ New Chat Button */}
+          <MDBBtn color="primary" className="mb-3 new-chat-btn" onClick={startNewChat}>
+            + New Chat
+          </MDBBtn>
+
           {loadingChats ? (
             <p>Loading chats...</p>
           ) : chats.length === 0 ? (
             <p>No previous chats.</p>
           ) : (
             <ul className="chat-list">
-              {chats.map((chat) => (
+              {chats.map((chat,index) => (
                 <li
                   key={chat.id}
                   className={`chat-item ${selectedChatId === chat.id ? "selected-chat" : ""}`}
                   onClick={() => fetchMessages(chat.id)}
                 >
+                <span className="chat-index">{chats.length - index}.</span> 
                   {chat.topic}
                 </li>
               ))}

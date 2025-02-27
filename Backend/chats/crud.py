@@ -32,4 +32,4 @@ def delete_chat(db: Session, chat_id: int):
     return chat
 
 def get_chats_by_user(db: Session, user_id: int):
-    return db.query(Chat).filter(Chat.user_id == user_id).all()
+    return db.query(Chat).filter(Chat.user_id == user_id).order_by(Chat.created_at.desc()).all()
