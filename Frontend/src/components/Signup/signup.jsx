@@ -12,6 +12,7 @@ import {
   MDBIcon
 } from 'mdb-react-ui-kit';
 
+import { signInWithGoogle,signInWithFacebook } from "../firebase/firebase"; // Import Google Sign-In function
 import "./signup.css";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
@@ -21,11 +22,9 @@ function Signup() {
   
   // State for form inputs
   const [formData, setFormData] = useState({
-    //firstName: '',
-    //lastName: '',
     email: '',
     password: '',
-    role : 'STANDARD'
+    role: 'STANDARD'
   });
 
   // State for error message
@@ -48,15 +47,32 @@ function Signup() {
       });
 
       if (response.status === 201 || response.status === 200) {
-        // Redirect to login on successful signup
-        alert("Successful Signup")
+        alert("Successful Signup");
         navigate('/login');
       }
     } catch (err) {
-      // Handle errors
       setError(err.response?.data?.message || 'Failed to sign up. Please try again.');
     }
   };
+
+  // Handle Google Sign-In
+  const handleGoogleSignIn = async () => {
+    const user = await signInWithGoogle();
+    if (user) {
+      console.log("Google Logged-in User:", user);
+      alert(`Welcome, ${user.displayName}!`);
+      navigate('/home'); // Redirect after login
+    }
+  };
+  const handleFacebookSignIn = async () => {
+    const user = await signInWithFacebook();
+    if (user) {
+      console.log("facebook Logged-in User:", user);
+      alert(`Welcome, ${user.displayName}!`);
+      navigate('/home'); // Redirect after login
+    }
+  };
+
 
   return (
     <MDBContainer fluid className='p-4 signup-container'>
@@ -77,36 +93,7 @@ function Signup() {
         <MDBCol md='6'>
           <MDBCard className='my-5 signup'>
             <MDBCardBody className='p-5 signup'>
-
               <form onSubmit={handleSubmit}>
-                {/* <MDBRow>
-                  <MDBCol col='6'>
-                    <MDBInput
-                      wrapperClass='mb-4 signup'
-                      label='First name'
-                      id='firstName'
-                      type='text'
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </MDBCol>
-
-                  <MDBCol col='6'>
-                    <MDBInput
-                      wrapperClass='mb-4 signup'
-                      label='Last name'
-                      id='lastName'
-                      type='text'
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </MDBCol>
-                </MDBRow> */}
-
                 <MDBInput
                   wrapperClass='mb-4 signup'
                   label='Email'
@@ -145,16 +132,20 @@ function Signup() {
               <div className="text-center signup">
                 <p>or sign up with:</p>
 
+                <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }} onClick={handleGoogleSignIn}>
+                  <MDBIcon fab icon='google' size="sm" /> Sign in with Google
+                </MDBBtn>
+                <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }} onClick={handleFacebookSignIn}>
+  <MDBIcon fab icon='facebook-f' size="sm" /> Sign in with Facebook
+</MDBBtn>
+
+
                 <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }}>
                   <MDBIcon fab icon='facebook-f' size="sm" />
                 </MDBBtn>
 
                 <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }}>
                   <MDBIcon fab icon='twitter' size="sm" />
-                </MDBBtn>
-
-                <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }}>
-                  <MDBIcon fab icon='google' size="sm" />
                 </MDBBtn>
 
                 <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }}>
