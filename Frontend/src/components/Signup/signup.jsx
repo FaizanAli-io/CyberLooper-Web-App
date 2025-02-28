@@ -12,14 +12,14 @@ import {
   MDBIcon
 } from 'mdb-react-ui-kit';
 
-import { signInWithGoogle,signInWithFacebook } from "../firebase/firebase"; // Import Google Sign-In function
+import { signInWithGoogle, signInWithFacebook } from "../firebase/firebase"; // Import Google Sign-In function
 import "./signup.css";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 function Signup() {
   const navigate = useNavigate();
-  
+
   // State for form inputs
   const [formData, setFormData] = useState({
     email: '',
@@ -136,8 +136,8 @@ function Signup() {
                   <MDBIcon fab icon='google' size="sm" /> Sign in with Google
                 </MDBBtn>
                 <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }} onClick={handleFacebookSignIn}>
-  <MDBIcon fab icon='facebook-f' size="sm" /> Sign in with Facebook
-</MDBBtn>
+                  <MDBIcon fab icon='facebook-f' size="sm" /> Sign in with Facebook
+                </MDBBtn>
 
 
                 <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }}>

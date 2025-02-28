@@ -1,7 +1,7 @@
 from enum import Enum
 from datetime import datetime
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+
 
 class UserRole(str, Enum):
     ADMIN = "ADMIN"
@@ -14,14 +14,13 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: Optional[str] = None  # Optional for Firebase users
-    firebase_uid: Optional[str] = None  # Store Firebase UID if applicable
+    password: str
 
 
 class UserUpdate(BaseModel):
-    email: Optional[EmailStr] = None
-    password: Optional[str] = None
-    role: Optional[UserRole] = None
+    email: EmailStr | None = None
+    password: str | None = None
+    role: UserRole | None = None
 
 
 class UserResponse(UserBase):

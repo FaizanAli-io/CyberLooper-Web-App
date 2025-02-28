@@ -1,3 +1,4 @@
+import firebase
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 import jwt
@@ -5,37 +6,39 @@ from jwt import ExpiredSignatureError, InvalidTokenError
 from database import get_db
 from sqlalchemy.orm import Session
 from users.models import User
+from users.crud import get_or_create_firebase_user
+from firebase_admin import auth as firebase_auth
 
-# JWT Configuration
-SECRET_KEY = "your_secret_key"  # Change this to a secure key
+SECRET_KEY = "your_secret_key"
 ALGORITHM = "HS256"
 
-# OAuth2 scheme to extract the token from the "Authorization" header
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-def verify_access_token(token: str):
-    """Decode JWT token and verify its validity."""
+
+def verify_access_token(token: str, db: Session):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id: int = payload.get("user_id")
-
         if user_id is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+        return db.query(User).filter(User.id == user_id).first()
+    except (ExpiredSignatureError, InvalidTokenError):
+        return None
 
-        return user_id  # Return user ID for use in protected routes
-
-    except ExpiredSignatureError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired")
-
-    except InvalidTokenError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    """Middleware to verify JWT token and retrieve the user."""
-    user_id = verify_access_token(token)
-    user = db.query(User).filter(User.id == user_id).first()
+    user = verify_access_token(token, db)
+    if not user:
+        firebase_user = verify_firebase_token(token)
+        if firebase_user:
+            user = get_or_create_firebase_user(db, firebase_user["uid"], firebase_user["email"])
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    return user
 
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
-
-    return user  # Return the authenticated user
+def verify_firebase_token(token: str):
+    try:
+        decoded_token = firebase_auth.verify_id_token(token)
+        return decoded_token
+    except Exception:
+        return None
