@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
-import { signInWithGoogle } from "../firebase/firebase"; // Import Google Sign-In function
+import { 
+  MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox 
+} from 'mdb-react-ui-kit';
+import { signInWithGoogle, signInWithFacebook, signInWithMicrosoft } from "../Firebase/firebase"; // Import authentication methods
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT; // Ensure this is set correctly in .env
 
 function Login() {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -20,10 +19,9 @@ function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission (Manual login)
+  // Handle manual login
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent page reload
-
+    e.preventDefault();
     try {
       const response = await axios.post(`${API_ENDPOINT}/users/login`, formData, {
         headers: { 'Content-Type': 'application/json' }
@@ -39,14 +37,22 @@ function Login() {
     }
   };
 
-  // Handle Google Sign-In
-  const handleGoogleSignIn = async () => {
-    const user = await signInWithGoogle();
+  // Handle social logins
+  const handleSocialLogin = async (provider) => {
+    let user;
+    if (provider === "google") {
+      user = await signInWithGoogle();
+    } else if (provider === "facebook") {
+      user = await signInWithFacebook();
+    } else if (provider === "microsoft") {
+      user = await signInWithMicrosoft();
+    }
+
     if (user) {
-      console.log("Google Logged-in User:", user);
+      console.log(`${provider} Logged-in User:`, user);
       alert(`Welcome, ${user.displayName}!`);
       localStorage.setItem("user_token", user.accessToken); // Store token
-      navigate("/Chat"); // Redirect to chat page
+      navigate("/Chat");
     }
   };
 
@@ -61,9 +67,15 @@ function Login() {
         <MDBCol col='4' md='6'>
           <div className="d-flex flex-row align-items-center justify-content-center login">
             <p className="lead fw-normal mb-0 me-3 login">Sign in with</p>
-            <MDBBtn floating size='md' tag='a' className='me-2'><MDBIcon fab icon='facebook-f' /></MDBBtn>
-            <MDBBtn floating size='md' tag='a' className='me-2'><MDBIcon fab icon='twitter' /></MDBBtn>
-            <MDBBtn floating size='md' tag='a' className='me-2'><MDBIcon fab icon='linkedin-in' /></MDBBtn>
+            <MDBBtn floating size='md' tag='a' className='me-2' onClick={() => handleSocialLogin("facebook")}>
+              <MDBIcon fab icon='facebook-f' />
+            </MDBBtn>
+            <MDBBtn floating size='md' tag='a' className='me-2' onClick={() => handleSocialLogin("google")}>
+              <MDBIcon fab icon='google' />
+            </MDBBtn>
+            <MDBBtn floating size='md' tag='a' className='me-2' onClick={() => handleSocialLogin("microsoft")}>
+              <MDBIcon fab icon='microsoft' />
+            </MDBBtn>
           </div>
 
           <div className="divider d-flex align-items-center my-4 login">
@@ -91,32 +103,20 @@ function Login() {
               </p>
             </div>
           </form>
-
-          <div className="text-center signup">
-            <p>or sign in with:</p>
-
-            <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: '#1266f1' }} onClick={handleGoogleSignIn}>
-              <MDBIcon fab icon='google' size="sm" /> Sign in with Google
-            </MDBBtn>
-          </div>
-
         </MDBCol>
       </MDBRow>
 
       <div className="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary login">
         <div className="text-white mb-3 mb-md-0 login">Copyright © 2024. All rights reserved.</div>
         <div>
-          <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }}>
+          <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }} onClick={() => handleSocialLogin("facebook")}>
             <MDBIcon fab icon='facebook-f' size="md"/>
           </MDBBtn>
-          <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }}>
-            <MDBIcon fab icon='twitter' size="md"/>
-          </MDBBtn>
-          <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }} onClick={handleGoogleSignIn}>
+          <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }} onClick={() => handleSocialLogin("google")}>
             <MDBIcon fab icon='google' size="md"/> Sign in with Google
           </MDBBtn>
-          <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }}>
-            <MDBIcon fab icon='linkedin-in' size="md"/>
+          <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }} onClick={() => handleSocialLogin("microsoft")}>
+            <MDBIcon fab icon='microsoft' size="md"/> Sign in with Microsoft
           </MDBBtn>
         </div>
       </div>
