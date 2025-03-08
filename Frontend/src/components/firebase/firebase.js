@@ -9,6 +9,8 @@ import {
 
 
 
+const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+
 const API_FIREBASE = import.meta.env.VITE_FIREBASE_API
 const firebaseConfig = {
   apiKey: API_FIREBASE,
@@ -34,7 +36,7 @@ const signInWithGoogle = async () => {
     const idToken = await result.user.getIdToken();
     console.log("Firebase ID Token: ", idToken);
 
-    const response = await fetch("http://127.0.0.1:8000/users/login", {
+    const response = await fetch(`${API_ENDPOINT}/users/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ firebase_token: idToken }),
@@ -68,7 +70,7 @@ const signInWithMicrosoft = async () => {
     console.log("Firebase ID Token: ", idToken);
 
     // Send token to backend (if applicable)
-    const response = await fetch("http://127.0.0.1:8000/users/login", {
+    const response = await fetch(`${API_ENDPOINT}/users/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ firebase_token: idToken }),
