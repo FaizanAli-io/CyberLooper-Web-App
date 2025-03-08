@@ -7,8 +7,11 @@ import {
   signInWithPopup 
 } from "firebase/auth";
 
+
+
+const API_FIREBASE = import.meta.env.VITE_FIREBASE_API
 const firebaseConfig = {
-  apiKey: "AIzaSyAeWj4ODFKSTY7ldUKIKzVg1NowQKvjcUM",
+  apiKey: API_FIREBASE,
   authDomain: "cyberlooper-login.firebaseapp.com",
   projectId: "cyberlooper-login",
   storageBucket: "cyberlooper-login.firebasestorage.app",
