@@ -4,7 +4,7 @@ import axios from 'axios';
 import { 
   MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox 
 } from 'mdb-react-ui-kit';
-import { signInWithGoogle, signInWithFacebook, signInWithMicrosoft } from "../Firebase/firebase"; // Import authentication methods
+import { signInWithGoogle, signInWithFacebook, signInWithMicrosoft } from "../firebase/firebase.js"; // Import authentication methods
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT; // Ensure this is set correctly in .env
 
