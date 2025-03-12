@@ -42,8 +42,6 @@ function Login() {
     let user;
     if (provider === "google") {
       user = await signInWithGoogle();
-    } else if (provider === "facebook") {
-      user = await signInWithFacebook();
     } else if (provider === "microsoft") {
       user = await signInWithMicrosoft();
     }
@@ -67,9 +65,7 @@ function Login() {
         <MDBCol col='4' md='6'>
           <div className="d-flex flex-row align-items-center justify-content-center login">
             <p className="lead fw-normal mb-0 me-3 login">Sign in with</p>
-            <MDBBtn floating size='md' tag='a' className='me-2' onClick={() => handleSocialLogin("facebook")}>
-              <MDBIcon fab icon='facebook-f' />
-            </MDBBtn>
+          
             <MDBBtn floating size='md' tag='a' className='me-2' onClick={() => handleSocialLogin("google")}>
               <MDBIcon fab icon='google' />
             </MDBBtn>

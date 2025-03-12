@@ -12,7 +12,7 @@ import {
   MDBIcon
 } from 'mdb-react-ui-kit';
 
-import { signInWithGoogle, signInWithFacebook } from "../firebase/firebase"; // Import Google Sign-In function
+import { signInWithGoogle, signInWithFacebook, signInWithMicrosoft } from "../firebase/firebase"; // Import Social Logins
 import "./signup.css";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
@@ -20,14 +20,12 @@ const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 function Signup() {
   const navigate = useNavigate();
 
-  // State for form inputs
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     role: 'STANDARD'
   });
 
-  // State for error message
   const [error, setError] = useState('');
 
   // Handle input change
@@ -37,7 +35,7 @@ function Signup() {
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent page reload
+    e.preventDefault();
 
     try {
       const response = await axios.post(`${API_ENDPOINT}/users`, formData, {
@@ -55,24 +53,23 @@ function Signup() {
     }
   };
 
-  // Handle Google Sign-In
-  const handleGoogleSignIn = async () => {
-    const user = await signInWithGoogle();
-    if (user) {
-      console.log("Google Logged-in User:", user);
-      alert(`Welcome, ${user.displayName}!`);
-      navigate('/home'); // Redirect after login
+  // Handle Social Logins
+  const handleSocialLogin = async (provider) => {
+    let user;
+    if (provider === "google") {
+      user = await signInWithGoogle();
     }
-  };
-  const handleFacebookSignIn = async () => {
-    const user = await signInWithFacebook();
-    if (user) {
-      console.log("facebook Logged-in User:", user);
-      alert(`Welcome, ${user.displayName}!`);
-      navigate('/home'); // Redirect after login
+    else if (provider === "microsoft") {
+      user = await signInWithMicrosoft();
     }
-  };
 
+    if (user) {
+      console.log(`${provider} Logged-in User:`, user);
+      alert(`Welcome, ${user.displayName}!`);
+      localStorage.setItem("user_token", user.accessToken);
+      navigate("/Chat");
+    }
+  };
 
   return (
     <MDBContainer fluid className='p-4 signup-container'>
@@ -132,24 +129,14 @@ function Signup() {
               <div className="text-center signup">
                 <p>or sign up with:</p>
 
-                <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }} onClick={handleGoogleSignIn}>
-                  <MDBIcon fab icon='google' size="sm" /> Sign in with Google
-                </MDBBtn>
-                <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }} onClick={handleFacebookSignIn}>
-                  <MDBIcon fab icon='facebook-f' size="sm" /> Sign in with Facebook
+                <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }} onClick={() => handleSocialLogin("google")}>
+                  <MDBIcon fab icon='google' size="sm" /> Sign up with Google
                 </MDBBtn>
 
+             
 
-                <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }}>
-                  <MDBIcon fab icon='facebook-f' size="sm" />
-                </MDBBtn>
-
-                <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }}>
-                  <MDBIcon fab icon='twitter' size="sm" />
-                </MDBBtn>
-
-                <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }}>
-                  <MDBIcon fab icon='github' size="sm" />
+                <MDBBtn tag='a' color='none' className='mx-3 signup' style={{ color: '#1266f1' }} onClick={() => handleSocialLogin("microsoft")}>
+                  <MDBIcon fab icon='microsoft' size="sm" /> Sign up with Microsoft
                 </MDBBtn>
               </div>
 

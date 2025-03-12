@@ -17,12 +17,11 @@ const API_FIREBASE = import.meta.env.VITE_FIREBASE_API
 
 const firebaseConfig = {
   apiKey:API_FIREBASE,
-  authDomain: "cyberloop-login.firebaseapp.com",
-  projectId: "cyberloop-login",
-  storageBucket: "cyberloop-login.firebasestorage.app",
-  messagingSenderId: "924220288327",
-  appId: "1:924220288327:web:16f00506e932a542223062",
-  measurementId: "G-2KW92SHWLN"
+  authDomain: "cyberlooper-login.firebaseapp.com",
+  projectId: "cyberlooper-login",
+  storageBucket: "cyberlooper-login.firebasestorage.app",
+  messagingSenderId: "373615051146",
+  appId: "1:373615051146:web:8b1dcf595f0c0afc2e4873"
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
