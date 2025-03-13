@@ -68,6 +68,8 @@ const ChatPage = () => {
   const sendMessage = async () => {
     if (input.trim() === "") return;
 
+    const userMessage = input;
+    setInput("");
     const newMessage = {
       request: input,
       response: "...", // ✅ Show loading dots while waiting
@@ -79,7 +81,7 @@ const ChatPage = () => {
     try {
       const response = await axios.post(
         `${API_ENDPOINT}/messages`,
-        { chat_id: selectedChatId, request: input },
+        { chat_id: selectedChatId, request: userMessage },
         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
       );
 
@@ -92,7 +94,7 @@ const ChatPage = () => {
       if (!selectedChatId) {
         const newChat = {
           id: response.data.chat_id,
-          topic: input.substring(0, 30), // ✅ First 30 characters as title
+          topic: userMessage.substring(0, 30), // ✅ First 30 characters as title
         };
         setChats((prevChats) => [newChat, ...prevChats]); // ✅ Append at the end, keeping order
         setSelectedChatId(response.data.chat_id);
@@ -100,7 +102,7 @@ const ChatPage = () => {
     } catch (error) {
       console.error("❌ Error sending message:", error);
     } finally {
-      setInput("");
+    
       setWaitingResponse(false);
     }
   };
