@@ -15,16 +15,18 @@ import {
   MDBDropdownItem,
   MDBCollapse,
 } from 'mdb-react-ui-kit';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Header() {
   const [openBasic, setOpenBasic] = useState(false);
+  const navigate = useNavigate();
+
   const handleLogout = () => {
-
-    localStorage.removeItem('user_token');
-   
-
-    navigate('/Login');
+    const confirmLogout = window.confirm("Are you sure you want to log out?");
+    if (confirmLogout) {
+      localStorage.removeItem('user_token');
+      navigate('/Login');
+    }
   };
 
   return (
@@ -68,13 +70,10 @@ export default function Header() {
               </Link>
             </MDBNavbarItem>
             <MDBNavbarItem>
-              <Link to="/login"  className='nav-link header-nav-buttons' onClick={handleLogout}>
+              <span className='nav-link header-nav-buttons' style={{ cursor: 'pointer' }} onClick={handleLogout}>
                 Logout
-              </Link>
-
+              </span>
             </MDBNavbarItem>
-          
-            
           </MDBNavbarNav>
         </MDBCollapse>
       </MDBContainer>

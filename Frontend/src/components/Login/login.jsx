@@ -4,7 +4,7 @@ import axios from 'axios';
 import { 
   MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox 
 } from 'mdb-react-ui-kit';
-import { signInWithGoogle, signInWithFacebook, signInWithMicrosoft } from "../firebase/firebase.js"; // Import authentication methods
+import { signInWithGoogle,  signInWithMicrosoft } from "../firebase/firebase.js"; // Import authentication methods
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT; // Ensure this is set correctly in .env
 
@@ -105,9 +105,7 @@ function Login() {
       <div className="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary login">
         <div className="text-white mb-3 mb-md-0 login">Copyright © 2024. All rights reserved.</div>
         <div>
-          <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }} onClick={() => handleSocialLogin("facebook")}>
-            <MDBIcon fab icon='facebook-f' size="md"/>
-          </MDBBtn>
+          
           <MDBBtn tag='a' color='none' className='mx-3 login' style={{ color: 'white' }} onClick={() => handleSocialLogin("google")}>
             <MDBIcon fab icon='google' size="md"/> Sign in with Google
           </MDBBtn>

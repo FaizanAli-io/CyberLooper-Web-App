@@ -2,40 +2,43 @@ import { initializeApp } from "firebase/app";
 import { 
   getAuth, 
   GoogleAuthProvider, 
-  FacebookAuthProvider, 
+  
   OAuthProvider, 
-  signInWithPopup 
+  signInWithPopup, 
+  signOut 
 } from "firebase/auth";
 
-
-
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-
-const API_FIREBASE = import.meta.env.VITE_FIREBASE_API
-
-
+const API_FIREBASE = import.meta.env.VITE_FIREBASE_API;
 
 const firebaseConfig = {
-  apiKey:API_FIREBASE,
+  apiKey: API_FIREBASE,
   authDomain: "cyberlooper-login.firebaseapp.com",
   projectId: "cyberlooper-login",
   storageBucket: "cyberlooper-login.firebasestorage.app",
   messagingSenderId: "373615051146",
   appId: "1:373615051146:web:8b1dcf595f0c0afc2e4873"
 };
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+// ✅ Force account selection for Google login
 const googleProvider = new GoogleAuthProvider();
-const facebookProvider = new FacebookAuthProvider();
+googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+
 const microsoftProvider = new OAuthProvider('microsoft.com'); // Microsoft Provider
 
+// ✅ Google Sign-In with forced account selection
 const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     console.log("Google User:", result.user);
+    
     const idToken = await result.user.getIdToken();
-    console.log("Firebase ID Token: ", idToken);
+    console.log("Firebase ID Token:", idToken);
 
     const response = await fetch(`${API_ENDPOINT}/users/login`, {
       method: "POST",
@@ -51,26 +54,18 @@ const signInWithGoogle = async () => {
   }
 };
 
-const signInWithFacebook = async () => {
-  try {
-    const result = await signInWithPopup(auth, facebookProvider);
-    console.log("Facebook User:", result.user);
-    return result.user;
-  } catch (error) {
-    console.error("Facebook Sign-In Error:", error);
-    return null;
-  }
-};
+// ✅ Facebook Sign-In
 
+
+// ✅ Microsoft Sign-In
 const signInWithMicrosoft = async () => {
   try {
     const result = await signInWithPopup(auth, microsoftProvider);
     console.log("Microsoft User:", result.user);
     
     const idToken = await result.user.getIdToken();
-    console.log("Firebase ID Token: ", idToken);
+    console.log("Firebase ID Token:", idToken);
 
-    // Send token to backend (if applicable)
     const response = await fetch(`${API_ENDPOINT}/users/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -85,5 +80,14 @@ const signInWithMicrosoft = async () => {
   }
 };
 
+// ✅ Sign out function to clear session
+const logoutUser = async () => {
+  try {
+    await signOut(auth);
+    console.log("User signed out successfully.");
+  } catch (error) {
+    console.error("Logout Error:", error);
+  }
+};
 
-export { auth, signInWithGoogle, signInWithFacebook, signInWithMicrosoft };
+export { auth, signInWithGoogle, signInWithMicrosoft, logoutUser };

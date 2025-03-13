@@ -12,7 +12,7 @@ import {
   MDBIcon
 } from 'mdb-react-ui-kit';
 
-import { signInWithGoogle, signInWithFacebook, signInWithMicrosoft } from "../firebase/firebase"; // Import Social Logins
+import { signInWithGoogle, signInWithMicrosoft } from "../firebase/firebase"; // Import Social Logins
 import "./signup.css";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;

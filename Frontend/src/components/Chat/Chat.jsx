@@ -18,11 +18,11 @@ const ChatPage = () => {
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [loadingChats, setLoadingChats] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
+  const [waitingResponse, setWaitingResponse] = useState(false);
 
   // ✅ Get user token from local storage
   const token = localStorage.getItem("user_token");
 
-  // ✅ Fetch user chats on page load
   useEffect(() => {
     const fetchChats = async () => {
       try {
@@ -48,17 +48,15 @@ const ChatPage = () => {
     fetchChats();
   }, [token]);
 
-  // ✅ Fetch messages when a chat is selected
   const fetchMessages = async (chatId) => {
     setLoadingMessages(true);
-    setMessages([]); // Clear previous messages
+    setMessages([]);
     setSelectedChatId(chatId);
 
     try {
       const response = await axios.get(`${API_ENDPOINT}/messages/chat/${chatId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       setMessages(response.data);
     } catch (error) {
       console.error("❌ Error fetching messages:", error);
@@ -67,17 +65,16 @@ const ChatPage = () => {
     }
   };
 
-  // ✅ Send message and display it immediately
   const sendMessage = async () => {
     if (input.trim() === "") return;
 
-    // ✅ Instantly show the sent message in the UI
     const newMessage = {
       request: input,
-      response: null, // Placeholder, backend will provide the response
+      response: "...", // ✅ Show loading dots while waiting
     };
-
+  
     setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setWaitingResponse(true);
 
     try {
       const response = await axios.post(
@@ -86,77 +83,69 @@ const ChatPage = () => {
         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
       );
 
-      // ✅ Update the message with response once received from backend
       setMessages((prevMessages) =>
         prevMessages.map((msg, index) =>
-          index === prevMessages.length - 1 ? response.data : msg
+          index === prevMessages.length - 1 ? { ...msg, response: response.data.response } : msg
         )
       );
 
-      // ✅ If it's a new chat, update selectedChatId
       if (!selectedChatId) {
+        const newChat = {
+          id: response.data.chat_id,
+          topic: input.substring(0, 30), // ✅ First 30 characters as title
+        };
+        setChats((prevChats) => [newChat, ...prevChats]); // ✅ Append at the end, keeping order
         setSelectedChatId(response.data.chat_id);
-        setChats([...chats, { id: response.data.chat_id, topic: "New Chat" }]);
       }
     } catch (error) {
       console.error("❌ Error sending message:", error);
     } finally {
       setInput("");
+      setWaitingResponse(false);
     }
   };
 
-  // ✅ New Chat Handler (Clears Messages & Starts New Chat)
   const startNewChat = () => {
-    setMessages([]); // Clear chat messages
-    setSelectedChatId(null); // Reset selected chat
+    setMessages([]);
+    setSelectedChatId(null);
   };
 
   return (
     <MDBContainer fluid className="chat-container">
       <MDBRow className="h-100">
-        {/* Sidebar */}
         <MDBCol md="3" className="chat-sidebar">
           <h2 className="text-white">Previous Chats</h2>
-
-          {/* ✅ New Chat Button */}
           <MDBBtn color="primary" className="mb-3 new-chat-btn" onClick={startNewChat}>
             + New Chat
           </MDBBtn>
-
           {loadingChats ? (
             <p>Loading chats...</p>
           ) : chats.length === 0 ? (
             <p>No previous chats.</p>
           ) : (
             <ul className="chat-list">
-              {chats.map((chat,index) => (
+              {chats.map((chat, index) => (
                 <li
                   key={chat.id}
                   className={`chat-item ${selectedChatId === chat.id ? "selected-chat" : ""}`}
                   onClick={() => fetchMessages(chat.id)}
                 >
-                <span className="chat-index">{chats.length - index}.</span> 
+                  <span className="chat-index">{chats.length - index}.</span>
                   {chat.topic}
                 </li>
               ))}
             </ul>
           )}
         </MDBCol>
-
-        {/* Chat Section */}
         <MDBCol md="9" className="chat-main">
           <div className="chat-messages">
             {messages.map((msg, index) => (
               <div key={index} className="message-wrapper">
-                {/* User message aligned right */}
                 <div className="chat-bubble user-bubble">{msg.request}</div>
-                {/* Bot response aligned left */}
                 {msg.response && <div className="chat-bubble bot-bubble">{msg.response}</div>}
               </div>
             ))}
           </div>
-
-          {/* Chat Input */}
           <MDBRow className="chat-input p-2">
             <MDBCol size="10">
               <MDBInput
@@ -165,10 +154,13 @@ const ChatPage = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                disabled={waitingResponse} // Disable input while waiting for response
               />
             </MDBCol>
             <MDBCol size="2">
-              <MDBBtn onClick={sendMessage}>Send</MDBBtn>
+              <MDBBtn onClick={sendMessage} disabled={waitingResponse}>
+                Send
+              </MDBBtn>
             </MDBCol>
           </MDBRow>
         </MDBCol>
