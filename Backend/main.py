@@ -5,17 +5,13 @@ from database import Base, engine
 
 app = FastAPI()
 
-origins = [
-   "*"
-]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Allow specific frontend origins
+    allow_headers=["*"],
+    allow_origins=["*"],
+    allow_methods=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods (POST, GET, PUT, DELETE, etc.)
-    allow_headers=["*"],  # Allow all headers
 )
-
 
 Base.metadata.create_all(bind=engine)
 

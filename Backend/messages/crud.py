@@ -5,31 +5,46 @@ from messages.schemas import MessageCreate
 import openai
 from datetime import datetime
 
-# openai.api_key = settings.OPENAI_API_KEY
-
+# Initialize OpenAI client
 client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
-#updated
-def create_message_with_ai(db: Session, message: MessageCreate):
+
+
+def get_ai_response(message: str) -> str:
+    """Generate a response from OpenAI API with specific role instructions."""
     try:
-        if inappropriate(message.request):
-            ai_response="I'm sorry, I can only assist with work-related topics. Ask me something else…"
-        else:
-        # Step 1: Pass user message to OpenAI API (NEW SYNTAX)
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",  # Use the GPT-4o mini model
-                messages=[{"role": "user", "content": message.request}]
-            )
-            
-            # Debugging: Print full response
-            print(response)
+        # Defining the role and behavior of the AI
+        system_message = (
+            "You are CyberLooper AI. "
+            "You are a corporate-style GPT. "
+            "You can only respond to appropriate and professional conversation. "
+            "Refrain from answering any questions containing a sensitive or inappropriate topic "
+            "(such as insults, violence, hate speech, discrimination, explicit content, etc.)."
+        )
 
-            # # Extract AI response
-            ai_response = response.choices[0].message.content
-          
-        # ai_response = "I do not have OpenAi key"
-        print(ai_response)  # Debugging: Print extracted response
+        # API call to OpenAI with system message
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",  # Use the GPT-4o mini model
+            messages=[
+                {"role": "system", "content": system_message},  # Role instruction
+                {"role": "user", "content": message},  # User's message
+            ],
+        )
 
-        # Step 2: Store AI response in DB
+        # Return AI's response
+        return response.choices[0].message.content
+
+    except Exception as e:
+        print(f"Error while calling OpenAI API: {e}")
+        return "Sorry, I couldn't generate a response."
+
+
+def create_message_with_ai(db: Session, message: MessageCreate):
+    """Create a new message with AI response, store it in DB."""
+    try:
+        ai_response = get_ai_response(message.request)
+        print(ai_response)  # Debugging: Print AI response
+
+        # Store the user message and AI response in the DB
         user_message = Message(
             chat_id=message.chat_id,
             request=message.request,
@@ -48,77 +63,21 @@ def create_message_with_ai(db: Session, message: MessageCreate):
         print(f"Error: {e}")  # Debugging: Print error
         return None
 
-blacklist = [
-    'insult', 'sex', 'illegal', 'inappropriate', 'violence', 'hate', 'nigger',
-    'offensive', 'harassment', 'profanity', 'discrimination', 'drugs', 'gambling',
-    'explicit', 'porn', 'slur', 'threat', 'abuse', 'vulgar', 'obscene'
-]  # Expanded list of blacklisted words
 
-def inappropriate(user_input):
-    lower_input = user_input.lower()
-    if any(word in lower_input for word in blacklist):
-        return True
-    return False
-
-#old
-# def create_message_with_ai(db: Session, message: MessageCreate):
-#     # Step 1: Store user message in DB
-    
-
-#     # Step 2: Pass user message to OpenAI API
-#     response = openai.ChatCompletion.create(
-#         model="gpt-4o-mini",  # Use the GPT-4o mini model
-#         messages=[
-#             {"role": "user", "content": message.request}
-#         ]
-#     )
-#     print(response)
-#     ai_response = response["choices"][0]["message"]["content"]
-#     print(ai_response)
-#     # ai_response = "I don't have Open AI API KEY"
-
-#     # Step 3: Store AI response in DB
-#     user_message = Message(
-#         chat_id=message.chat_id,
-#         request=message.request,
-#         response=ai_response,
-#         created_at=datetime.utcnow(),
-#         updated_at=datetime.utcnow(),
-#     )
-#     db.add(user_message)
-#     db.commit()
-#     db.refresh(user_message)
-
-#     return {"user_message": user_message}
-
-# def create_message(db: Session, message: MessageCreate):
-#     db_message = Message(**message.dict())
-#     db.add(db_message)
-#     db.commit()
-#     db.refresh(db_message)
-#     return db_message
-
-def get_message(db: Session, message_id: int):
+def get_message(db: Session, message_id: int) -> Message:
+    """Retrieve a message from the DB by ID."""
     return db.query(Message).filter(Message.id == message_id).first()
 
-# def get_messages_by_chat(db: Session, chat_id: int, skip: int = 0, limit: int = 10):
-#     return db.query(Message).filter(Message.chat_id == chat_id).offset(skip).limit(limit).all()
 
-# def update_message(db: Session, message_id: int, message_update: MessageUpdate):
-#     db_message = db.query(Message).filter(Message.id == message_id).first()
-#     if db_message:
-#         for key, value in message_update.dict(exclude_unset=True).items():
-#             setattr(db_message, key, value)
-#         db.commit()
-#         db.refresh(db_message)
-#     return db_message
-
-def delete_message(db: Session, message_id: int):
+def delete_message(db: Session, message_id: int) -> Message:
+    """Delete a message from the DB by ID."""
     db_message = db.query(Message).filter(Message.id == message_id).first()
     if db_message:
         db.delete(db_message)
         db.commit()
     return db_message
 
-def get_messages_by_chat(db: Session, chat_id: int):
+
+def get_messages_by_chat(db: Session, chat_id: int) -> list:
+    """Retrieve all messages for a specific chat."""
     return db.query(Message).filter(Message.chat_id == chat_id).all()

@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
+
 class Chat(Base):
     __tablename__ = "chats"
 
@@ -14,4 +15,6 @@ class Chat(Base):
 
     user = relationship("User", back_populates="chats")
 
-    messages = relationship("Message", back_populates="chat", cascade="all, delete-orphan")
+    messages = relationship(
+        "Message", back_populates="chat", cascade="all, delete-orphan"
+    )

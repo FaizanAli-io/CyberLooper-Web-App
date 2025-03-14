@@ -3,7 +3,14 @@ import jwt
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from database import get_db
-from users.crud import authenticate_user,create_user, get_user, get_users, update_user, delete_user
+from users.crud import (
+    authenticate_user,
+    create_user,
+    get_user,
+    get_users,
+    update_user,
+    delete_user,
+)
 from users.schemas import UserCreate, UserUpdate, UserResponse
 from users.models import User
 from users.auth import get_current_user
@@ -15,11 +22,13 @@ SECRET_KEY = "your_secret_key"  # Change this to a secure key
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
+
 def create_access_token(user_id: int):
     """Generate JWT access token containing only user ID."""
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     payload = {"user_id": user_id, "exp": expire}
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
 
 @router.post("/login", status_code=status.HTTP_200_OK)
 def login_user(data: dict, db: Session = Depends(get_db)):
@@ -28,26 +37,30 @@ def login_user(data: dict, db: Session = Depends(get_db)):
     password = data.get("password")
 
     if not email or not password:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email and password are required")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email and password are required",
+        )
 
     user = authenticate_user(db, email, password)
 
     if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password"
+        )
 
     # Generate JWT Token with only user ID
     access_token = create_access_token(user.id)
 
-    return {
-        "message": "Login successful",
-        "accessToken": access_token
-    }
+    return {"message": "Login successful", "accessToken": access_token}
+
 
 @router.get("/verify", status_code=status.HTTP_200_OK)
-def verify(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    return {
-        "message": "access granted"
-    }
+def verify(
+    db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+):
+    return {"message": "access granted"}
+
 
 @router.post("", response_model=UserResponse)
 def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
@@ -57,40 +70,53 @@ def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered",
         )
-    
+
     created_user = create_user(db, user)
 
     access_token = create_access_token(created_user.id)
 
-    return {
-        "message": "Signup successful",
-        "accessToken": access_token
-    }
+    return {"message": "Signup successful", "accessToken": access_token}
+
 
 @router.get("", response_model=UserResponse)
-def read_user(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def read_user(
+    db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+):
     db_user = get_user(db, current_user.id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
+
 # @router.get("", response_model=list[UserResponse])
 # def read_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
 #     return get_users(db, skip, limit)
 
+
 @router.put("", response_model=UserResponse)
-def update_existing_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def update_existing_user(
+    user_id: int,
+    user: UserUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     updated_user = update_user(db, current_user.id, user)
     if updated_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return updated_user
 
+
 @router.delete("")
-def delete_existing_user(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def delete_existing_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     deleted_user = delete_user(db, current_user.id)
     if deleted_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return {"detail": "User deleted successfully"}
+
 
 #############################################################################################################################
 
@@ -147,6 +173,7 @@ def google_login(data: dict, db: Session = Depends(get_db)):
 
     access_token = create_access_token(user.id)
     return {"message": "Login successful", "accessToken": access_token}
+
 
 # import users.crud.py as crud
 # from database import get_db

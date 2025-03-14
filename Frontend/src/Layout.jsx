@@ -1,17 +1,16 @@
 import React from "react";
-import { Outlet,useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "./components/Header/Header";
 function Layout() {
-    const location = useLocation();
-    const hideNavbar = ["/signup",'/login'].includes(location.pathname);
-    
+  const location = useLocation();
+  const hideNavbar = ["/signup", "/login"].includes(location.pathname);
 
-    return (
-        <>
-           {!hideNavbar && <Header />}
-            <Outlet />
-        </>
-    );
+  return (
+    <>
+      {!hideNavbar && <Header />}
+      <Outlet />
+    </>
+  );
 }
 
 export default Layout;

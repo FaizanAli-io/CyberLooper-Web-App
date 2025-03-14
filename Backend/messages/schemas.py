@@ -2,10 +2,12 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 
+
 # ✅ Input Schema (Only required fields for creating a message)
 class MessageCreate(BaseModel):
     chat_id: Optional[int] = None  # ✅ Allows missing chat_id for new chats
     request: str
+
 
 # ✅ Response Schema (Includes fields returned from DB)
 class MessageResponse(BaseModel):
@@ -17,4 +19,4 @@ class MessageResponse(BaseModel):
     updated_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True

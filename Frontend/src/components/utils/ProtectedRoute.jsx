@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import axios from "axios";
 
 const ProtectedRoute = () => {
   const [isAuthorized, setIsAuthorized] = useState(null);
@@ -8,7 +8,7 @@ const ProtectedRoute = () => {
 
   useEffect(() => {
     const verifyAccess = async () => {
-      const token = localStorage.getItem('user_token');
+      const token = localStorage.getItem("user_token");
 
       if (!token) {
         console.warn("🚨 No token found, redirecting to login.");
@@ -19,7 +19,7 @@ const ProtectedRoute = () => {
       try {
         console.log("🔍 Checking authorization...");
         const response = await axios.get(`${BASE_URL}/users/verify`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (response.status >= 200 && response.status < 300) {

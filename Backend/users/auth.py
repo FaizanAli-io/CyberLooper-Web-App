@@ -20,21 +20,30 @@ def verify_access_token(token: str, db: Session):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id: int = payload.get("user_id")
         if user_id is None:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+            )
         return db.query(User).filter(User.id == user_id).first()
     except (ExpiredSignatureError, InvalidTokenError):
         return None
 
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+def get_current_user(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
     user = verify_access_token(token, db)
     if not user:
         firebase_user = verify_firebase_token(token)
         if firebase_user:
-            user = get_or_create_firebase_user(db, firebase_user["uid"], firebase_user["email"])
+            user = get_or_create_firebase_user(
+                db, firebase_user["uid"], firebase_user["email"]
+            )
     if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
+        )
     return user
+
 
 def verify_firebase_token(token: str):
     try:

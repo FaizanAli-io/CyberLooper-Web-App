@@ -1,10 +1,10 @@
+pyjwt
 openai
 fastapi
 uvicorn
 pydantic
-pyjwt
-firebase_admin
 sqlalchemy
+firebase_admin
 passlib[bcrypt]
 pydantic[email]
 psycopg2-binary

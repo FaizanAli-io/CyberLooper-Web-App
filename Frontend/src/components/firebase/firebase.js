@@ -1,11 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  
-  OAuthProvider, 
-  signInWithPopup, 
-  signOut 
+import {
+  getAuth,
+  GoogleAuthProvider,
+  OAuthProvider,
+  signInWithPopup,
+  signOut,
 } from "firebase/auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
@@ -17,7 +16,7 @@ const firebaseConfig = {
   projectId: "cyberlooper-login",
   storageBucket: "cyberlooper-login.firebasestorage.app",
   messagingSenderId: "373615051146",
-  appId: "1:373615051146:web:8b1dcf595f0c0afc2e4873"
+  appId: "1:373615051146:web:8b1dcf595f0c0afc2e4873",
 };
 
 // Initialize Firebase
@@ -26,17 +25,16 @@ const auth = getAuth(app);
 
 // ✅ Force account selection for Google login
 const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: 'select_account' });
+googleProvider.setCustomParameters({ prompt: "select_account" });
 
-
-const microsoftProvider = new OAuthProvider('microsoft.com'); // Microsoft Provider
+const microsoftProvider = new OAuthProvider("microsoft.com"); // Microsoft Provider
 
 // ✅ Google Sign-In with forced account selection
 const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     console.log("Google User:", result.user);
-    
+
     const idToken = await result.user.getIdToken();
     console.log("Firebase ID Token:", idToken);
 
@@ -56,13 +54,12 @@ const signInWithGoogle = async () => {
 
 // ✅ Facebook Sign-In
 
-
 // ✅ Microsoft Sign-In
 const signInWithMicrosoft = async () => {
   try {
     const result = await signInWithPopup(auth, microsoftProvider);
     console.log("Microsoft User:", result.user);
-    
+
     const idToken = await result.user.getIdToken();
     console.log("Firebase ID Token:", idToken);
 

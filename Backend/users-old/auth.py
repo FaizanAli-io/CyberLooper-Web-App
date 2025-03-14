@@ -13,6 +13,7 @@ ALGORITHM = "HS256"
 # OAuth2 scheme to extract the token from the "Authorization" header
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
+
 def verify_access_token(token: str):
     """Decode JWT token and verify its validity."""
     try:
@@ -20,22 +21,33 @@ def verify_access_token(token: str):
         user_id: int = payload.get("user_id")
 
         if user_id is None:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+            )
 
         return user_id  # Return user ID for use in protected routes
 
     except ExpiredSignatureError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired"
+        )
 
     except InvalidTokenError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+        )
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+
+def get_current_user(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
     """Middleware to verify JWT token and retrieve the user."""
     user_id = verify_access_token(token)
     user = db.query(User).filter(User.id == user_id).first()
 
     if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
+        )
 
     return user  # Return the authenticated user

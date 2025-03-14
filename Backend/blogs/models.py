@@ -2,6 +2,7 @@ from database import Base
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime
 
+
 class Blog(Base):
     __tablename__ = "blogs"
 

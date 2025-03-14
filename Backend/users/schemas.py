@@ -3,6 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
+
 class UserRole(str, Enum):
     ADMIN = "ADMIN"
     STANDARD = "STANDARD"

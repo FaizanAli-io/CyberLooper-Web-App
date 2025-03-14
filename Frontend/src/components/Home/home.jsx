@@ -1,15 +1,19 @@
-import React from 'react';
-import { MDBCarousel, MDBCarouselItem, MDBCarouselCaption } from 'mdb-react-ui-kit';
+import React from "react";
+import {
+  MDBCarousel,
+  MDBCarouselItem,
+  MDBCarouselCaption,
+} from "mdb-react-ui-kit";
 
 export default function Home() {
   return (
     <MDBCarousel showIndicators showControls fade style={{ height: "100vh" }}>
       <MDBCarouselItem itemId={1}>
-        <img 
-          src='https://mdbootstrap.com/img/Photos/Slides/img%20(15).jpg' 
-          className='d-block w-100' 
-          alt='...' 
-          style={{ height: "80vh", objectFit: "cover" }} 
+        <img
+          src="https://mdbootstrap.com/img/Photos/Slides/img%20(15).jpg"
+          className="d-block w-100"
+          alt="..."
+          style={{ height: "80vh", objectFit: "cover" }}
         />
         <MDBCarouselCaption>
           <h5>First slide label</h5>
@@ -18,11 +22,11 @@ export default function Home() {
       </MDBCarouselItem>
 
       <MDBCarouselItem itemId={2}>
-        <img 
-          src='https://mdbootstrap.com/img/Photos/Slides/img%20(22).jpg' 
-          className='d-block w-100' 
-          alt='...' 
-          style={{ height: "80vh", objectFit: "cover" }} 
+        <img
+          src="https://mdbootstrap.com/img/Photos/Slides/img%20(22).jpg"
+          className="d-block w-100"
+          alt="..."
+          style={{ height: "80vh", objectFit: "cover" }}
         />
         <MDBCarouselCaption>
           <h5>Second slide label</h5>
@@ -31,15 +35,17 @@ export default function Home() {
       </MDBCarouselItem>
 
       <MDBCarouselItem itemId={3}>
-        <img 
-          src='https://mdbootstrap.com/img/Photos/Slides/img%20(23).jpg' 
-          className='d-block w-100' 
-          alt='...' 
-          style={{ height: "80vh", objectFit: "cover" }} 
+        <img
+          src="https://mdbootstrap.com/img/Photos/Slides/img%20(23).jpg"
+          className="d-block w-100"
+          alt="..."
+          style={{ height: "80vh", objectFit: "cover" }}
         />
         <MDBCarouselCaption>
           <h5>Third slide label</h5>
-          <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+          <p>
+            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+          </p>
         </MDBCarouselCaption>
       </MDBCarouselItem>
     </MDBCarousel>

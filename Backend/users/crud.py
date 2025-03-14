@@ -23,7 +23,12 @@ def authenticate_user(db: Session, email: str, password: str):
 
 def create_user(db: Session, user_data: UserCreate):
     hashed_password = hash_password(user_data.password) if user_data.password else None
-    user = User(email=user_data.email, password=hashed_password, role=user_data.role, firebase_uid=user_data.firebase_uid)
+    user = User(
+        email=user_data.email,
+        password=hashed_password,
+        role=user_data.role,
+        firebase_uid=user_data.firebase_uid,
+    )
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -42,6 +47,7 @@ def get_or_create_firebase_user(db: Session, firebase_uid: str, email: str):
 
 def get_user(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
+
 
 def update_user(db: Session, user_id: int, user_data: UserUpdate):
     user = db.query(User).filter(User.id == user_id).first()

@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { MDBContainer, MDBCard, MDBCardBody, MDBTypography, MDBBtn, MDBInput } from "mdb-react-ui-kit";
+import {
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBTypography,
+  MDBBtn,
+  MDBInput,
+} from "mdb-react-ui-kit";
 import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_API_ENDPOINT}/blogs`;
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
-  const [newTitle, setNewTitle] = useState("");  // Added title input
+  const [newTitle, setNewTitle] = useState(""); // Added title input
   const [newCaption, setNewCaption] = useState("");
   const [editId, setEditId] = useState(null);
   const [editTitle, setEditTitle] = useState(""); // For editing title
@@ -26,7 +33,7 @@ const Blogs = () => {
 
     try {
       console.log("🔍 Fetching blogs with token:", token);
-      
+
       const response = await axios.get(API_URL, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -39,7 +46,10 @@ const Blogs = () => {
       console.log("✅ Blogs fetched successfully:", response.data);
       setBlogs(response.data.reverse());
     } catch (error) {
-      console.error("❌ Error fetching blogs:", error.response?.data || error.message);
+      console.error(
+        "❌ Error fetching blogs:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -57,11 +67,14 @@ const Blogs = () => {
         }
       );
 
-      setNewTitle(""); 
+      setNewTitle("");
       setNewCaption("");
       fetchBlogs();
     } catch (error) {
-      console.error("❌ Error creating blog:", error.response?.data || error.message);
+      console.error(
+        "❌ Error creating blog:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -83,7 +96,10 @@ const Blogs = () => {
       setEditCaption("");
       fetchBlogs();
     } catch (error) {
-      console.error("❌ Error updating blog:", error.response?.data || error.message);
+      console.error(
+        "❌ Error updating blog:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -96,7 +112,10 @@ const Blogs = () => {
       });
       fetchBlogs();
     } catch (error) {
-      console.error("❌ Error deleting blog:", error.response?.data || error.message);
+      console.error(
+        "❌ Error deleting blog:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -130,7 +149,8 @@ const Blogs = () => {
             <MDBCard key={blog.id} className="mb-3 p-3">
               <MDBCardBody>
                 <MDBTypography tag="h5">
-                  {blog.title ? blog.title : "Untitled"} {/* Display blog title */}
+                  {blog.title ? blog.title : "Untitled"}{" "}
+                  {/* Display blog title */}
                 </MDBTypography>
                 <p>{blog.caption}</p>
                 <p className="text-muted">
@@ -158,15 +178,22 @@ const Blogs = () => {
                       Save
                     </MDBBtn>
                   ) : (
-                    <MDBBtn size="sm" onClick={() => { 
-                      setEditId(blog.id); 
-                      setEditTitle(blog.title || ""); 
-                      setEditCaption(blog.caption); 
-                    }}>
+                    <MDBBtn
+                      size="sm"
+                      onClick={() => {
+                        setEditId(blog.id);
+                        setEditTitle(blog.title || "");
+                        setEditCaption(blog.caption);
+                      }}
+                    >
                       Edit
                     </MDBBtn>
                   )}
-                  <MDBBtn size="sm" color="danger" onClick={() => deleteBlog(blog.id)}>
+                  <MDBBtn
+                    size="sm"
+                    color="danger"
+                    onClick={() => deleteBlog(blog.id)}
+                  >
                     Delete
                   </MDBBtn>
                 </div>

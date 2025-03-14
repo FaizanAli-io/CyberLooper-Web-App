@@ -34,9 +34,6 @@
   width: 100%;
 }
 
-
-
-
 /* Wrapper for each message pair */
 .message-wrapper {
   display: flex;
@@ -68,7 +65,6 @@
   word-wrap: break-word;
   text-align: left;
 }
-
 
 /* ✅ Adjust chat container to accommodate navbar height */
 .chat-container {

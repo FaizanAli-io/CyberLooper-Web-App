@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 import {
   MDBContainer,
   MDBRow,
   MDBCol,
   MDBBtn,
-  MDBInput
+  MDBInput,
 } from "mdb-react-ui-kit";
-import "./Chat.css"; // Import CSS
+import "./Chat.css";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
@@ -20,31 +21,23 @@ const ChatPage = () => {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [waitingResponse, setWaitingResponse] = useState(false);
 
-  // ✅ Get user token from local storage
   const token = localStorage.getItem("user_token");
 
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        console.log("🔍 Fetching chats with token:", token);
-
         const response = await axios.get(`${API_ENDPOINT}/chats`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        const formattedChats = response.data.map(chat => ({
-          id: chat.id,
-          topic: chat.topic,
-        }));
-
-        setChats(formattedChats);
+        setChats(
+          response.data.map((chat) => ({ id: chat.id, topic: chat.topic }))
+        );
       } catch (error) {
-        console.error("❌ Error fetching chats:", error);
+        console.error("Error fetching chats:", error);
       } finally {
         setLoadingChats(false);
       }
     };
-
     fetchChats();
   }, [token]);
 
@@ -52,57 +45,59 @@ const ChatPage = () => {
     setLoadingMessages(true);
     setMessages([]);
     setSelectedChatId(chatId);
-
     try {
-      const response = await axios.get(`${API_ENDPOINT}/messages/chat/${chatId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        `${API_ENDPOINT}/messages/chat/${chatId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setMessages(response.data);
     } catch (error) {
-      console.error("❌ Error fetching messages:", error);
+      console.error("Error fetching messages:", error);
     } finally {
       setLoadingMessages(false);
     }
   };
 
   const sendMessage = async () => {
-    if (input.trim() === "") return;
+    if (!input.trim()) return;
 
     const userMessage = input;
     setInput("");
-    const newMessage = {
-      request: input,
-      response: "...", // ✅ Show loading dots while waiting
-    };
-  
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setMessages((prev) => [...prev, { request: userMessage, response: "..." }]);
     setWaitingResponse(true);
 
     try {
       const response = await axios.post(
         `${API_ENDPOINT}/messages`,
         { chat_id: selectedChatId, request: userMessage },
-        { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
 
-      setMessages((prevMessages) =>
-        prevMessages.map((msg, index) =>
-          index === prevMessages.length - 1 ? { ...msg, response: response.data.response } : msg
+      setMessages((prev) =>
+        prev.map((msg, idx) =>
+          idx === prev.length - 1
+            ? { ...msg, response: response.data.response }
+            : msg
         )
       );
 
       if (!selectedChatId) {
-        const newChat = {
-          id: response.data.chat_id,
-          topic: userMessage.substring(0, 30), // ✅ First 30 characters as title
-        };
-        setChats((prevChats) => [newChat, ...prevChats]); // ✅ Append at the end, keeping order
+        setChats((prev) => [
+          { id: response.data.chat_id, topic: userMessage.slice(0, 30) },
+          ...prev,
+        ]);
         setSelectedChatId(response.data.chat_id);
       }
     } catch (error) {
-      console.error("❌ Error sending message:", error);
+      console.error("Error sending message:", error);
     } finally {
-    
       setWaitingResponse(false);
     }
   };
@@ -117,7 +112,11 @@ const ChatPage = () => {
       <MDBRow className="h-100">
         <MDBCol md="3" className="chat-sidebar">
           <h2 className="text-white">Previous Chats</h2>
-          <MDBBtn color="primary" className="mb-3 new-chat-btn" onClick={startNewChat}>
+          <MDBBtn
+            color="primary"
+            className="mb-3 new-chat-btn"
+            onClick={startNewChat}
+          >
             + New Chat
           </MDBBtn>
           {loadingChats ? (
@@ -144,7 +143,11 @@ const ChatPage = () => {
             {messages.map((msg, index) => (
               <div key={index} className="message-wrapper">
                 <div className="chat-bubble user-bubble">{msg.request}</div>
-                {msg.response && <div className="chat-bubble bot-bubble">{msg.response}</div>}
+                {msg.response && (
+                  <div className="chat-bubble bot-bubble">
+                    <ReactMarkdown>{msg.response}</ReactMarkdown>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -156,7 +159,7 @@ const ChatPage = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                disabled={waitingResponse} // Disable input while waiting for response
+                disabled={waitingResponse}
               />
             </MDBCol>
             <MDBCol size="2">

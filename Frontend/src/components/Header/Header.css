@@ -1,29 +1,27 @@
-
-.header-main-navbar{
-    /* background: linear-gradient(to right, #fca668, #f09091); */
-    background: rgb(80, 162, 209);
+.header-main-navbar {
+  /* background: linear-gradient(to right, #fca668, #f09091); */
+  background: rgb(80, 162, 209);
 }
 
-.header-navbar-brand{
-    color:black
+.header-navbar-brand {
+  color: black;
 }
 
-
-.header-navbar-brand:hover{
-    color:rgb(1, 1, 7);
-    transition: background 0.3s ease;
+.header-navbar-brand:hover {
+  color: rgb(1, 1, 7);
+  transition: background 0.3s ease;
 }
 
-.header-nav-buttons a:hover{
-    color:rgb(2, 20, 26);
-    transition: background 0.3s ease;
+.header-nav-buttons a:hover {
+  color: rgb(2, 20, 26);
+  transition: background 0.3s ease;
 }
 
-.header-nav-buttons:focus{
-    color:rgb(3, 19, 20);
-    transition: background 0.3s ease;
+.header-nav-buttons:focus {
+  color: rgb(3, 19, 20);
+  transition: background 0.3s ease;
 }
 
-.header-drop-down{
-    background: linear-gradient(to right,rgb(244, 244, 255),rgb(255, 218, 203));
+.header-drop-down {
+  background: linear-gradient(to right, rgb(244, 244, 255), rgb(255, 218, 203));
 }
