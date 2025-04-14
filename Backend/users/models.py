@@ -27,3 +27,4 @@ class User(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     chats = relationship("Chat", back_populates="user", cascade="all, delete-orphan")
+    contactform = relationship("ContactForm", back_populates="user", cascade="all, delete-orphan")

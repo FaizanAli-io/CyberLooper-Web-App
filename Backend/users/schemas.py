@@ -22,10 +22,10 @@ class UserCreate(UserBase):
 
 
 class UserUpdate(BaseModel):
-    firstname: str
-    lastname: str
-    jobtitle: str
-    bio: str
+    firstname: Optional[str] = None
+    lastname: Optional[str] = None
+    jobtitle: Optional[str] = None
+    bio: Optional[str] = None
 
 
 class UserLogin(BaseModel):
@@ -37,9 +37,9 @@ class UserLogin(BaseModel):
 class UserResponse(UserBase):
     created_at: datetime
     updated_at: datetime
-    lastname: str
-    jobtitle: str
-    bio: str
+    lastname: Optional[str] = None
+    jobtitle: Optional[str] = None
+    bio: Optional[str] = None
 
     class Config:
         from_attributes = True

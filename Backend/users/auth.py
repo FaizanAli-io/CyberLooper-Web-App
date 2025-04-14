@@ -6,6 +6,7 @@ from jwt import ExpiredSignatureError, InvalidTokenError
 from database import get_db
 from sqlalchemy.orm import Session
 from users.models import User
+from users.models import UserRole
 from users.crud import get_or_create_firebase_user
 from firebase_admin import auth as firebase_auth
 
@@ -58,9 +59,10 @@ def get_current_admin(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
         )
-    if user.role != "ADMIN":
+    print(user.role)
+    if user.role != UserRole.ADMIN:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials - Not an Admin"
         )
     return user
 
