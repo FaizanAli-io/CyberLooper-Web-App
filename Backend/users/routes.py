@@ -11,9 +11,16 @@ from users.crud import (
     delete_user,
     get_or_create_firebase_user,
 )
-from users.schemas import UserCreate, UserUpdate, UserResponse
+from users.schemas import UserCreate, UserUpdate, UserResponse, UserLogin
 from users.models import User
 from users.auth import get_current_user, verify_firebase_token
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
 
 router = APIRouter()
 
@@ -29,36 +36,39 @@ def create_access_token(user_id: int):
 
 
 @router.post("/login", status_code=status.HTTP_200_OK)
-def login_user(data: dict, db: Session = Depends(get_db)):
-    email = data.get("email")
-    password = data.get("password")
-    firebase_token = data.get("firebase_token")
+def login_user(user: UserLogin, db: Session = Depends(get_db)):
 
-    if firebase_token:
-        firebase_user = verify_firebase_token(firebase_token)
+    if user.firebase_token:
+        firebase_user = verify_firebase_token(user.firebase_token)
         print("FIREBASE USER: ", firebase_user)
         if not firebase_user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid Firebase token",
             )
-        user = get_or_create_firebase_user(
-            db, firebase_user["uid"], firebase_user["email"]
+        print(firebase_user["uid"], firebase_user["email"], firebase_user["firebase"]["sign_in_provider"], firebase_user["name"])
+        if firebase_user["firebase"]["sign_in_provider"] not in ["google.com", "microsoft.com"]:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Sign-in provider not allowed. Please use Google or Microsoft.",
+            )
+        current_user = get_or_create_firebase_user(
+            db, firebase_user["uid"], firebase_user["email"], firebase_user["firebase"]["sign_in_provider"], firebase_user["name"]
         )
     else:
-        if not email or not password:
+        if not user.email or not user.password:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email and password are required",
             )
-        user = authenticate_user(db, email, password)
-        if not user:
+        current_user = authenticate_user(db, user.email, user.password)
+        if not current_user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid email or password",
             )
 
-    access_token = create_access_token(user.id)
+    access_token = create_access_token(current_user.id)
     return {"message": "Login successful", "accessToken": access_token}
 
 
@@ -72,12 +82,26 @@ def verify(
 # , response_model=UserResponse
 @router.post("")
 def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
+    if not user.password:
+        raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Password is required",
+            )
     existing_user = db.query(User).filter(User.email == user.email).first()
     if existing_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered",
-        )
+        if existing_user.password:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email already registered",
+            )
+        else:
+            hashed_password = hash_password(user.password) if user.password else None
+            existing_user.password = hashed_password
+            db.commit()
+            db.refresh(existing_user)
+            access_token = create_access_token(existing_user.id)
+            return {"message": "Signup successful", "accessToken": access_token}
+
 
     created_user = create_user(db, user)
 
@@ -98,7 +122,6 @@ def read_user(
 
 @router.put("", response_model=UserResponse)
 def update_existing_user(
-    user_id: int,
     user: UserUpdate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),

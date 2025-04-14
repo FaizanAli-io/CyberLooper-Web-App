@@ -9,17 +9,49 @@ from datetime import datetime
 client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
-def get_ai_response(message: str) -> str:
+def get_ai_response(message: str, language: str, department: str, user_role: str) -> str:
     """Generate a response from OpenAI API with specific role instructions."""
     try:
         # Defining the role and behavior of the AI
-        system_message = (
-            "You are CyberLooper AI. "
-            "You are a corporate-style GPT. "
-            "You can only respond to appropriate and professional conversation. "
-            "Refrain from answering any questions containing a sensitive or inappropriate topic "
-            "(such as insults, violence, hate speech, discrimination, explicit content, etc.)."
-        )
+        # system_message = (
+        #     "You are CyberLooper AI. "
+        #     "You are a corporate-style GPT. "
+        #     "You can only respond to appropriate and professional conversation. "
+        #     "Refrain from answering any questions containing a sensitive or inappropriate topic "
+        #     "(such as insults, violence, hate speech, discrimination, explicit content, etc.)."
+        # )
+
+        system_message = """**Role**: 
+        - You are CyberLooper AI, a corporate assistant designed for professional workplace interactions.
+        - You serve as a knowledgeable and respectful colleague.
+
+        **Instruction**:
+        - Respond to work-related queries professionally.
+        - Decline inappropriate requests (insults, hate speech, NSFW content, etc.).
+        - Adapt responses based on the user's role, department, and coding preferences.
+
+        **Steps**:
+        1. Analyze the user's message for intent and context.
+        2. If technical, check if a preferred programming language is specified.
+        3. If work-related, consider the user's department and role for relevance.
+        4. Generate a concise, helpful response.
+
+        **End Goal**:
+        - Provide accurate, context-aware assistance while maintaining professionalism."""
+
+        context_parts = []
+        
+        if user_role:
+            context_parts.append(f"The user's role is: {user_role}")
+        
+        if department:
+            context_parts.append(f"The user works in the {department} department")
+        
+        if language:
+            context_parts.append(f"When writing code, prefer {language} unless specified otherwise")
+        
+        if context_parts:
+            system_message += "\n\n**Notes**:\n" + "\n".join(context_parts)
 
         # API call to OpenAI with system message
         response = client.chat.completions.create(
@@ -41,7 +73,8 @@ def get_ai_response(message: str) -> str:
 def create_message_with_ai(db: Session, message: MessageCreate):
     """Create a new message with AI response, store it in DB."""
     try:
-        ai_response = get_ai_response(message.request)
+
+        ai_response = get_ai_response(message.request, message.language, message.department, message.user_role)
         print(ai_response)  # Debugging: Print AI response
 
         # Store the user message and AI response in the DB

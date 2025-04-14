@@ -7,6 +7,9 @@ from typing import Optional
 class MessageCreate(BaseModel):
     chat_id: Optional[int] = None  # ✅ Allows missing chat_id for new chats
     request: str
+    user_role: Optional[str]
+    department: Optional[str]
+    language: Optional[str]
 
 
 # ✅ Response Schema (Includes fields returned from DB)

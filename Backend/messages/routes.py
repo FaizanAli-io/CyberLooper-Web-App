@@ -27,6 +27,9 @@ def send_message(
     user_id = current_user.id
     chat_id = message_data.chat_id
     request_text = message_data.request
+    user_role = message_data.user_role
+    department = message_data.department
+    language = message_data.language
 
     if not user_id or not request_text:
         raise HTTPException(
@@ -53,7 +56,7 @@ def send_message(
 
     # ✅ Generate AI response and store message
     saved_message = create_message_with_ai(
-        db, MessageCreate(user_id=user_id, chat_id=chat_id, request=request_text)
+        db, MessageCreate(user_id=user_id, chat_id=chat_id, request=request_text, user_role=user_role, department=department,language=language)
     )
 
     if not saved_message:

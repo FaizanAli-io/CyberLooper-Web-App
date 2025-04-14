@@ -25,9 +25,10 @@ def create_user(db: Session, user_data: UserCreate):
     hashed_password = hash_password(user_data.password) if user_data.password else None
     user = User(
         email=user_data.email,
+        firstname=user_data.firstname,
         password=hashed_password,
         role=user_data.role,
-        firebase_uid=user_data.firebase_uid,
+        # firebase_uid=user_data.firebase_uid,
     )
     db.add(user)
     db.commit()
@@ -35,15 +36,31 @@ def create_user(db: Session, user_data: UserCreate):
     return user
 
 
-def get_or_create_firebase_user(db: Session, firebase_uid: str, email: str):
-    user = db.query(User).filter(User.firebase_uid == firebase_uid).first()
-    if not user:
-        user = User(email=email, firebase_uid=firebase_uid)
-        db.add(user)
+def get_or_create_firebase_user(db: Session, firebase_uid: str, email: str, provider: str, name: str):
+    user = db.query(User).filter(User.email == email).first()
+
+    if user:
+        # Update the corresponding Firebase UID field if it's not already set
+        if provider == "google.com" and not user.google_firebase_uid:
+            user.google_firebase_uid = firebase_uid
+        elif provider == "microsoft.com" and not user.microsoft_firebase_uid:
+            user.microsoft_firebase_uid = firebase_uid
+
         db.commit()
         db.refresh(user)
-    return user
+        return user
 
+    # No user with this email exists, create a new one
+    user = User(
+        email=email,
+        firstname=name,
+        google_firebase_uid=firebase_uid if provider == "google" else None,
+        microsoft_firebase_uid=firebase_uid if provider == "microsoft" else None,
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
 
 def get_user(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
@@ -52,12 +69,14 @@ def get_user(db: Session, user_id: int):
 def update_user(db: Session, user_id: int, user_data: UserUpdate):
     user = db.query(User).filter(User.id == user_id).first()
     if user:
-        if user_data.email is not None:
-            user.email = user_data.email
-        if user_data.password is not None:
-            user.password = hash_password(user_data.password)
-        if user_data.role is not None:
-            user.role = user_data.role
+        if user_data.firstname is not None:
+            user.firstname = user_data.firstname
+        if user_data.lastname is not None:
+            user.lastname = user_data.lastname
+        if user_data.jobtitle is not None:
+            user.jobtitle = user_data.jobtitle
+        if user_data.bio is not None:
+            user.bio = user_data.bio
         db.commit()
         db.refresh(user)
     return user

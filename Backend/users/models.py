@@ -15,8 +15,13 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, nullable=False)
+    firstname = Column(String, nullable=False)
+    lastname = Column(String, nullable=True)
+    jobtitle = Column(String, nullable=True)
+    bio = Column(String, nullable=True)
     password = Column(String, nullable=True)  # Optional for Firebase users
-    firebase_uid = Column(String, unique=True, nullable=True)  # Firebase UID
+    microsoft_firebase_uid = Column(String, unique=True, nullable=True)  # Firebase UID
+    google_firebase_uid = Column(String, unique=True, nullable=True)  # Firebase UID
     role = Column(Enum(UserRole), default=UserRole.STANDARD, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
