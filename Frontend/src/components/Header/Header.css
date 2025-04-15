@@ -1,27 +1,65 @@
-.header-main-navbar {
-  /* background: linear-gradient(to right, #fca668, #f09091); */
-  background: rgb(80, 162, 209);
+/* Header Component Scoped Styles */
+
+.header-container {
+  position: absolute;
+  width: 695px;
+  height: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 66px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+
+  background: rgba(255, 255, 255, 0.1);
+  border: 0.8px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(7.5px);
+  border-radius: 50px;
+
+  z-index: 999;
 }
 
-.header-navbar-brand {
-  color: black;
+.header-menubar {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-.header-navbar-brand:hover {
-  color: rgb(1, 1, 7);
-  transition: background 0.3s ease;
+.header-menubar .p-menubar-root-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  margin-top: 15px;
+  padding: 0;
 }
 
-.header-nav-buttons a:hover {
-  color: rgb(2, 20, 26);
-  transition: background 0.3s ease;
+.header-menubar .p-menuitem-link {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+  padding: 1rem 0.5rem;
+  border-radius: 5px;
+  transition: color 0.3s ease;
 }
 
-.header-nav-buttons:focus {
-  color: rgb(3, 19, 20);
-  transition: background 0.3s ease;
+.header-menubar .p-menuitem-link:hover,
+.header-menubar .p-menuitem-link:focus,
+.header-menubar .p-menuitem-link.active-item {
+  font-weight: 800 !important;
+  color: white !important;
+  background: transparent !important;
 }
 
-.header-drop-down {
-  background: linear-gradient(to right, rgb(244, 244, 255), rgb(255, 218, 203));
+/* Optional: Typography override (can be moved to global styles if needed) */
+body, html, * {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100;
 }
+
+

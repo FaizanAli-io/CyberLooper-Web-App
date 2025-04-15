@@ -1,7 +1,7 @@
+import './assets/fonts/fonts.css';
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
@@ -25,34 +25,50 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/faq",
+        element: <FAQ />,
+      },
+      {
+        path: "/chat",
+        element: <Chat />,
+      },
+      {
+        path: "/blogs",
+        element: <Blogs />,
+      },
+      {
         path: "signup",
         element: <Signup />,
       },
-      {
-        element: <ProtectedRoute />,
-        children: [
-          {
-            path: "faq",
-            element: <FAQ />,
-          },
-          {
-            path: "/chat",
-            element: <Chat />,
-          },
-          {
-            path: "/blogs",
-            element: <Blogs />,
-          },
-          {
-            path: "home",
-            element: <Home />,
-          },
-          {
-            path: "/",
-            element: <Home />,
-          },
-        ],
-      },
+      // {
+      //   element: <ProtectedRoute />,
+      //   children: [
+      //     {
+      //       path: "faq",
+      //       element: <FAQ />,
+      //     },
+      //     {
+      //       path: "/chat",
+      //       element: <Chat />,
+      //     },
+      //     {
+      //       path: "/blogs",
+      //       element: <Blogs />,
+      //     },
+      //     {
+      //       path: "home",
+      //       element: <Home />,
+      //     },
+      //     {
+      //       path: "/",
+      //       element: <Home />,
+      //     },
+      //   ],
+      // },
 
       // Protected Routes
       {},
