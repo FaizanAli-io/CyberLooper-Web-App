@@ -1,22 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {
-  MDBContainer,
-  MDBCol,
-  MDBRow,
-  MDBBtn,
-  MDBIcon,
-  MDBInput,
-  MDBCheckbox,
-} from "mdb-react-ui-kit";
+import { MDBIcon } from "mdb-react-ui-kit";
 import { signInWithGoogle, signInWithMicrosoft } from "../firebase/firebase.js";
+import "./Login.css";
+import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -60,105 +55,146 @@ function Login() {
     }
   };
 
+  const toggleRememberMe = () => {
+    setRememberMe(!rememberMe);
+  };
+
   return (
-    <MDBContainer fluid className="p-3 my-5 h-custom login">
-      <MDBRow>
-        <MDBCol col="10" md="6">
-          <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-            className="img-fluid"
-            alt="Sample image"
-          />
-        </MDBCol>
-
-        <MDBCol col="4" md="6">
-          <div className="d-flex flex-row align-items-center justify-content-center login">
-            <p className="lead fw-normal mb-0 me-3 login">Sign in with</p>
-            <MDBBtn
-              floating
-              size="md"
-              tag="a"
-              className="me-2"
-              onClick={() => handleSocialLogin("google")}
-            >
-              <MDBIcon fab icon="google" />
-            </MDBBtn>
-            <MDBBtn
-              floating
-              size="md"
-              tag="a"
-              className="me-2"
-              onClick={() => handleSocialLogin("microsoft")}
-            >
-              <MDBIcon fab icon="microsoft" />
-            </MDBBtn>
+    <div className="login-container">
+      
+      <div className="login-layout">
+        
+        {/* Left section with login form */}
+        <div className="left-section">
+        <div className="login-logo-section">
+                <div className="login-logo-container">
+                  <img src={logo} alt="Cyberlooper Logo" className="footer-logo" />
+                </div>
+      </div>
+          <div className="welcome-container">
+            <p className="welcome-text">Welcome Back</p>
+            <h1 className="time-to-get">Time to Get</h1>
+            <div className="productive-container">
+              <p className="productive-text">Productive</p>
+            </div>
+            <p className="description">
+              Log in to your account and start managing your projects efficiently
+            </p>
           </div>
 
-          <div className="divider d-flex align-items-center my-4 login">
-            <p className="text-center fw-bold mx-3 mb-0 login">Or</p>
-          </div>
+          <div className="form-container">
+            <form onSubmit={handleSubmit}>
+              {error && <p className="error-message">{error}</p>}
+              {message && <p className="success-message">{message}</p>}
 
-          {error && <p className="text-danger">{error}</p>}
-          {message && <p className="text-success">{message}</p>}
+              <div className="email-container">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="input-field"
+                />
+              </div>
 
-          <form onSubmit={handleSubmit}>
-            <MDBInput
-              wrapperClass="mb-4 login"
-              label="Email address"
-              id="email"
-              type="email"
-              size="lg"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            <div className="position-relative">
-              <MDBInput
-                wrapperClass="mb-4 login"
-                label="Password"
-                id="password"
-                type={showPassword ? "text" : "password"}
-                size="lg"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-              <span
-                className="position-absolute end-0 top-50 translate-middle-y me-3 cursor-pointer"
-                style={{ cursor: "pointer" }}
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                <MDBIcon icon={showPassword ? "eye-slash" : "eye"} />
-              </span>
-            </div>
+              <div className="password-container">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  className="input-field"
+                />
+                <span
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <MDBIcon icon={showPassword ? "eye-slash" : "eye"} />
+                </span>
+              </div>
 
-            <div className="d-flex justify-content-between mb-4 login">
-              <MDBCheckbox
-                name="flexCheck"
-                value=""
-                id="flexCheckDefault"
-                label="Remember me"
-              />
-              <a href="!#">Forgot password?</a>
-            </div>
-
-            <div className="text-center text-md-start mt-4 pt-2 login">
-              <MDBBtn className="mb-0 px-5 login" size="lg" type="submit">
-                Login
-              </MDBBtn>
-              <p className="small fw-bold mt-2 pt-1 mb-2 login">
-                Don't have an account?{" "}
-                <a href="signup" className="link-danger login">
-                  Register
+              <div className="remember-forgot-container">
+                <div className="remember-me-container">
+                  <div 
+                    className={`checkbox ${rememberMe ? 'checked' : ''}`} 
+                    onClick={toggleRememberMe}
+                  >
+                    <div className="knob"></div>
+                  </div>
+                  <span className="remember-text">Remember me</span>
+                </div>
+                
+                <a href="#forgot" className="forgot-password">
+                  Forgot Password?
                 </a>
-              </p>
+              </div>
+
+              <button type="submit" className="login-button">
+                Log In
+              </button>
+
+              <div className="signup-container">
+                <span className="signup-text">Don't have an account? </span>
+                <a href="signup" className="signup-link">
+                  Sign up!
+                </a>
+              </div>
+            </form>
+
+            <div className="social-login-container">
+              <div className="divider-container">
+                <div className="divider-line"></div>
+                <span className="divider-text">Or continue with</span>
+                <div className="divider-line"></div>
+              </div>
+
+              <div className="social-buttons">
+                <button
+                  className="social-button microsoft"
+                  onClick={() => handleSocialLogin("microsoft")}
+                >
+                  <MDBIcon fab icon="microsoft" />
+                </button>
+                <button
+                  className="social-button google"
+                  onClick={() => handleSocialLogin("google")}
+                >
+                  <MDBIcon fab icon="google" />
+                </button>
+              </div>
             </div>
-          </form>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+          </div>
+        </div>
+
+        {/* Right section with security note */}
+        <div className="right-section">
+          <div className="security-note-container">
+            <div className="security-note-background"></div>
+            <div className="security-note-text-container">
+              <div className="security-note-icon">
+                <div className="flash-circle">
+                  <MDBIcon icon="shield-alt" />
+                </div>
+                <span className="security-label">Security Note</span>
+              </div>
+            </div>
+            <p className="security-note-description">
+             We safeguard your data with enterprise-grade security
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="cyberlooper">
+        <div className="green-ellipse"></div>
+      </div>
+    </div>
   );
 }
 
