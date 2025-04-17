@@ -10,8 +10,13 @@ from users.models import UserRole
 from users.crud import get_or_create_firebase_user
 from firebase_admin import auth as firebase_auth
 
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -48,22 +53,7 @@ def get_current_user(
 def get_current_admin(
     token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
-    user = verify_access_token(token, db)
-    if not user:
-        firebase_user = verify_firebase_token(token)
-        if firebase_user:
-            user = get_or_create_firebase_user(
-                db, firebase_user["uid"], firebase_user["email"]
-            )
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
-        )
-    print(user.role)
-    if user.role != UserRole.ADMIN:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials - Not an Admin"
-        )
+    user = get_current_user(token=token, db=db)
     return user
 
 def verify_firebase_token(token: str):

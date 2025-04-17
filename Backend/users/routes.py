@@ -10,11 +10,18 @@ from users.crud import (
     update_user,
     delete_user,
     get_or_create_firebase_user,
+    send_forgotpassword_email,
+    send_emailverification_email,
 )
-from users.schemas import UserCreate, UserUpdate, UserResponse, UserLogin
+from users.schemas import UserCreate, UserUpdate, UserResponse, UserLogin, PasswordChangeRequest, ResetPasswordRequest, VerifyEmail
 from users.models import User
 from users.auth import get_current_user, verify_firebase_token
 from passlib.context import CryptContext
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
+FRONTEND_URL = os.getenv("FRONTEND_URL")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -28,12 +35,75 @@ SECRET_KEY = "your_secret_key"  # Change this to a secure key
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
+import secrets
+from datetime import datetime, timedelta
+
+@router.post("/forgot-password")
+def forgot_password(email: str, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Generate token
+    token = secrets.token_urlsafe(32)
+    expiry = datetime.utcnow() + timedelta(hours=1)
+
+    user.reset_token = token
+    user.reset_token_expiry = expiry
+    db.commit()
+
+    reset_link = f"{FRONTEND_URL}/reset-password?token={token}"
+
+    send_forgotpassword_email(email, reset_link)
+
+    # TODO: Send this link via actual email
+    print(f"Password reset link: {reset_link}")
+
+    return {"message": "Reset link has been sent to your email."}
+
+@router.post("/reset-password")
+def reset_password(data: ResetPasswordRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.reset_token == data.token).first()
+    if not user or not user.reset_token_expiry or user.reset_token_expiry < datetime.utcnow():
+        raise HTTPException(status_code=400, detail="Invalid or expired token")
+
+    user.password = hash_password(data.new_password)
+    user.reset_token = None
+    user.reset_token_expiry = None
+    db.commit()
+
+    return {"message": "Password reset successfully"}
 
 def create_access_token(user_id: int):
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     payload = {"user_id": user_id, "exp": expire}
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
+@router.post("/change-password")
+def change_password(
+    request: PasswordChangeRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if not request.old_password or not request.new_password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Old and new passwords are required",
+        )
+
+    # Verify old password
+    if not pwd_context.verify(request.old_password, current_user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Old password is incorrect",
+        )
+
+    # Update password
+    current_user.password = hash_password(request.new_password)
+    db.commit()
+    db.refresh(current_user)
+
+    return {"message": "Password changed successfully"}
 
 @router.post("/login", status_code=status.HTTP_200_OK)
 def login_user(user: UserLogin, db: Session = Depends(get_db)):
@@ -67,6 +137,26 @@ def login_user(user: UserLogin, db: Session = Depends(get_db)):
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid email or password",
             )
+        
+        if not current_user.email_verified:
+            token = secrets.token_urlsafe(32)
+            expiry = datetime.utcnow() + timedelta(hours=1)
+
+            current_user.email_verification_token = token
+            current_user.email_verification_token_expiry = expiry
+            db.commit()
+
+            email_verification_link = f"{FRONTEND_URL}/verify-email?token={token}"
+
+            send_emailverification_email(current_user.email, email_verification_link)
+
+            # TODO: Send this link via actual email
+            print(f"Email verification link: {email_verification_link}")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Your email address hasn't been verified yet. Please check your inbox for our verification email and click the link to activate your account.",
+            )
+
 
     access_token = create_access_token(current_user.id)
     return {"message": "Login successful", "accessToken": access_token}
@@ -78,8 +168,6 @@ def verify(
 ):
     return {"message": "access granted"}
 
-
-# , response_model=UserResponse
 @router.post("")
 def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
     if not user.password:
@@ -99,16 +187,39 @@ def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
             existing_user.password = hashed_password
             db.commit()
             db.refresh(existing_user)
-            access_token = create_access_token(existing_user.id)
-            return {"message": "Signup successful", "accessToken": access_token}
+            return {"message": "Signup successful, please verify your email"}
+    else:
+        existing_user = create_user(db, user)
 
+    token = secrets.token_urlsafe(32)
+    expiry = datetime.utcnow() + timedelta(hours=1)
 
-    created_user = create_user(db, user)
+    existing_user.email_verification_token = token
+    existing_user.email_verification_token_expiry = expiry
+    db.commit()
 
-    access_token = create_access_token(created_user.id)
+    email_verification_link = f"{FRONTEND_URL}/verify-email?token={token}"
 
-    return {"message": "Signup successful", "accessToken": access_token}
+    send_emailverification_email(existing_user.email, email_verification_link)
 
+    # TODO: Send this link via actual email
+    print(f"Email verification link: {email_verification_link}")
+
+    return {"message": "Signup successful. Please check your inbox for our verification email and click the link to activate your account."}
+
+@router.post("/verify-email")
+def verify_email(data: VerifyEmail, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email_verification_token == data.token).first()
+    if not user or not user.email_verification_token_expiry or user.email_verification_token_expiry < datetime.utcnow():
+        raise HTTPException(status_code=400, detail="Invalid or expired token")
+
+    user.email_verification_token = None
+    user.email_verification_token_expiry = None
+    user.email_verified = True
+    db.commit()
+
+    access_token = create_access_token(user.id)
+    return {"message": "Email Verified", "accessToken": access_token}
 
 @router.get("", response_model=UserResponse)
 def read_user(

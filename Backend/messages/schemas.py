@@ -10,6 +10,13 @@ class MessageCreate(BaseModel):
     user_role: Optional[str]
     department: Optional[str]
     language: Optional[str]
+    model: Optional[str]
+
+class SwitchModel(BaseModel):
+    chat_id: int
+    user_role: Optional[str]
+    department: Optional[str]
+    language: Optional[str]
 
 
 # ✅ Response Schema (Includes fields returned from DB)

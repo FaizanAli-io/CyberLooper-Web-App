@@ -9,3 +9,4 @@ passlib[bcrypt]
 pydantic[email]
 psycopg2-binary
 pydantic-settings
+apscheduler

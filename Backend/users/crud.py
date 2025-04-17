@@ -5,6 +5,55 @@ from users.schemas import UserCreate, UserUpdate
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+from utilities.email import send_email
+
+def send_emailverification_email(recipient_email: str, message: str):
+
+    subject = "Cyberlooper – Verify Your Email Address"
+
+    body = f"""
+    Hello,
+
+    Thank you for signing up with Cyberlooper!
+
+    To complete your registration and activate your account, please verify your email address by clicking the link below:
+
+    {message}
+
+    If you did not sign up for a Cyberlooper account, you can safely ignore this email.
+
+    Best regards,  
+    Support Team
+    """
+
+    try:
+        send_email(recipient_email, subject, body)
+    except Exception as e:
+        print(f"❌ Failed to send email: {e}")
+
+def send_forgotpassword_email(recipient_email: str, message: str):
+
+    subject = "Cyberlooper - Reset Your Password"
+
+    body = f"""
+    Hello,
+
+    We received a request to reset your Cyberlooper account password.
+
+    To proceed, please click the link below:
+
+    "{message}"
+
+    If you didn’t request this, you can safely ignore this email—your password will remain unchanged.
+
+    Best regards,  
+    Support Team
+    """
+
+    try:
+        send_email(recipient_email, subject, body)
+    except Exception as e:
+        print(f"❌ Failed to send email: {e}")
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)

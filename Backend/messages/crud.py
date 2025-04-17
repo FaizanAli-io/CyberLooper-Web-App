@@ -5,22 +5,68 @@ from messages.schemas import MessageCreate
 import openai
 from datetime import datetime
 
-# Initialize OpenAI client
-client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-def get_ai_response(message: str, language: str, department: str, user_role: str) -> str:
-    """Generate a response from OpenAI API with specific role instructions."""
+XAI_API_KEY = os.getenv("XAI_API_KEY")
+
+gpt = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+
+grok = openai.OpenAI(
+  api_key=XAI_API_KEY,
+  base_url="https://api.x.ai/v1",
+)
+
+def get_grok_response(message: str, system_message: str) -> str:
     try:
-        # Defining the role and behavior of the AI
-        # system_message = (
-        #     "You are CyberLooper AI. "
-        #     "You are a corporate-style GPT. "
-        #     "You can only respond to appropriate and professional conversation. "
-        #     "Refrain from answering any questions containing a sensitive or inappropriate topic "
-        #     "(such as insults, violence, hate speech, discrimination, explicit content, etc.)."
-        # )
+        print("grok")
+        # API call to OpenAI with system message
+        response = grok.chat.completions.create(
+            model="grok-3-beta",  # Use the GPT-4o mini model
+            messages=[
+                {"role": "system", "content": system_message},  # Role instruction
+                {"role": "user", "content": message},  # User's message
+            ],
+        )
 
+        print(response)
+
+        print("total tokens", response.usage.total_tokens)
+
+        # Return AI's response
+        return response.choices[0].message.content, response.usage.total_tokens
+
+    except Exception as e:
+        print(f"Error while calling OpenAI API: {e}")
+        return "Sorry, I couldn't generate a response."
+
+def get_gpt_response(message: str, system_message: str) -> str:
+    try:
+        # API call to OpenAI with system message
+        response = gpt.chat.completions.create(
+            model="gpt-4o-mini",  # Use the GPT-4o mini model
+            messages=[
+                {"role": "system", "content": system_message},  # Role instruction
+                {"role": "user", "content": message},  # User's message
+            ],
+        )
+
+        print(response)
+
+        print("total tokens", response.usage.total_tokens)
+        
+        return response.choices[0].message.content, response.usage.total_tokens
+
+    except Exception as e:
+        print(f"Error while calling OpenAI API: {e}")
+        return "Sorry, I couldn't generate a response."
+
+
+def create_message_with_ai(db: Session, message: MessageCreate, model:str, message_context: list[str] ):
+    """Create a new message with AI response, store it in DB."""
+    try:
         system_message = """**Role**: 
         - You are CyberLooper AI, a corporate assistant designed for professional workplace interactions.
         - You serve as a knowledgeable and respectful colleague.
@@ -41,40 +87,30 @@ def get_ai_response(message: str, language: str, department: str, user_role: str
 
         context_parts = []
         
-        if user_role:
-            context_parts.append(f"The user's role is: {user_role}")
+        if message.user_role:
+            context_parts.append(f"The user's role is: {message.user_role}")
         
-        if department:
-            context_parts.append(f"The user works in the {department} department")
+        if message.department:
+            context_parts.append(f"The user works in the {message.department} department")
         
-        if language:
-            context_parts.append(f"When writing code, prefer {language} unless specified otherwise")
+        if message.language:
+            context_parts.append(f"When writing code, prefer {message.language} unless specified otherwise")
         
         if context_parts:
             system_message += "\n\n**Notes**:\n" + "\n".join(context_parts)
 
-        # API call to OpenAI with system message
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",  # Use the GPT-4o mini model
-            messages=[
-                {"role": "system", "content": system_message},  # Role instruction
-                {"role": "user", "content": message},  # User's message
-            ],
-        )
+        context = ""
+        if message_context:
+            context = "The following are the user's previous messages to help maintain conversation context:\n"
+            for i, msg in enumerate(message_context, start=1):
+                context += f"{i} - {msg}\n"
+        if context != "":
+            system_message+=context
 
-        # Return AI's response
-        return response.choices[0].message.content
-
-    except Exception as e:
-        print(f"Error while calling OpenAI API: {e}")
-        return "Sorry, I couldn't generate a response."
-
-
-def create_message_with_ai(db: Session, message: MessageCreate):
-    """Create a new message with AI response, store it in DB."""
-    try:
-
-        ai_response = get_ai_response(message.request, message.language, message.department, message.user_role)
+        if model=="grok":
+            ai_response = get_grok_response(message.request, system_message)
+        else:
+            ai_response = get_gpt_response(message.request, system_message)
         print(ai_response)  # Debugging: Print AI response
 
         # Store the user message and AI response in the DB
@@ -114,3 +150,12 @@ def delete_message(db: Session, message_id: int) -> Message:
 def get_messages_by_chat(db: Session, chat_id: int) -> list:
     """Retrieve all messages for a specific chat."""
     return db.query(Message).filter(Message.chat_id == chat_id).all()
+
+def get_last_n_messages_by_chat(db: Session, chat_id: int, n: int = 6) -> list:
+    return (
+        db.query(Message)
+        .filter(Message.chat_id == chat_id)
+        .order_by(Message.created_at.desc())  # newest first
+        .limit(n)
+        .all()
+    )[::-1]  # reverse to restore chronological order

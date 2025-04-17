@@ -4,7 +4,7 @@ from chats.schemas import ChatCreate, ChatUpdate
 
 
 def create_chat(db: Session, chat_data: ChatCreate, current_user):
-    chat = Chat(user_id=current_user.id, topic=chat_data.topic)
+    chat = Chat(user_id=current_user.id, topic=chat_data.topic, model=chat_data.model)
     db.add(chat)
     db.commit()
     db.refresh(chat)

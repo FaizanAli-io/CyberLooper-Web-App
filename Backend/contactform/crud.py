@@ -2,21 +2,9 @@ from sqlalchemy.orm import Session
 from contactform.models import ContactForm
 from contactform.schemas import ContactFormCreate, ContactFormResponse
 from sqlalchemy.orm import joinedload
-
-import os
-from email.message import EmailMessage
-import smtplib
-from dotenv import load_dotenv
-
-# Load .env values
-load_dotenv()
-
-sender_email = os.getenv("SENDER_EMAIL")
-sender_password = os.getenv("SENDER_PASSWORD")
+from utilities.email import send_email
 
 def send_ack_email(recipient_email: str, message: str):
-    if not sender_email or not sender_password:
-        raise RuntimeError("Email credentials not set in environment variables.")
 
     subject = "Cyberlooper - We’ve received your message"
     body = f"""
@@ -32,17 +20,8 @@ def send_ack_email(recipient_email: str, message: str):
     Support Team
     """
 
-    msg = EmailMessage()
-    msg["Subject"] = subject
-    msg["From"] = sender_email
-    msg["To"] = recipient_email
-    msg.set_content(body)
-
     try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-            smtp.login(sender_email, sender_password)
-            smtp.send_message(msg)
-            print("✅ Acknowledgment email sent")
+        send_email(recipient_email, subject, body)
     except Exception as e:
         print(f"❌ Failed to send email: {e}")
 

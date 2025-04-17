@@ -14,7 +14,6 @@ from users.models import User
 
 router = APIRouter()
 
-
 @router.post("", response_model=ChatResponse)
 def create_new_chat(
     chat: ChatCreate,
@@ -39,13 +38,6 @@ def read_chat(
         )
     return db_chat
 
-
-# @router.get("", response_model=list[ChatResponse])
-# def read_chats(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-#     return get_chats(db, skip, limit)
-
-
-# NO NEED
 @router.put("/{chat_id}", response_model=ChatResponse)
 def update_existing_chat(
     chat_id: int,
