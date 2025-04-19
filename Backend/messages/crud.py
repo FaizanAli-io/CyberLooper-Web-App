@@ -64,7 +64,7 @@ def get_gpt_response(message: str, system_message: str) -> str:
         return "Sorry, I couldn't generate a response."
 
 
-def create_message_with_ai(db: Session, message: MessageCreate, model:str, message_context: list[str] ):
+def create_message_with_ai(db: Session, message: MessageCreate, message_context: list[str] ):
     """Create a new message with AI response, store it in DB."""
     try:
         system_message = """**Role**: 
@@ -107,10 +107,14 @@ def create_message_with_ai(db: Session, message: MessageCreate, model:str, messa
         if context != "":
             system_message+=context
 
-        if model=="grok":
-            ai_response = get_grok_response(message.request, system_message)
+        print(system_message)
+        
+        tokens = 0
+
+        if message.model=="grok":
+            ai_response, tokens = get_grok_response(message.request, system_message)
         else:
-            ai_response = get_gpt_response(message.request, system_message)
+            ai_response, tokens = get_gpt_response(message.request, system_message)
         print(ai_response)  # Debugging: Print AI response
 
         # Store the user message and AI response in the DB
@@ -125,7 +129,7 @@ def create_message_with_ai(db: Session, message: MessageCreate, model:str, messa
         db.commit()
         db.refresh(user_message)
 
-        return user_message
+        return user_message, tokens
 
     except Exception as e:
         db.rollback()  # Rollback in case of failure
@@ -153,7 +157,7 @@ def get_messages_by_chat(db: Session, chat_id: int) -> list:
 
 def get_last_n_messages_by_chat(db: Session, chat_id: int, n: int = 6) -> list:
     return (
-        db.query(Message)
+        db.query(Message.request)
         .filter(Message.chat_id == chat_id)
         .order_by(Message.created_at.desc())  # newest first
         .limit(n)

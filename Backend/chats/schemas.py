@@ -9,7 +9,6 @@ class ChatBase(BaseModel):
 
 class ChatCreate(ChatBase):
     model: Optional[str] = None
-    pass
 
 
 class ChatUpdate(BaseModel):

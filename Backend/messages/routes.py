@@ -78,7 +78,7 @@ def send_message(
     model = db_chat.model
     # ✅ Generate AI response and store message
     saved_message, tokens = create_message_with_ai(
-        db, MessageCreate(user_id=user_id, chat_id=chat_id, request=request_text, user_role=user_role, department=department,language=language), model, message_context
+        db, MessageCreate(user_id=user_id, chat_id=chat_id, request=request_text, user_role=user_role, department=department,language=language, model=model), message_context
     )
 
     if not saved_message:
@@ -140,10 +140,12 @@ def send_message(
             status_code=403, detail="Not authorized to access this chat"
         )
     model = db_chat.model
+    print(model)
     message_context = get_last_n_messages_by_chat(db, chat_id, 5)
+    print(message_context)
     # ✅ Generate AI response and store message
     saved_message, tokens = create_message_with_ai(
-        db, MessageCreate(user_id=user_id, chat_id=chat_id, request=request_text, user_role=user_role, department=department,language=language), model, message_context
+        db, MessageCreate(user_id=user_id, chat_id=chat_id, request=request_text, user_role=user_role, department=department,language=language, model=model), message_context
     )
 
     if not saved_message:

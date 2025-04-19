@@ -7,6 +7,9 @@ class ResetPasswordRequest(BaseModel):
     token: str
     new_password: str
 
+class ForgotPassword(BaseModel):
+    email: str
+
 class VerifyEmail(BaseModel):
     token: str
 

@@ -13,7 +13,7 @@ from users.crud import (
     send_forgotpassword_email,
     send_emailverification_email,
 )
-from users.schemas import UserCreate, UserUpdate, UserResponse, UserLogin, PasswordChangeRequest, ResetPasswordRequest, VerifyEmail
+from users.schemas import UserCreate, UserUpdate, UserResponse, UserLogin, PasswordChangeRequest, ResetPasswordRequest, VerifyEmail, ForgotPassword
 from users.models import User
 from users.auth import get_current_user, verify_firebase_token
 from passlib.context import CryptContext
@@ -39,8 +39,8 @@ import secrets
 from datetime import datetime, timedelta
 
 @router.post("/forgot-password")
-def forgot_password(email: str, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == email).first()
+def forgot_password(data: ForgotPassword, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == data.email).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -54,7 +54,7 @@ def forgot_password(email: str, db: Session = Depends(get_db)):
 
     reset_link = f"{FRONTEND_URL}/reset-password?token={token}"
 
-    send_forgotpassword_email(email, reset_link)
+    send_forgotpassword_email(data.email, reset_link)
 
     # TODO: Send this link via actual email
     print(f"Password reset link: {reset_link}")
@@ -72,7 +72,7 @@ def reset_password(data: ResetPasswordRequest, db: Session = Depends(get_db)):
     user.reset_token_expiry = None
     db.commit()
 
-    return {"message": "Password reset successfully"}
+    return {"message": "Password reset successfully. Login using the new password."}
 
 def create_access_token(user_id: int):
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)

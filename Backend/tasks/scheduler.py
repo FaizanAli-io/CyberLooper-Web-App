@@ -30,4 +30,5 @@ def start_scheduler():
     scheduler = BackgroundScheduler()
     scheduler.add_job(reset_all_users_token_usage, 'cron', hour=TOKEN_RESET_HOUR, minute=TOKEN_RESET_MINUTE, timezone=timezone('Asia/Karachi'))  # Every day at midnight
     scheduler.start()
+    print(TOKEN_RESET_HOUR, TOKEN_RESET_MINUTE)
     print("🕓 Scheduler started for daily token reset.")
