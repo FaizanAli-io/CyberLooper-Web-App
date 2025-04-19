@@ -1,10 +1,15 @@
+from langchain.chat_models import ChatOpenAI
+from langchain.chains.summarize import load_summarize_chain
+from langchain.docstore.document import Document
+
+from fastapi import HTTPException
 from config import settings
 from sqlalchemy.orm import Session
 from messages.models import Message
-from messages.schemas import MessageCreate
+from messages.schemas import MessageCreate, MessagePair
 import openai
-from datetime import datetime
-
+from datetime import datetime, timedelta
+from pytz import timezone
 import os
 from dotenv import load_dotenv
 
@@ -19,9 +24,12 @@ grok = openai.OpenAI(
   base_url="https://api.x.ai/v1",
 )
 
+llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
+summary_chain = load_summarize_chain(llm, chain_type="stuff")
+
 def get_grok_response(message: str, system_message: str) -> str:
     try:
-        print("grok")
+        print("\ngrok\n")
         # API call to OpenAI with system message
         response = grok.chat.completions.create(
             model="grok-3-beta",  # Use the GPT-4o mini model
@@ -64,7 +72,7 @@ def get_gpt_response(message: str, system_message: str) -> str:
         return "Sorry, I couldn't generate a response."
 
 
-def create_message_with_ai(db: Session, message: MessageCreate, message_context: list[str] ):
+def create_message_with_ai(db: Session, message: MessageCreate, message_context: str ):
     """Create a new message with AI response, store it in DB."""
     try:
         system_message = """**Role**: 
@@ -101,9 +109,8 @@ def create_message_with_ai(db: Session, message: MessageCreate, message_context:
 
         context = ""
         if message_context:
-            context = "The following are the user's previous messages to help maintain conversation context:\n"
-            for i, msg in enumerate(message_context, start=1):
-                context += f"{i} - {msg}\n"
+            context = "The following is a summary of the previous conversation to maintain context:\n"
+            context += message_context
         if context != "":
             system_message+=context
 
@@ -155,11 +162,60 @@ def get_messages_by_chat(db: Session, chat_id: int) -> list:
     """Retrieve all messages for a specific chat."""
     return db.query(Message).filter(Message.chat_id == chat_id).all()
 
-def get_last_n_messages_by_chat(db: Session, chat_id: int, n: int = 6) -> list:
-    return (
-        db.query(Message.request)
+def get_last_n_message_pairs(db: Session, chat_id: int, n: int = 5) -> list[MessagePair]:
+    rows = (
+        db.query(Message.request, Message.response)
         .filter(Message.chat_id == chat_id)
-        .order_by(Message.created_at.desc())  # newest first
+        .order_by(Message.created_at.desc())
         .limit(n)
         .all()
-    )[::-1]  # reverse to restore chronological order
+    )[::-1]  # Reverse to chronological order
+
+    return [MessagePair(user=row.request, ai=row.response) for row in rows]
+
+def summarize_conversation(messages: list[MessagePair]) -> str:
+    if not messages:
+        return ""
+
+    conversation_text = "\n".join(
+        f"User: {m.user}\nAI: {m.ai}" for m in messages
+    )
+
+    doc = Document(page_content=conversation_text)
+    summary = summary_chain.run([doc])
+    return summary
+
+def get_summary_from_db_chat(db: Session, chat_id: int, n: int = 5) -> str:
+    messages = get_last_n_message_pairs(db, chat_id, n)
+    return summarize_conversation(messages)
+
+def get_last_user_message_by_chat(db: Session, chat_id: int) -> str:
+    row = (
+        db.query(Message.request)
+        .filter(Message.chat_id == chat_id)
+        .order_by(Message.created_at.desc())
+        .first()
+    )
+
+    if row and row.request:
+        return row.request
+
+    raise HTTPException(status_code=404, detail="No messages found for this chat.")
+
+def time_until_midnight_karachi():
+    # Define the Asia/Karachi timezone
+    karachi_tz = timezone('Asia/Karachi')
+    
+    # Get current time in UTC and convert it to Asia/Karachi time zone
+    now = datetime.now(karachi_tz)
+    
+    # Define midnight (00:00) of the current day in Asia/Karachi timezone
+    midnight = now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
+    
+    # Calculate the time difference
+    time_difference = midnight - now
+
+    hours, remainder = divmod(time_difference.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+    
+    return hours, minutes

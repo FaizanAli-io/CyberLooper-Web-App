@@ -6,7 +6,11 @@ from messages.crud import (
     get_message,
     get_messages_by_chat,
     delete_message,
-    get_last_n_messages_by_chat,
+    get_summary_from_db_chat,
+    get_last_user_message_by_chat,
+    summarize_conversation,
+    get_last_n_message_pairs,
+    time_until_midnight_karachi,
 )
 from messages.schemas import MessageCreate, MessageResponse, SwitchModel
 from chats.models import Chat
@@ -45,10 +49,11 @@ def send_message(
     if old_chat.model == "gpt":
         model_name = "grok"
 
-    messages = get_last_n_messages_by_chat(db, chat_id)
+    messages = get_last_n_message_pairs(db, chat_id, 6)
+    messages = messages[:-1]
 
-    request_text = messages[-1].request if messages else ""
-    message_context = [msg.request for msg in messages[:-1]]
+    request_text = get_last_user_message_by_chat(db, chat_id)
+    message_context = summarize_conversation(messages)
 
     if not user_id or not request_text:
         raise HTTPException(
@@ -56,8 +61,9 @@ def send_message(
         )
 
     if current_user.token_used >= TOKEN_LIMIT:
+        hours, minutes = time_until_midnight_karachi()
         raise HTTPException(
-            status_code=400, detail="Token limit reached. Limit will be reset at midnight."
+            status_code=400, detail=f"Token limit reached. Come after {hours} hours {minutes} minutes."
         )
 
     new_chat = Chat(
@@ -118,8 +124,9 @@ def send_message(
         )
 
     if current_user.token_used >= TOKEN_LIMIT:
+        hours, minutes = time_until_midnight_karachi()
         raise HTTPException(
-            status_code=400, detail="Token limit reached. Limit will be reset at midnight."
+            status_code=400, detail=f"Token limit reached. Come after {hours} hours {minutes} minutes."
         )
 
     # ✅ If no chat_id, create a new chat
@@ -141,7 +148,7 @@ def send_message(
         )
     model = db_chat.model
     print(model)
-    message_context = get_last_n_messages_by_chat(db, chat_id, 5)
+    message_context = get_summary_from_db_chat(db, chat_id, 5)
     print(message_context)
     # ✅ Generate AI response and store message
     saved_message, tokens = create_message_with_ai(

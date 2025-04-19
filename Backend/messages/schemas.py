@@ -2,6 +2,9 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 
+class MessagePair(BaseModel):
+    user: str
+    ai: str
 
 # ✅ Input Schema (Only required fields for creating a message)
 class MessageCreate(BaseModel):

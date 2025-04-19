@@ -13,3 +13,5 @@ apscheduler
 cloudinary
 pytz
 python-multipart
+langchain
+langchain_community
