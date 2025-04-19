@@ -10,3 +10,6 @@ pydantic[email]
 psycopg2-binary
 pydantic-settings
 apscheduler
+cloudinary
+pytz
+python-multipart
