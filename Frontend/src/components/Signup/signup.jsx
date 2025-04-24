@@ -1,19 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBCard,
-  MDBCardBody,
-  MDBInput,
-  MDBIcon,
-} from "mdb-react-ui-kit";
-
+import { MDBIcon } from "mdb-react-ui-kit";
 import { signInWithGoogle, signInWithMicrosoft } from "../firebase/firebase";
 import "./signup.css";
+import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
@@ -21,13 +12,17 @@ function Signup() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
+    fullName: "",
     email: "",
     password: "",
+    confirmPassword: "",
     role: "STANDARD",
   });
 
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,11 +32,28 @@ function Signup() {
     setShowPassword(!showPassword);
   };
 
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  const toggleRememberMe = () => {
+    setRememberMe(!rememberMe);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Check if passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     try {
-      const response = await axios.post(`${API_ENDPOINT}/users`, formData, {
+      // Remove confirmPassword before sending to API
+      const { confirmPassword, ...dataToSend } = formData;
+      
+      const response = await axios.post(`${API_ENDPOINT}/users`, dataToSend, {
         headers: { "Content-Type": "application/json" },
       });
 
@@ -72,103 +84,157 @@ function Signup() {
   };
 
   return (
-    <MDBContainer fluid className="p-4 signup-container">
-      <MDBRow>
-        <MDBCol
-          md="6"
-          className="text-center text-md-start d-flex flex-column justify-content-center signup"
-        >
-          <h1 className="my-5 display-3 fw-bold ls-tight px-3 signup">
-            The best offer <br />
-            <span className="text-primary signup">for your business</span>
-          </h1>
-          <p className="px-3 signup" style={{ color: "hsl(217, 10%, 50.8%)" }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet,
-            itaque accusantium odio, soluta, corrupti aliquam quibusdam tempora
-            at cupiditate quis eum maiores libero veritatis? Dicta facilis sint
-            aliquid ipsum atque?
-          </p>
-        </MDBCol>
+    <div className="su-container">
+      <div className="su-layout">
+        {/* Left section - Security Note */}
+        <div className="su-security-section">
+        <div className="su-logo-section">
+            <div className="su-logo-container">
+               <img src={logo} alt="Cyberlooper Logo" className="footer-logo" />
+            </div>
+          </div>
+          <div className="su-security-note-container">
+            <div className="su-security-note-background"></div>
+            <div className="su-security-text-container">
+              <div className="su-flash-circle">
+                <MDBIcon icon="shield-alt" size="lg" />
+              </div>
+              <h2 className="su-security-label">Security Note</h2>
+            </div>
+            <p className="su-security-description">
+              We use industry-leading encryption and security practices to ensure your data remains protected. 
+              Your credentials are never stored in plain text, and all communications are encrypted end-to-end.
+            </p>
+          </div>
+          <div className="su-cyberlooper">
+            <div className="su-green-ellipse"></div>
+          </div>
+        </div>
 
-        <MDBCol md="6">
-          <MDBCard className="my-5 signup">
-            <MDBCardBody className="p-5 signup">
-              <form onSubmit={handleSubmit}>
-                <MDBInput
-                  wrapperClass="mb-4 signup"
-                  label="Email"
-                  id="email"
+        {/* Right section - Signup Form */}
+        <div className="su-form-section">
+          
+
+          <div className="su-welcome-container">
+            <p className="su-welcome-text">GET STARTED NOW</p>
+            <h1 className="su-heading">Boost Your Work Day</h1>
+            <div className="su-productive-container">
+              <div className="su-productive-text">With AI</div>
+            </div>
+            <p className="su-description">
+              Create your account now and get access to all our features.
+            </p>
+          </div>
+
+          <div className="su-form-wrapper">
+            {error && <div className="su-error-message">{error}</div>}
+            <form onSubmit={handleSubmit} className="su-form">
+              <div className="su-fullname-field">
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  className="su-input"
+                  placeholder="Enter your full name"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="su-email-field">
+                <input
                   type="email"
+                  id="email"
                   name="email"
+                  className="su-input"
+                  placeholder="Enter your email"
                   value={formData.email}
                   onChange={handleChange}
                   required
                 />
+              </div>
 
-                <div className="position-relative">
-                  <MDBInput
-                    wrapperClass="mb-4 signup"
-                    label="Password"
-                    id="password"
+              <div className="su-password-field">
+          
+                <div className="su-password-input-wrapper">
+                  <input
                     type={showPassword ? "text" : "password"}
+                    id="password"
                     name="password"
+                    className="su-input"
+                    placeholder="Enter your password"
                     value={formData.password}
                     onChange={handleChange}
                     required
                   />
-                  <MDBIcon
-                    icon={showPassword ? "eye-slash" : "eye"}
-                    className="position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer"
-                    onClick={togglePasswordVisibility}
-                    style={{ cursor: "pointer" }}
-                  />
+                  <span className="su-password-toggle" onClick={togglePasswordVisibility}>
+                    <MDBIcon icon={showPassword ? "eye-slash" : "eye"} />
+                  </span>
                 </div>
-
-                {error && <p className="text-danger">{error}</p>}
-
-                <div className="text-center text-md-start mt-4 pt-2 signup">
-                  <p className="small fw-bold mt-2 pt-1 mb-2 login">
-                    Already have an account?{" "}
-                    <a href="/login" className="link-danger login">
-                      Login
-                    </a>
-                  </p>
-                </div>
-
-                <MDBBtn className="w-100 mb-4 signup" size="md" type="submit">
-                  Sign Up
-                </MDBBtn>
-              </form>
-
-              <div className="text-center signup">
-                <p>or sign up with:</p>
-
-                <MDBBtn
-                  tag="a"
-                  color="none"
-                  className="mx-3 signup"
-                  style={{ color: "#1266f1" }}
-                  onClick={() => handleSocialLogin("google")}
-                >
-                  <MDBIcon fab icon="google" size="sm" /> Sign up with Google
-                </MDBBtn>
-
-                <MDBBtn
-                  tag="a"
-                  color="none"
-                  className="mx-3 signup"
-                  style={{ color: "#1266f1" }}
-                  onClick={() => handleSocialLogin("microsoft")}
-                >
-                  <MDBIcon fab icon="microsoft" size="sm" /> Sign up with
-                  Microsoft
-                </MDBBtn>
               </div>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+
+              <div className="su-confirm-password-field">
+                
+                <div className="su-password-input-wrapper">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    className="su-input"
+                    placeholder="Confirm your password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    required
+                  />
+                  <span className="su-password-toggle" onClick={toggleConfirmPasswordVisibility}>
+                    <MDBIcon icon={showConfirmPassword ? "eye-slash" : "eye"} />
+                  </span>
+                </div>
+              </div>
+
+              <div className="su-options-row">
+                <div className="su-remember-container">
+                  <div 
+                    className={`su-checkbox ${rememberMe ? 'su-checked' : ''}`} 
+                    onClick={toggleRememberMe}
+                  >
+                    <div className="su-knob"></div>
+                  </div>
+                  <span className="su-remember-text">Remember me</span>
+                </div>
+                <a href="#" className="su-help-link">Need help?</a>
+              </div>
+
+              <button type="submit" className="su-submit-button">Sign Up</button>
+            </form>
+
+            <div className="su-login-redirect">
+              <p className="su-redirect-text">
+                Already have an account? <a href="/login" className="su-login-link">Login</a>
+              </p>
+            </div>
+
+            <div className="su-social-login">
+              <div className="su-divider">
+                <div className="su-divider-line"></div>
+                <span className="su-divider-text">Or sign up with</span>
+                <div className="su-divider-line"></div>
+              </div>
+
+              <div className="su-social-buttons">
+                <div className="su-social-btn su-microsoft" onClick={() => handleSocialLogin("microsoft")}>
+                  <MDBIcon fab icon="microsoft" />
+                </div>
+                <div className="su-social-btn su-google" onClick={() => handleSocialLogin("google")}>
+                  <MDBIcon fab icon="google" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

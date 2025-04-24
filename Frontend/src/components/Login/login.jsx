@@ -66,11 +66,11 @@ function Login() {
         
         {/* Left section with login form */}
         <div className="left-section">
-        <div className="login-logo-section">
-                <div className="login-logo-container">
-                  <img src={logo} alt="Cyberlooper Logo" className="footer-logo" />
-                </div>
-      </div>
+        <div className="su-logo-section">
+            <div className="su-logo-container">
+               <img src={logo} alt="Cyberlooper Logo" className="footer-logo" />
+            </div>
+          </div>
           <div className="welcome-container">
             <p className="welcome-text">Welcome Back</p>
             <h1 className="time-to-get">Time to Get</h1>
@@ -130,7 +130,7 @@ function Login() {
                   <span className="remember-text">Remember me</span>
                 </div>
                 
-                <a href="#forgot" className="forgot-password">
+                <a href="/ForgotPassword" className="forgot-password">
                   Forgot Password?
                 </a>
               </div>

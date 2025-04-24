@@ -1,3 +1,559 @@
-body {
-  background-color: hsl(0, 0%, 96%);
+/* signup-unique.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Base styles */
+.su-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-color: #030B0C;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.su-layout {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Left section - Security Note */
+.su-security-section {
+  width: 45%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(22.23% 39.86% at -4.98% 51.6%, #329866 0%, #319665 21.79%, #246E4A 32.5%, #194B32 43.69%, #0F2F1F 55%, #091B12 65.48%, #040D08 75.83%, #010403 86.07%, #000000 99.17%, #000000 100%);
+}
+
+.su-security-note-container {
+  position: relative;
+  width: 80%;
+  max-width: 450px;
+  padding: 2.5rem;
+  z-index: 5;
+}
+
+.su-security-note-background {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(255, 242, 242, 0.13);
+  backdrop-filter: blur(50px);
+  z-index: -1;
+}
+
+.su-security-text-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.su-flash-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #28F68B;
+  margin-right: 1rem;
+  position: relative;
+  box-shadow: 0 0 15px rgba(40, 246, 139, 0.5);
+}
+
+.su-flash-circle:before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), transparent 60%);
+  z-index: 1;
+}
+
+.su-security-label {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.su-security-description {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #E2E8F0;
+}
+
+.su-cyberlooper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  right: 0;
+  top: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.su-green-ellipse {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  top: 40%;
+  right: 15%;
+  border-radius: 50%;
+  background: radial-gradient(45% 78% at -5% 52%, 
+                rgba(40, 246, 139, 0.3) 0%, 
+                rgba(23, 160, 92, 0.25) 30%, 
+                rgba(0, 94, 87, 0.2) 50%, 
+                rgba(0, 40, 37, 0.15) 70%, 
+                rgba(0, 7, 9, 0.1) 100%);
+  filter: blur(80px);
+  z-index: 0;
+  animation: su-pulse 10s infinite alternate ease-in-out;
+}
+
+/* Right section - Form */
+.su-form-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 4rem;
+  position: relative;
+  z-index: 2;
+  background-color: #080F10;
+  min-height: 100vh;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.su-logo-section {
+  position: absolute;
+  top: 30px;
+  left: 50px;
+}
+
+.su-logo-container {
+  position: relative;
+  width: 200px;
+}
+
+.su-logo {
+  width: 100%;
+  height: auto;
+}
+
+.su-welcome-container {
+  max-width: 400px;
+  text-align: center;
+}
+
+.su-welcome-text {
+  font-size: 1rem;
+  color: #ffffff;
+  margin-bottom: 0.2rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.su-heading {
+  font-size: 3.5rem;
+
+  font-weight: bold;
+  margin: 0;
+  color: #FFFFFF;
+  text-align: center;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.su-productive-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.su-productive-text {
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 265px;
+  height: 60px;
+  border: 3px solid #28F68B;
+  border-radius: 23.38px;
+  font-weight: 400;
+  font-size: 40px;
+  color: #FFFFFF;
+}
+
+.su-description {
+  color: #A0AEC0;
+  font-size: 1rem;
+  text-align: center;
+  max-width: 400px;
+  margin: 14px 0 1.5rem;
+  line-height: 1.5;
+}
+
+/* Form styles */
+.su-form-wrapper {
+  width: 100%;
+  max-width: 500px;
+}
+
+.su-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.su-fullname-field,
+.su-email-field,
+.su-password-field,
+.su-confirm-password-field {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.su-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #A0AEC0;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.su-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 1px solid #2D3748;
+  background-color: #121B1C;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: #FFFFFF;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.su-input:focus {
+  border-color: #28F68B;
+  box-shadow: 0 0 0 2px rgba(40, 246, 139, 0.1);
+}
+
+.su-input::placeholder {
+  color: #4A5568;
+  font-size: 0.9rem;
+}
+
+.su-password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.su-password-toggle {
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #718096;
+  transition: color 0.2s ease;
+}
+
+.su-password-toggle:hover {
+  color: #28F68B;
+}
+
+.su-options-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+.su-remember-container {
+  display: flex;
+  align-items: center;
+}
+
+.su-checkbox {
+  width: 42px;
+  height: 22px;
+  background-color: #1A202C;
+  border: 1px solid #2D3748;
+  border-radius: 36.5px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-right: 0.75rem;
+}
+
+.su-checkbox.su-checked {
+  background-color: #17A05C;
+  border-color: #17A05C;
+}
+
+.su-checkbox .su-knob {
+  width: 16px;
+  height: 16px;
+  background-color: #FFFFFF;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.su-checkbox.su-checked .su-knob {
+  left: 22px;
+  background-color: #FFFFFF;
+}
+
+.su-remember-text {
+  font-size: 0.85rem;
+  color: #A0AEC0;
+  font-weight: 400;
+}
+
+.su-help-link {
+  font-size: 0.85rem;
+  color: #28F68B;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.su-help-link:hover {
+  color: #17A05C;
+  text-decoration: underline;
+}
+
+.su-submit-button {
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(90deg, #17A05C 0%, #02291B 100%);
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1.75rem;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(23, 160, 92, 0.3);
+}
+
+.su-submit-button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.6s;
+}
+
+.su-submit-button:hover {
+  background: linear-gradient(90deg, #15944F 0%, #021A10 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(23, 160, 92, 0.4);
+}
+
+.su-submit-button:hover:before {
+  left: 100%;
+}
+
+.su-submit-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(23, 160, 92, 0.3);
+}
+
+.su-login-redirect {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.su-redirect-text {
+  color: #A0AEC0;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.su-login-link {
+  color: #28F68B;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.su-login-link:hover {
+  color: #17A05C;
+  text-decoration: underline;
+}
+
+/* Social login section */
+.su-social-login {
+  margin-top: 0.5rem;
+}
+
+.su-divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+}
+
+.su-divider-line {
+  flex: 1;
+  height: 1px;
+  background-color: #2D3748;
+}
+
+.su-divider-text {
+  padding: 0 1rem;
+  color: #A0AEC0;
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.su-social-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.su-social-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #121B1C;
+  border: 1px solid #2D3748;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.25rem;
+}
+
+.su-social-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.su-social-btn.su-microsoft {
+  color: #0078d4;
+}
+
+.su-social-btn.su-microsoft:hover {
+  background-color: rgba(0, 120, 212, 0.1);
+  border-color: #0078d4;
+}
+
+.su-social-btn.su-google {
+  color: #DB4437;
+}
+
+.su-social-btn.su-google:hover {
+  background-color: rgba(219, 68, 55, 0.1);
+  border-color: #DB4437;
+}
+
+.su-error-message {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #F87171;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border-left: 3px solid #EF4444;
+}
+
+/* Pulse animation */
+@keyframes su-pulse {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.9) translate(0, 0);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05) translate(-5%, 2%);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1) translate(5%, -2%);
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .su-security-section {
+    width: 40%;
+  }
+  
+  .su-form-section {
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .su-layout {
+    flex-direction: column;
+  }
+  
+  .su-security-section {
+    display: none;
+  }
+  
+  .su-form-section {
+    padding: 3rem 2rem;
+    height: 100vh;
+  }
+  
+  .su-form-wrapper {
+    max-width: 450px;
+  }
+}
+
+@media (max-width: 576px) {
+  .su-form-section {
+    padding: 2rem 1.5rem;
+  }
+  
+  .su-heading {
+    font-size: 2rem;
+  }
+  
+  .su-productive-text {
+    font-size: 2rem;
+    width: 200px;
+    height: 50px;
+  }
+  
+  .su-logo-section {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin-bottom: 2rem;
+  }
 }

@@ -1,0 +1,266 @@
+.faq-page {
+  position: relative;
+  width: 100%;
+  background-color: #030B0C;
+  color: #FFFFFF;
+  font-family: 'Montserrat', 'Lato', sans-serif;
+  padding: 40px 0;
+  margin-top: 200px;
+}
+
+.faq-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 100px;
+}
+
+/* Header Section */
+.faq-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.faq-header h2 {
+  font-size: 60px;
+  font-weight: 500;
+  line-height: 73px;
+  margin-bottom: 20px;
+}
+
+.faq-header p {
+  font-size: 20px;
+  line-height: 24px;
+  max-width: 744px;
+  margin: 0 auto;
+}
+
+/* FAQ Items */
+.faq-list {
+  margin-bottom: 60px;
+}
+
+.faq-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 36px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.faq-question:hover {
+  opacity: 0.9;
+}
+
+.faq-question h3 {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 45px;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.toggle-icon {
+  width: 38.75px;
+  height: 38.75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.faq-answer {
+  padding: 0 0 36px;
+}
+
+.faq-answer p {
+  font-family: 'Lato', sans-serif;
+  font-size: 24px;
+  line-height: 45px;
+  color: #FFFFFF;
+  margin: 0;
+  text-align: justify;
+}
+
+/* Contact Section */
+.contact-section {
+  margin-top: 100px;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.contact-header h2 {
+  font-size: 60px;
+  font-weight: 500;
+  line-height: 73px;
+  margin-bottom: 20px;
+}
+
+.contact-header p {
+  font-size: 20px;
+  line-height: 24px;
+  max-width: 744px;
+  margin: 0 auto;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.form-row {
+  display: flex;
+  gap: 28px;
+}
+
+.input-standard {
+  flex: 1;
+  position: relative;
+}
+
+.input-standard input,
+.input-multiline textarea {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 17.7px;
+  padding: 21px;
+  color: #FFFFFF;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 26px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-standard input {
+  height: 78px;
+}
+
+.input-multiline textarea {
+  height: 220px;
+  resize: none;
+}
+
+.input-standard input::placeholder,
+.input-multiline textarea::placeholder {
+  color: rgba(255, 255, 255, 0.36);
+}
+
+.input-standard input:focus,
+.input-multiline textarea:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.submit-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.submit-button {
+  background: #030B0C;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 15px 80px;
+  color: #FFFFFF;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .faq-container {
+    padding: 0 50px;
+  }
+  
+  .faq-header h2,
+  .contact-header h2 {
+    font-size: 48px;
+    line-height: 60px;
+  }
+  
+  .faq-question h3 {
+    font-size: 28px;
+    line-height: 38px;
+  }
+  
+  .faq-answer p {
+    font-size: 20px;
+    line-height: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .faq-container {
+    padding: 0 30px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+  }
+  
+  .faq-header h2,
+  .contact-header h2 {
+    font-size: 36px;
+    line-height: 48px;
+  }
+  
+  .faq-header p,
+  .contact-header p {
+    font-size: 18px;
+    line-height: 22px;
+  }
+  
+  .input-standard input,
+  .input-multiline textarea {
+    font-size: 20px;
+  }
+  
+  .submit-button {
+    padding: 12px 60px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .faq-container {
+    padding: 0 20px;
+  }
+  
+  .faq-header h2,
+  .contact-header h2 {
+    font-size: 32px;
+    line-height: 40px;
+  }
+  
+  .faq-question h3 {
+    font-size: 22px;
+    line-height: 30px;
+  }
+  
+  .toggle-icon {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .submit-button {
+    width: 100%;
+    padding: 12px 20px;
+  }
+}
