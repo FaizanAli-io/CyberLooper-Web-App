@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
-import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBBtn,
-  MDBInput,
-} from "mdb-react-ui-kit";
+import { useNavigate } from "react-router-dom";
 import "./Chat.css";
+import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
@@ -16,62 +11,51 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [chats, setChats] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [loadingChats, setLoadingChats] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [waitingResponse, setWaitingResponse] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showOtherMenu, setShowOtherMenu] = useState(false);
 
-  const [postMessage, setPostMessage] = useState(null);
-  const [postError, setPostError] = useState(null);
-  const [postLoading, setPostLoading] = useState(false);
-  
-  const [putMessage, setPutMessage] = useState(null);
-  const [putError, setPutError] = useState(null);
-  const [putLoading, setPutLoading] = useState(false);
-  
-  const [getMessage, setGetMessage] = useState(null);
-  const [getError, setGetError] = useState(null);
-  const [getLoading, setGetLoading] = useState(false);
-  
-  const [deleteMessage, setDeleteMessage] = useState(null);
-  const [deleteError, setDeleteError] = useState(null);
-  const [deleteLoading, setDeleteLoading] = useState(false);
+  const navigate = useNavigate();
 
-  
-
-  const token = localStorage.getItem("user_token");
-
+  // Get token and check authentication
   useEffect(() => {
-    const fetchChats = async () => {
-      setGetMessage(null);
-      setGetError(null);
-      setGetLoading(true);
+    const token = localStorage.getItem("user_token");
+    if (token) {
+      setIsAuthenticated(true);
+      fetchChats(token);
+    } else {
+      setIsAuthenticated(false);
+      setLoadingChats(false);
+    }
+  }, []);
 
-      try {
-        const response = await axios.get(`${API_ENDPOINT}/chats`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setGetMessage(response.data.message);
-        setChats(
-          response.data.map((chat) => ({ id: chat.id, topic: chat.topic, model: chat.model }))
-        );
-      } catch (error) {
-        console.error(
-          "❌ Error fetching chats:",
-          error.response?.data?.detail || error.message || error.response?.data || "Something went wrong. Please try again."
-        );
-        setGetError(
-          error.response?.data?.detail || error.message || error.response?.data || "Something went wrong. Please try again."
-        );
-      } finally {
-        setGetLoading(false);
-        setLoadingChats(false)
-      }
-    };
-    fetchChats();
-  }, [token]);
+  const fetchChats = async (token) => {
+    setLoadingChats(true);
+    try {
+      const response = await axios.get(`${API_ENDPOINT}/chats`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setChats(
+        response.data.map((chat) => ({ id: chat.id, topic: chat.topic }))
+      );
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    } finally {
+      setLoadingChats(false);
+    }
+  };
 
   const fetchMessages = async (chatId) => {
+    const token = localStorage.getItem("user_token");
+    if (!token) {
+      alert("Please sign in to view chat history");
+      return;
+    }
+
     setLoadingMessages(true);
     setMessages([]);
     setSelectedChatId(chatId);
@@ -98,13 +82,15 @@ const ChatPage = () => {
     setMessages((prev) => [...prev, { request: userMessage, response: "..." }]);
     setWaitingResponse(true);
 
+    const token = localStorage.getItem("user_token");
+
     try {
       const response = await axios.post(
         `${API_ENDPOINT}/messages`,
         { chat_id: selectedChatId, request: userMessage },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: token ? `Bearer ${token}` : "",
             "Content-Type": "application/json",
           },
         }
@@ -118,7 +104,7 @@ const ChatPage = () => {
         )
       );
 
-      if (!selectedChatId) {
+      if (!selectedChatId && token) {
         setChats((prev) => [
           { id: response.data.chat_id, topic: userMessage.slice(0, 30) },
           ...prev,
@@ -135,72 +121,348 @@ const ChatPage = () => {
   const startNewChat = () => {
     setMessages([]);
     setSelectedChatId(null);
+    setShowOtherMenu(false);
   };
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredChats = chats.filter(chat =>
+    chat.topic.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleSignIn = () => {
+    navigate('/login');
+  };
+
+  const handleSignUp = () => {
+    navigate('/signup');
+  };
+
+  const handleSignOut = () => {
+    localStorage.removeItem("user_token");
+    setIsAuthenticated(false);
+    setChats([]);
+    startNewChat();
+  };
+
+  const navigateTo = (path) => {
+    navigate(path);
+    setShowOtherMenu(false);
+  };
+
+  const handleCopyText = (text) => {
+    navigator.clipboard.writeText(text);
+    // Optional: Add a toast notification here
+  };
+
+  const categoryCards = [
+    {
+      title: "AI Assistant",
+      icon: "assistant",
+      examples: "How do I use V-Lookup with two excel files… Create a DAX formula that provides YTD sales on… How do I merge two tables in Power Query …"
+    },
+    {
+      title: "Discovery",
+      icon: "discovery",
+      examples: "Find recent studies on remote work efficiency… Who are the main competitors in the tech industry for.. Summarize the latest trends in renewable energy with …"
+    },
+    {
+      title: "Communication",
+      icon: "communication",
+      examples: "Draft an email to request a project update.… Generate a follow-up message after a sales call... Create an agenda for our next project kickoff…"
+    },
+    {
+      title: "Coding",
+      icon: "coding",
+      examples: "Write a Python script to automate data cleaning..… Explain the difference between SQL JOIN types... Debug this JavaScript error:…"
+    }
+  ];
+
+  const renderCategoryIcon = (iconName) => {
+    // A placeholder for the icons - in a real app you'd use actual icons
+    return (
+      <div className="card-icon">
+        {/* Icon placeholder */}
+      </div>
+    );
+  };
+
+  // Render the user avatar
+  const renderUserAvatar = () => (
+    <div className="avatar-container">
+      <div className="user-avatar"></div>
+    </div>
+  );
+
+  // Render the bot avatar
+  const renderBotAvatar = () => (
+    <div className="avatar-container">
+      <div className="bot-avatar">
+        {/* You can add an SVG icon here */}
+      </div>
+    </div>
+  );
+
   return (
-    <MDBContainer fluid className="chat-container">
-      <MDBRow className="h-100">
-        <MDBCol md="3" className="chat-sidebar">
-          <h2 className="text-white">Previous Chats</h2>
-          <MDBBtn
-            color="primary"
-            className="mb-3 new-chat-btn"
-            onClick={startNewChat}
-          >
-            + New Chat
-          </MDBBtn>
-          {loadingChats ? (
-            <p>Loading chats...</p>
-          ) : chats.length === 0 ? (
-            <p>No previous chats.</p>
+    <div className="app-container">
+      {/* Top Navbar */}
+      <div className="nav-top-bar">
+        <div className="navbar-content">
+          {!isAuthenticated ? (
+            <div className="auth-buttons">
+              <button className="auth-btn sign-in" onClick={handleSignIn}>Sign In</button>
+              <button className="auth-btn sign-up" onClick={handleSignUp}>Sign Up</button>
+            </div>
+          ) : (
+            <div className="auth-buttons">
+              <button className="auth-btn sign-out" onClick={handleSignOut}>Sign Out</button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="chat-container">
+        {/* Sidebar */}
+        <div className="chat-sidebar">
+          <div className="sidebar-logo-section">
+            <div className="chat-logo-container">
+              <img src={logo} alt="Cyberlooper Logo" className="chat-logo" />
+            </div>
+
+            <div className="search-bar-container">
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Search chats..."
+                value={searchQuery}
+                onChange={handleSearch}
+              />
+              <svg className="search-icon" width="16" height="16" viewBox="0 0 16 16">
+                <path
+                  d="M10.5 11.5L14 15M6.5 12C3.46243 12 1 9.53757 1 6.5C1 3.46243 3.46243 1 6.5 1C9.53757 1 12 3.46243 12 6.5C12 9.53757 9.53757 12 6.5 12Z"
+                  stroke="white"
+                  strokeWidth="1.33333"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <div className="sidebar-header">
+            <button className="new-chat-btn" onClick={startNewChat}>
+              <svg width="16" height="16" viewBox="0 0 16 16">
+                <path
+                  d="M8.33333 2.33333V13.6667M2.66667 8H14"
+                  stroke="white"
+                  strokeWidth="1.33333"
+                />
+              </svg>
+              New Chat
+            </button>
+          </div>
+
+          {!isAuthenticated ? (
+            <div className="auth-prompt">
+              <p>Sign in to see your previous chats</p>
+              <div className="auth-sidebar-buttons">
+                <button className="auth-sidebar-btn" onClick={handleSignUp}>Sign Up</button>
+              </div>
+            </div>
           ) : (
             <ul className="chat-list">
-              {chats.map((chat, index) => (
-                <li
-                  key={chat.id}
-                  className={`chat-item ${selectedChatId === chat.id ? "selected-chat" : ""}`}
-                  onClick={() => fetchMessages(chat.id)}
-                >
-                  <span className="chat-index">{chats.length - index}.</span>
-                  {chat.topic}
-                </li>
-              ))}
+              {loadingChats ? (
+                <p className="loading-indicator">Loading chats...</p>
+              ) : filteredChats.length === 0 ? (
+                searchQuery ? (
+                  <p className="loading-indicator">No chats match your search.</p>
+                ) : (
+                  <p className="loading-indicator">No previous chats.</p>
+                )
+              ) : (
+                filteredChats.map((chat, index) => (
+                  <li
+                    key={chat.id}
+                    className={`chat-item ${selectedChatId === chat.id ? "selected-chat" : ""}`}
+                    onClick={() => fetchMessages(chat.id)}
+                  >
+                    <span className="chat-index">{filteredChats.length - index}.</span>
+                    {chat.topic}
+                  </li>
+                ))
+              )}
             </ul>
           )}
-        </MDBCol>
-        <MDBCol md="9" className="chat-main">
-          <div className="chat-messages">
-            {messages.map((msg, index) => (
-              <div key={index} className="message-wrapper">
-                <div className="chat-bubble user-bubble">{msg.request}</div>
-                {msg.response && (
-                  <div className="chat-bubble bot-bubble">
-                    <ReactMarkdown>{msg.response}</ReactMarkdown>
-                  </div>
+
+          <div className="sidebar-footer">
+            <button
+              className={`other-btn ${showOtherMenu ? "active" : ""}`}
+              onClick={() => setShowOtherMenu(!showOtherMenu)}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16">
+                <path
+                  d="M7.33333 7.33333H2.66667M13.3333 7.33333H8.66667M7.33333 7.33333V2.66667M7.33333 7.33333V13.3333"
+                  stroke="white"
+                  strokeWidth="1.33333"
+                />
+              </svg>
+              Other
+            </button>
+
+            {showOtherMenu && (
+              <div className="other-menu">
+                <button className="other-menu-item" onClick={() => navigateTo('/dashboard')}>
+                  Dashboard
+                </button>
+                <button className="other-menu-item" onClick={() => navigateTo('/analytics')}>
+                  Analytics
+                </button>
+                <button className="other-menu-item" onClick={() => navigateTo('/settings')}>
+                  Settings
+                </button>
+                <button className="other-menu-item" onClick={() => navigateTo('/help')}>
+                  Help Center
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Main Chat Area */}
+        <div className="chat-main">
+          {!messages.length && !selectedChatId ? (
+            <>
+              <div className="hero-section">
+                <h2>Elevate Your Workday!</h2>
+
+                <div className="hero-title">
+                  <span className="normal-text">That Feels Like</span>
+                  <span className="chat-ai-support">AI Support</span>
+                </div>
+
+                <p className="hero-subtitle">Having a Personal Technology Assistant</p>
+
+                <p className="hero-instruction">
+                  Type in your Position, Department and Code Language (If applicable) for better results
+                </p>
+
+                <div className="category-cards">
+                  {categoryCards.map((card, index) => (
+                    <div key={index} className="category-card">
+                      {renderCategoryIcon(card.icon)}
+                      <div className="card-title">{card.title}</div>
+                      <div className="card-examples">{card.examples}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="chat-input-form">
+                <div className="chat-input-container">
+                  <input
+                    type="text"
+                    className="chat-input"
+                    placeholder="Hello! What work challenge can I help you tackle?"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                    disabled={waitingResponse}
+                  />
+                  <button
+                    className="send-button"
+                    onClick={sendMessage}
+                    disabled={waitingResponse}
+                  >
+                    <svg viewBox="0 0 24 24">
+                      <path d="M7.33 24l2.83-9.25H2l14.67-10.5L14 14h8.33L7.33 24z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <p className="terms-notice">
+                When you use Cyberlooper, you consent to our Terms of Service and confirm that you've reviewed our Privacy & Security Policy.
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="chat-messages">
+                {loadingMessages ? (
+                  <p className="loading-indicator">Loading messages...</p>
+                ) : (
+                  messages.map((msg, index) => (
+                        <div className="message-wrapper">
+                          {/* User message with avatar and actions */}
+                          <div className="user-message-container">
+                            <div className="user-avatar-container">
+                              <div className="user-avatar"></div>
+                            </div>
+                            <div className="user-content">
+                              <div className="user-bubble">{msg.request}</div>
+                              <div className="user-actions">
+                                <button className="action-btn">Edit</button>
+                                <span className="timestamp">Just now</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Bot message with avatar and actions */}
+                          {msg.response && (
+                            <div className="bot-message-container">
+                              <div className="bot-avatar-container">
+                                <div className="bot-avatar"></div>
+                              </div>
+                              <div className="bot-content">
+                                <div className="bot-bubble">
+                                  <ReactMarkdown>{msg.response}</ReactMarkdown>
+                                </div>
+                                <div className="bot-actions">
+                                  <button
+                                    className="action-btn"
+                                    onClick={() => handleCopyText(msg.response)}
+                                  >
+                                    Copy
+                                  </button>
+                                  <button className="action-btn">Regenerate response</button>
+                                  <button className="action-btn">Use Another LLM</button>
+                                  <span className="timestamp">Just now</span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))
                 )}
               </div>
-            ))}
-          </div>
-          <MDBRow className="chat-input p-2">
-            <MDBCol size="10">
-              <MDBInput
-                type="text"
-                placeholder="Type a message..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                disabled={waitingResponse}
-              />
-            </MDBCol>
-            <MDBCol size="2">
-              <MDBBtn onClick={sendMessage} disabled={waitingResponse}>
-                Send
-              </MDBBtn>
-            </MDBCol>
-          </MDBRow>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+
+              <div className="chat-input-form">
+                <div className="chat-input-container">
+                  <input
+                    type="text"
+                    className="chat-input"
+                    placeholder="Type a message..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                    disabled={waitingResponse}
+                  />
+                  <button
+                    className="send-button"
+                    onClick={sendMessage}
+                    disabled={waitingResponse}
+                  >
+                    <svg viewBox="0 0 24 24">
+                      <path d="M7.33 24l2.83-9.25H2l14.67-10.5L14 14h8.33L7.33 24z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
