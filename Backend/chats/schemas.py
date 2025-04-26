@@ -17,6 +17,7 @@ class ChatUpdate(BaseModel):
 
 class ChatResponse(ChatBase):
     id: int
+    model: str
     created_at: datetime
     updated_at: datetime
 

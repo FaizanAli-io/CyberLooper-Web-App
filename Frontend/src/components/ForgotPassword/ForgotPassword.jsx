@@ -21,7 +21,7 @@ function ForgotPassword() {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${API_ENDPOINT}/forgot-password`,
+        `${API_ENDPOINT}/users/forgot-password`,
         { email }
       );
       setMessage(response.data.message);

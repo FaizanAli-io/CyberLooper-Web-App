@@ -12,7 +12,7 @@ function Signup() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    fullName: "",
+    firstname: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -20,6 +20,8 @@ function Signup() {
   });
 
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -48,6 +50,7 @@ function Signup() {
       setError("Passwords do not match.");
       return;
     }
+    setLoading(true)
 
     try {
       // Remove confirmPassword before sending to API
@@ -57,14 +60,22 @@ function Signup() {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (response.status === 201 || response.status === 200) {
-        localStorage.setItem("user_token", response.data.accessToken);
-        navigate("/Chat");
+      // if (response.status === 201 || response.status === 200) {
+      //   localStorage.setItem("user_token", response.data.accessToken);
+      //   navigate("/Chat");
+      // }
+      if (response.status === 200 || response.status === 201) {
+        alert(response.data.message);
+        setError(null);
+        setMessage(response.data.message); // Show "check inbox" message
+        navigate("/login");
       }
     } catch (err) {
       setError(
         err.response?.data?.message || "Failed to sign up. Please try again."
       );
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -136,7 +147,7 @@ function Signup() {
                   name="fullName"
                   className="su-input"
                   placeholder="Enter your full name"
-                  value={formData.fullName}
+                  value={formData.firstame}
                   onChange={handleChange}
                   required
                 />

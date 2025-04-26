@@ -31,9 +31,9 @@ def hash_password(password: str) -> str:
 
 router = APIRouter()
 
-SECRET_KEY = "your_secret_key"  # Change this to a secure key
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+SECRET_KEY = os.getenv("SECRET_KEY")  # Change this to a secure key
+ALGORITHM = os.getenv("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
 import secrets
 from datetime import datetime, timedelta

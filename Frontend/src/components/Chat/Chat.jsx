@@ -21,21 +21,51 @@ const ChatPage = () => {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [waitingResponse, setWaitingResponse] = useState(false);
 
+  const [postMessage, setPostMessage] = useState(null);
+  const [postError, setPostError] = useState(null);
+  const [postLoading, setPostLoading] = useState(false);
+  
+  const [putMessage, setPutMessage] = useState(null);
+  const [putError, setPutError] = useState(null);
+  const [putLoading, setPutLoading] = useState(false);
+  
+  const [getMessage, setGetMessage] = useState(null);
+  const [getError, setGetError] = useState(null);
+  const [getLoading, setGetLoading] = useState(false);
+  
+  const [deleteMessage, setDeleteMessage] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  
+
   const token = localStorage.getItem("user_token");
 
   useEffect(() => {
     const fetchChats = async () => {
+      setGetMessage(null);
+      setGetError(null);
+      setGetLoading(true);
+
       try {
         const response = await axios.get(`${API_ENDPOINT}/chats`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        setGetMessage(response.data.message);
         setChats(
-          response.data.map((chat) => ({ id: chat.id, topic: chat.topic }))
+          response.data.map((chat) => ({ id: chat.id, topic: chat.topic, model: chat.model }))
         );
       } catch (error) {
-        console.error("Error fetching chats:", error);
+        console.error(
+          "❌ Error fetching chats:",
+          error.response?.data?.detail || error.message || error.response?.data || "Something went wrong. Please try again."
+        );
+        setGetError(
+          error.response?.data?.detail || error.message || error.response?.data || "Something went wrong. Please try again."
+        );
       } finally {
-        setLoadingChats(false);
+        setGetLoading(false);
+        setLoadingChats(false)
       }
     };
     fetchChats();

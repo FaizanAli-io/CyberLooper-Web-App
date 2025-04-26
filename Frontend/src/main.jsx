@@ -7,8 +7,10 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import Login from "./components/Login/login.jsx";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword.jsx";
+import ResetPassword from "./components/ForgotPassword/resetPassword.jsx";
 import Layout from "./Layout.jsx";
 import Signup from "./components/Signup/signup.jsx";
+import VerifyEmail from "./components/Signup/verifyEmail.jsx";
 import Home from "./components/Home/home.jsx";
 import FAQ from "./components/FAQ/FAQPage.jsx";
 import Chat from "./components/Chat/Chat.jsx";
@@ -53,6 +55,14 @@ const router = createBrowserRouter([
       {
         path: "About",
         element:<About/>
+      },
+      {
+        path: "verify-email",
+        element:<VerifyEmail/>
+      },
+      {
+        path: "reset-password",
+        element:<ResetPassword/>
       },
       // {
       //   element: <ProtectedRoute />,

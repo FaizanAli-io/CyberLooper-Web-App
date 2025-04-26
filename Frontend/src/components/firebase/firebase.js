@@ -44,6 +44,13 @@ const signInWithGoogle = async () => {
       body: JSON.stringify({ firebase_token: idToken }),
     });
 
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.detail || "Login failed. Please try again.");
+      return null;
+    }
+
     console.log(response);
     return result.user;
   } catch (error) {
@@ -68,6 +75,13 @@ const signInWithMicrosoft = async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ firebase_token: idToken }),
     });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.detail || "Login failed. Please try again.");
+      return null;
+    }
 
     console.log("Backend Response: ", await response.json());
     return result.user;
