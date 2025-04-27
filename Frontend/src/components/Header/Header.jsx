@@ -4,23 +4,28 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 
 export default function Header() {
-  
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isLoggedIn = !!localStorage.getItem("user_token"); // Check if user is logged in
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
       localStorage.removeItem("user_token");
-      navigate("/Login");
+      navigate("/login");
     }
+  };
+
+  const handleLogin = () => {
+    navigate("/login");
   };
 
   const items = [
     {
       label: "Home",
       command: () => navigate("/"),
-      className: location.pathname === "/home" ? "active-item" : "",
+      className: location.pathname === "/" ? "active-item" : "",
     },
     {
       label: "Chat",
@@ -28,19 +33,25 @@ export default function Header() {
       className: location.pathname === "/chat" ? "active-item" : "",
     },
     {
-      label: "Blogs",
-      command: () => navigate("/blogs"),
-      className: location.pathname === "/blogs" ? "active-item" : "",
+      label: "About",
+      command: () => navigate("/about"),
+      className: location.pathname === "/about" ? "active-item" : "",
     },
     {
       label: "FAQ",
       command: () => navigate("/faq"),
       className: location.pathname === "/faq" ? "active-item" : "",
     },
-    {
-      label: "Logout",
-      command: handleLogout,
-    },
+    isLoggedIn
+      ? {
+          label: "Logout",
+          command: handleLogout,
+        }
+      : {
+          label: "Login",
+          command: handleLogin,
+          className: location.pathname === "/login" ? "active-item" : "",
+        },
   ];
 
   return (

@@ -32,18 +32,18 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
-      {
-        path: "/faq",
-        element: <FAQ />,
-      },
+      // {
+      //   path: "/faq",
+      //   element: <FAQ />,
+      // },
       {
         path: "/chat",
         element: <Chat />,
       },
-      {
-        path: "/blogs",
-        element: <Blogs />,
-      },
+      // {
+      //   path: "/blogs",
+      //   element: <Blogs />,
+      // },
       {
         path: "signup",
         element: <Signup />,
@@ -64,31 +64,19 @@ const router = createBrowserRouter([
         path: "reset-password",
         element:<ResetPassword/>
       },
-      // {
-      //   element: <ProtectedRoute />,
-      //   children: [
-      //     {
-      //       path: "faq",
-      //       element: <FAQ />,
-      //     },
-      //     {
-      //       path: "/chat",
-      //       element: <Chat />,
-      //     },
-      //     {
-      //       path: "/blogs",
-      //       element: <Blogs />,
-      //     },
-      //     {
-      //       path: "home",
-      //       element: <Home />,
-      //     },
-      //     {
-      //       path: "/",
-      //       element: <Home />,
-      //     },
-      //   ],
-      // },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "faq",
+            element: <FAQ />,
+          },
+          {
+            path: "/blogs",
+            element: <Blogs />,
+          },
+        ],
+      },
 
       // Protected Routes
       {},

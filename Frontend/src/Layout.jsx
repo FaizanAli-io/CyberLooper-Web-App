@@ -5,7 +5,7 @@ import Footer from "./components/Footer/Footer";
 
 function Layout() {
   const location = useLocation();
-  const hideNavbar = ["/signup", "/login", "/ForgotPassword", "/Chat","/chat","reset-password"].includes(location.pathname);
+  const hideNavbar = ["/signup", "/login", "/ForgotPassword", "/Chat","/chat","/reset-password"].includes(location.pathname);
 
   return (
     <>

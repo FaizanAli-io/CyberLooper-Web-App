@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./FAQPage.css";
 import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 import axios from "axios";
@@ -7,11 +8,31 @@ const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 const FAQPage = () => {
   const [activeItem, setActiveItem] = useState(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [sendingMessage, setSendingMessage] = useState(false);
 
+  const navigate = useNavigate();
+
+  const validateEmail = (email) => {
+    // Simple regex for basic email validation
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
   const sendMessage = async () => {
-    if (!message.trim()) return;
+    // Basic Form Validations
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !message.trim()) {
+      alert("Please fill out all the fields.");
+      return;
+    }
+    if (!validateEmail(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
     setSendingMessage(true);
 
     const token = localStorage.getItem("user_token");
@@ -20,6 +41,9 @@ const FAQPage = () => {
       const response = await axios.post(
         `${API_ENDPOINT}/contactform`,
         {
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
           message: message
         },
         {
@@ -32,22 +56,24 @@ const FAQPage = () => {
 
       if (response.status === 200) {
         alert("Contact form submitted! Please check your email for acknowledgement.");
+        // Clear fields after successful submit
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setMessage("");
       } else {
         console.error("Unexpected response:", response);
-        alert("Failed to submit the contact form:");
+        alert("Failed to submit the contact form.");
       }
-
     } catch (error) {
       console.error("Error Submitting Contact Form:", error);
       const errorMessage =
         error.response?.data?.message ||
         error.response?.data?.error ||
         "Failed to submit the contact form. Please try again later.";
-
       alert(errorMessage);
     } finally {
       setSendingMessage(false);
-      setMessage("")
     }
   };
 
@@ -60,10 +86,7 @@ const FAQPage = () => {
 
     return (
       <div className="faq-item">
-        <div
-          className="faq-question"
-          onClick={() => toggleItem(id)}
-        >
+        <div className="faq-question" onClick={() => toggleItem(id)}>
           <h3>{question}</h3>
           <div className="toggle-icon">
             {isActive ? (
@@ -99,6 +122,7 @@ const FAQPage = () => {
         <span className="try-text">Try it free</span>
         <i className="pi pi-arrow-up-right icon-arrow"></i>
       </div>
+
       <div className="faq-page">
         <div className="faq-container">
           {/* Header Section */}
@@ -116,19 +140,16 @@ const FAQPage = () => {
               question="How does Cyberlooper platform operate?"
               answer="We use advanced language models to understand your questions and provide context-relevant answers. Simply type your question in everyday language—no complex commands needed."
             />
-
             <FAQItem
               id={2}
               question="Is my company's data secure when I use this platform?"
               answer="Yes! We employ enterprise-grade security protocols to ensure all your data remains confidential and protected at all times."
             />
-
             <FAQItem
               id={3}
               question="What kinds of work tasks can I use Cyberlooper for?"
               answer="Cyberlooper can assist with data analysis, content creation, research, customer support automation, and many other business tasks requiring information processing or generation."
             />
-
             <FAQItem
               id={4}
               question="How do I know Cyberlooper won't share confidential information?"
@@ -146,15 +167,30 @@ const FAQPage = () => {
             <div className="contact-form">
               <div className="form-row">
                 <div className="input-standard">
-                  <input type="text" placeholder="First name" />
+                  <input 
+                    type="text" 
+                    placeholder="First name" 
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
                 </div>
                 <div className="input-standard">
-                  <input type="text" placeholder="Last name" />
+                  <input 
+                    type="text" 
+                    placeholder="Last name" 
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
                 </div>
               </div>
 
               <div className="input-standard full-width">
-                <input type="email" placeholder="Email" />
+                <input 
+                  type="email" 
+                  placeholder="Email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
 
               <div className="input-multiline">
@@ -166,7 +202,13 @@ const FAQPage = () => {
               </div>
 
               <div className="submit-button-container">
-                <button className="submit-button" onClick={sendMessage}>Submit</button>
+                <button 
+                  className="submit-button" 
+                  onClick={sendMessage}
+                  disabled={sendingMessage}
+                >
+                  {sendingMessage ? "Sending..." : "Submit"}
+                </button>
               </div>
             </div>
           </div>
