@@ -557,3 +557,18 @@
     margin-bottom: 2rem;
   }
 }
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #121B1C inset !important; /* or your input's background color */
+  -webkit-text-fill-color: #ffffff !important; /* your text color */
+  transition: background-color 5000s ease-in-out 0s; /* helps prevent "flash" */
+}
+input:-webkit-autofill:hover {
+  -webkit-box-shadow: 0 0 0px 1000px #121B1C inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Optional: make sure focused autofill looks normal too */
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #121B1C inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+}

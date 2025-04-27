@@ -19,7 +19,7 @@ export default function Header() {
   const items = [
     {
       label: "Home",
-      command: () => navigate("/home"),
+      command: () => navigate("/"),
       className: location.pathname === "/home" ? "active-item" : "",
     },
     {

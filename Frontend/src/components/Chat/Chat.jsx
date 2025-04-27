@@ -7,6 +7,8 @@ import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -38,6 +40,13 @@ const ChatPage = () => {
       setLoadingChats(false);
     }
   }, []);
+  
+  function formatTimestamp(timestamp) {
+    if (!timestamp) return "Just now"; // fallback if no timestamp exists
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
 
   const fetchChats = async (token) => {
     setLoadingChats(true);
@@ -466,10 +475,14 @@ const ChatPage = () => {
             <>
               <div className="chat-messages">
                 {loadingMessages ? (
-                  <p className="loading-indicator">Loading messages...</p>
+                  <div className="loading-indicator">
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                  </div>
                 ) : (
                   messages.map((msg, index) => (
-                    <div className="message-wrapper">
+                    <div className="message-wrapper" key={index}>
                       {/* User message with avatar and actions */}
                       <div className="user-message-container">
                         <div className="user-avatar-container">
@@ -479,7 +492,7 @@ const ChatPage = () => {
                           <div className="user-bubble">{msg.request}</div>
                           <div className="user-actions">
                             <button className="action-btn">Edit</button>
-                            <span className="timestamp">Just now</span>
+                            <span className="timestamp">{formatTimestamp(msg.timestamp)}</span>
                           </div>
                         </div>
                       </div>
@@ -501,9 +514,13 @@ const ChatPage = () => {
                               >
                                 Copy
                               </button>
-                              <button className="action-btn" onClick={regenerateResponse}>Regenerate response</button>
-                              <button className="action-btn" onClick={switchModel}>Use Another LLM</button>
-                              <span className="timestamp">Just now</span>
+                              <button className="action-btn" onClick={regenerateResponse}>
+                                Regenerate response
+                              </button>
+                              <button className="action-btn" onClick={switchModel}>
+                                Use Another LLM
+                              </button>
+                              <span className="timestamp">{formatTimestamp(msg.timestamp)}</span>
                             </div>
                           </div>
                         </div>
@@ -512,6 +529,7 @@ const ChatPage = () => {
                   ))
                 )}
               </div>
+
 
               <div className="chat-input-form">
                 <div className="chat-input-container">
