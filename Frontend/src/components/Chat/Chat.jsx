@@ -40,7 +40,7 @@ const ChatPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setChats(
-        response.data.map((chat) => ({ id: chat.id, topic: chat.topic }))
+        response.data.map((chat) => ({ id: chat.id, topic: chat.topic, model: chat.model }))
       );
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -74,6 +74,13 @@ const ChatPage = () => {
     }
   };
 
+  const regenerateResponse = async () => {
+    if (messages.length === 0) return;
+    const lastMessage = messages[messages.length - 1];
+    setInput(lastMessage.request);
+    sendMessage();
+  };
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
@@ -87,7 +94,13 @@ const ChatPage = () => {
     try {
       const response = await axios.post(
         `${API_ENDPOINT}/messages`,
-        { chat_id: selectedChatId, request: userMessage },
+        {
+          chat_id: selectedChatId,
+          request: userMessage,
+          // user_role: userRole || null,
+          // department: userDepartment || null,
+          // language: userLanguage || null, 
+        },
         {
           headers: {
             Authorization: token ? `Bearer ${token}` : "",
@@ -99,7 +112,8 @@ const ChatPage = () => {
       setMessages((prev) =>
         prev.map((msg, idx) =>
           idx === prev.length - 1
-            ? { ...msg, response: response.data.response }
+            // ? { ...msg, response: response.data.response }
+            ? response.data
             : msg
         )
       );
@@ -113,6 +127,49 @@ const ChatPage = () => {
       }
     } catch (error) {
       console.error("Error sending message:", error);
+    } finally {
+      setWaitingResponse(false);
+    }
+  };
+
+  const switchModel = async () => {
+    setWaitingResponse(true);
+
+    const token = localStorage.getItem("user_token");
+
+    try {
+      const response = await axios.post(
+        `${API_ENDPOINT}/messages/switchmodel`,
+        {
+          chat_id: selectedChatId,
+          // user_role: userRole || null,
+          // department: userDepartment || null,
+          // language: userLanguage || null,
+        },
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Since switching model creates a NEW chat, reset messages to only the new message
+      setMessages([
+        response.data
+      ]);
+
+      // Update chats list (prepend new chat)
+      setChats((prev) => [
+        { id: response.data.chat_id, topic: response.data.request.slice(0, 30) },
+        ...prev,
+      ]);
+
+      // Update selected chat id to new one
+      setSelectedChatId(response.data.chat_id);
+
+    } catch (error) {
+      console.error("Error switching model:", error);
     } finally {
       setWaitingResponse(false);
     }
@@ -392,47 +449,47 @@ const ChatPage = () => {
                   <p className="loading-indicator">Loading messages...</p>
                 ) : (
                   messages.map((msg, index) => (
-                        <div className="message-wrapper">
-                          {/* User message with avatar and actions */}
-                          <div className="user-message-container">
-                            <div className="user-avatar-container">
-                              <div className="user-avatar"></div>
+                    <div className="message-wrapper">
+                      {/* User message with avatar and actions */}
+                      <div className="user-message-container">
+                        <div className="user-avatar-container">
+                          <div className="user-avatar"></div>
+                        </div>
+                        <div className="user-content">
+                          <div className="user-bubble">{msg.request}</div>
+                          <div className="user-actions">
+                            <button className="action-btn">Edit</button>
+                            <span className="timestamp">Just now</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Bot message with avatar and actions */}
+                      {msg.response && (
+                        <div className="bot-message-container">
+                          <div className="bot-avatar-container">
+                            <div className="bot-avatar"></div>
+                          </div>
+                          <div className="bot-content">
+                            <div className="bot-bubble">
+                              <ReactMarkdown>{msg.response}</ReactMarkdown>
                             </div>
-                            <div className="user-content">
-                              <div className="user-bubble">{msg.request}</div>
-                              <div className="user-actions">
-                                <button className="action-btn">Edit</button>
-                                <span className="timestamp">Just now</span>
-                              </div>
+                            <div className="bot-actions">
+                              <button
+                                className="action-btn"
+                                onClick={() => handleCopyText(msg.response)}
+                              >
+                                Copy
+                              </button>
+                              <button className="action-btn" onClick={regenerateResponse}>Regenerate response</button>
+                              <button className="action-btn" onClick={switchModel}>Use Another LLM</button>
+                              <span className="timestamp">Just now</span>
                             </div>
                           </div>
-
-                          {/* Bot message with avatar and actions */}
-                          {msg.response && (
-                            <div className="bot-message-container">
-                              <div className="bot-avatar-container">
-                                <div className="bot-avatar"></div>
-                              </div>
-                              <div className="bot-content">
-                                <div className="bot-bubble">
-                                  <ReactMarkdown>{msg.response}</ReactMarkdown>
-                                </div>
-                                <div className="bot-actions">
-                                  <button
-                                    className="action-btn"
-                                    onClick={() => handleCopyText(msg.response)}
-                                  >
-                                    Copy
-                                  </button>
-                                  <button className="action-btn">Regenerate response</button>
-                                  <button className="action-btn">Use Another LLM</button>
-                                  <span className="timestamp">Just now</span>
-                                </div>
-                              </div>
-                            </div>
-                          )}
                         </div>
-                      ))
+                      )}
+                    </div>
+                  ))
                 )}
               </div>
 
