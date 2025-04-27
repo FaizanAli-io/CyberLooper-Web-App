@@ -40,7 +40,7 @@ const ChatPage = () => {
       setLoadingChats(false);
     }
   }, []);
-  
+
   function formatTimestamp(timestamp) {
     if (!timestamp) return "Just now"; // fallback if no timestamp exists
     const date = new Date(timestamp);
@@ -432,6 +432,30 @@ const ChatPage = () => {
                 <p className="hero-instruction">
                   Type in your Position, Department and Code Language (If applicable) for better results
                 </p>
+                {/* Add this after the hero-instruction paragraph in the hero-section */}
+                <div className="user-info-inputs">
+                  <input
+                    type="text"
+                    className="user-info-input"
+                    placeholder="Your Role/Position"
+                    value={userRole}
+                    onChange={(e) => setUserRole(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    className="user-info-input"
+                    placeholder="Your Department"
+                    value={userDepartment}
+                    onChange={(e) => setUserDepartment(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    className="user-info-input"
+                    placeholder="Programming Language (if applicable)"
+                    value={userLanguage}
+                    onChange={(e) => setuserLanguage(e.target.value)}
+                  />
+                </div>
 
                 <div className="category-cards">
                   {categoryCards.map((card, index) => (

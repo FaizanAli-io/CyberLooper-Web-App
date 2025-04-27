@@ -142,6 +142,7 @@ body {
 .form-container {
   width: 100%;
   max-width: 500px;
+  
 }
 
 .input-label {
@@ -315,6 +316,7 @@ body {
 }
 
 .signup-container {
+  color: rgba(255, 255, 255, 0.5);
   text-align: center;
   margin-bottom: 2rem;
 }

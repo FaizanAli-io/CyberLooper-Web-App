@@ -986,3 +986,45 @@ body {
     transform: scale(1);
   }
 }
+
+
+/* User info inputs container */
+.user-info-inputs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  max-width: 959px;
+  margin: 20px auto;
+}
+
+/* Individual input field */
+.user-info-input {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  padding: 16.5px 14px;
+  width: 283px;
+  height: 56px;
+  background: #333333;
+  border: 1px solid #FFFFFF;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 23px;
+}
+
+.user-info-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.user-info-input:focus {
+  outline: none;
+  border: 1px solid #28F68B;
+}
