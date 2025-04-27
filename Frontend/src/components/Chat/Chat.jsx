@@ -7,8 +7,6 @@ import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
