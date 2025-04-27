@@ -55,7 +55,7 @@ function Signup() {
     try {
       // Remove confirmPassword before sending to API
       const { confirmPassword, ...dataToSend } = formData;
-      
+
       const response = await axios.post(`${API_ENDPOINT}/users`, dataToSend, {
         headers: { "Content-Type": "application/json" },
       });
@@ -72,7 +72,7 @@ function Signup() {
       }
     } catch (err) {
       setError(
-        err.response?.data?.message || "Failed to sign up. Please try again."
+        err.response?.data?.message || err.response?.data?.detail || "Failed to sign up. Please try again."
       );
     } finally {
       setLoading(false)
@@ -99,9 +99,9 @@ function Signup() {
       <div className="su-layout">
         {/* Left section - Security Note */}
         <div className="su-security-section">
-        <div className="su-logo-section">
+          <div className="su-logo-section">
             <div className="su-logo-container">
-               <img src={logo} alt="Cyberlooper Logo" className="footer-logo" />
+              <img src={logo} alt="Cyberlooper Logo" className="footer-logo" />
             </div>
           </div>
           <div className="su-security-note-container">
@@ -113,7 +113,7 @@ function Signup() {
               <h2 className="su-security-label">Security Note</h2>
             </div>
             <p className="su-security-description">
-              We use industry-leading encryption and security practices to ensure your data remains protected. 
+              We use industry-leading encryption and security practices to ensure your data remains protected.
               Your credentials are never stored in plain text, and all communications are encrypted end-to-end.
             </p>
           </div>
@@ -124,7 +124,7 @@ function Signup() {
 
         {/* Right section - Signup Form */}
         <div className="su-form-section">
-          
+
 
           <div className="su-welcome-container">
             <p className="su-welcome-text">GET STARTED NOW</p>
@@ -167,7 +167,7 @@ function Signup() {
               </div>
 
               <div className="su-password-field">
-          
+
                 <div className="su-password-input-wrapper">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -186,7 +186,7 @@ function Signup() {
               </div>
 
               <div className="su-confirm-password-field">
-                
+
                 <div className="su-password-input-wrapper">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
@@ -206,8 +206,8 @@ function Signup() {
 
               <div className="su-options-row">
                 <div className="su-remember-container">
-                  <div 
-                    className={`su-checkbox ${rememberMe ? 'su-checked' : ''}`} 
+                  <div
+                    className={`su-checkbox ${rememberMe ? 'su-checked' : ''}`}
                     onClick={toggleRememberMe}
                   >
                     <div className="su-knob"></div>

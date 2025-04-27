@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,8 @@ import "./Chat.css";
 import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
@@ -18,6 +20,12 @@ const ChatPage = () => {
   const [waitingResponse, setWaitingResponse] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showOtherMenu, setShowOtherMenu] = useState(false);
+
+  const [userRole, setUserRole] = useState("");
+  const [userDepartment, setUserDepartment] = useState("");
+  const [userLanguage, setuserLanguage] = useState("");
+
+  const isRegenerating = useRef(false);
 
   const navigate = useNavigate();
 
@@ -74,12 +82,26 @@ const ChatPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (isRegenerating.current && input) {
+      sendMessage();
+      isRegenerating.current = false; // Reset flag
+    }
+  }, [input]);
+
   const regenerateResponse = async () => {
     if (messages.length === 0) return;
     const lastMessage = messages[messages.length - 1];
+    isRegenerating.current = true; // Set flag before updating input
     setInput(lastMessage.request);
-    sendMessage();
   };
+
+  // const regenerateResponse = async () => {
+  //   if (messages.length === 0) return;
+  //   const lastMessage = messages[messages.length - 1];
+  //   setInput(lastMessage.request);
+  //   sendMessage();
+  // };
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -97,9 +119,9 @@ const ChatPage = () => {
         {
           chat_id: selectedChatId,
           request: userMessage,
-          // user_role: userRole || null,
-          // department: userDepartment || null,
-          // language: userLanguage || null, 
+          user_role: userRole || null,
+          department: userDepartment || null,
+          language: userLanguage || null,
         },
         {
           headers: {
@@ -142,9 +164,9 @@ const ChatPage = () => {
         `${API_ENDPOINT}/messages/switchmodel`,
         {
           chat_id: selectedChatId,
-          // user_role: userRole || null,
-          // department: userDepartment || null,
-          // language: userLanguage || null,
+          user_role: userRole || null,
+          department: userDepartment || null,
+          language: userLanguage || null,
         },
         {
           headers: {
@@ -369,14 +391,14 @@ const ChatPage = () => {
 
             {showOtherMenu && (
               <div className="other-menu">
-                <button className="other-menu-item" onClick={() => navigateTo('/dashboard')}>
-                  Dashboard
+                <button className="other-menu-item" onClick={() => navigateTo('/About')}>
+                  About
                 </button>
-                <button className="other-menu-item" onClick={() => navigateTo('/analytics')}>
-                  Analytics
+                <button className="other-menu-item" onClick={() => navigateTo('/FAQPage')}>
+                  FAQ
                 </button>
-                <button className="other-menu-item" onClick={() => navigateTo('/settings')}>
-                  Settings
+                <button className="other-menu-item" onClick={() => navigateTo('/Blogs')}>
+                  Blogs
                 </button>
                 <button className="other-menu-item" onClick={() => navigateTo('/help')}>
                   Help Center
