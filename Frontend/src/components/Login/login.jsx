@@ -36,7 +36,9 @@ function Login() {
         navigate("/Chat");
       }
     } catch (err) {
-      setError("Invalid email or password.");
+      setError(
+        err.response?.data?.message || err.response?.data?.detail || "Failed to log in. Please try again."
+      );
     }
   };
 
@@ -61,14 +63,14 @@ function Login() {
 
   return (
     <div className="login-container">
-      
+
       <div className="login-layout">
-        
+
         {/* Left section with login form */}
         <div className="left-section">
-        <div className="su-logo-section">
+          <div className="su-logo-section">
             <div className="su-logo-container">
-               <img src={logo} alt="Cyberlooper Logo" className="footer-logo" />
+              <img src={logo} alt="Cyberlooper Logo" className="footer-logo" />
             </div>
           </div>
           <div className="welcome-container">
@@ -121,15 +123,15 @@ function Login() {
 
               <div className="remember-forgot-container">
                 <div className="remember-me-container">
-                  <div 
-                    className={`checkbox ${rememberMe ? 'checked' : ''}`} 
+                  <div
+                    className={`checkbox ${rememberMe ? 'checked' : ''}`}
                     onClick={toggleRememberMe}
                   >
                     <div className="knob"></div>
                   </div>
                   <span className="remember-text">Remember me</span>
                 </div>
-                
+
                 <a href="/ForgotPassword" className="forgot-password">
                   Forgot Password?
                 </a>
@@ -185,7 +187,7 @@ function Login() {
               </div>
             </div>
             <p className="security-note-description">
-             We safeguard your data with enterprise-grade security
+              We safeguard your data with enterprise-grade security
             </p>
           </div>
         </div>

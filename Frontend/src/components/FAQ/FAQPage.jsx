@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import "./FAQPage.css";
 import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
+import axios from "axios";
+
+const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 const FAQPage = () => {
   const [activeItem, setActiveItem] = useState(null);
@@ -155,7 +158,11 @@ const FAQPage = () => {
               </div>
 
               <div className="input-multiline">
-                <textarea placeholder="Your message"></textarea>
+                <textarea
+                  placeholder="Your message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                ></textarea>
               </div>
 
               <div className="submit-button-container">
