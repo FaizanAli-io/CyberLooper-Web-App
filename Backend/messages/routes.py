@@ -193,6 +193,12 @@ def send_message(
         raise HTTPException(
             status_code=400, detail=f"Token limit reached. Come after {hours} hours {minutes} minutes."
         )
+    
+    message_context = ""
+    summary_tokens = 0
+    if chat_id:
+        message_context, summary_tokens = get_summary(db, chat_id)
+        set_chat_summary(db, chat_id, message_context)
 
     # ✅ If no chat_id, create a new chat
     if not chat_id:
@@ -215,8 +221,6 @@ def send_message(
     print(model)
     # message_context = get_summary_from_db_chat(db, chat_id, 5)
 
-    message_context, summary_tokens = get_summary(db, chat_id)
-    set_chat_summary(db, chat_id, message_context)
     print(message_context)
     # ✅ Generate AI response and store message
     saved_message, tokens = create_message_with_ai(

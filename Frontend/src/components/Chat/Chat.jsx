@@ -25,7 +25,7 @@ const ChatPage = () => {
   const [userDepartment, setUserDepartment] = useState("");
   const [userLanguage, setuserLanguage] = useState("");
 
-  const isRegenerating = useRef(false);
+  // const isRegenerating = useRef(false);
 
   const navigate = useNavigate();
 
@@ -89,25 +89,18 @@ const ChatPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (isRegenerating.current && input) {
-      sendMessage();
-      isRegenerating.current = false; // Reset flag
-    }
-  }, [input]);
-
-  const regenerateResponse = async () => {
-    if (messages.length === 0) return;
-    const lastMessage = messages[messages.length - 1];
-    isRegenerating.current = true; // Set flag before updating input
-    setInput(lastMessage.request);
-  };
+  // useEffect(() => {
+  //   if (isRegenerating.current && input) {
+  //     callRegenerateResponse();
+  //     isRegenerating.current = false; // Reset flag
+  //   }
+  // }, [input]);
 
   // const regenerateResponse = async () => {
   //   if (messages.length === 0) return;
   //   const lastMessage = messages[messages.length - 1];
+  //   isRegenerating.current = true; // Set flag before updating input
   //   setInput(lastMessage.request);
-  //   sendMessage();
   // };
 
   const sendMessage = async () => {
@@ -199,6 +192,50 @@ const ChatPage = () => {
 
     } catch (error) {
       console.error("Error switching model:", error);
+    } finally {
+      setWaitingResponse(false);
+    }
+  };
+  const regenerateResponse = async () => {
+    setWaitingResponse(true);
+
+    const token = localStorage.getItem("user_token");
+
+    try {
+      const response = await axios.post(
+        `${API_ENDPOINT}/messages/regenerate`,
+        {
+          chat_id: selectedChatId,
+          user_role: userRole || null,
+          department: userDepartment || null,
+          language: userLanguage || null,
+        },
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setMessages((prev) =>
+        prev.map((msg, idx) =>
+          idx === prev.length - 1
+            // ? { ...msg, response: response.data.response }
+            ? response.data
+            : msg
+        )
+      );
+
+      if (!selectedChatId && token) {
+        setChats((prev) => [
+          { id: response.data.chat_id, topic: userMessage.slice(0, 30) },
+          ...prev,
+        ]);
+        setSelectedChatId(response.data.chat_id);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
     } finally {
       setWaitingResponse(false);
     }

@@ -1,6 +1,7 @@
 from langchain.chat_models import ChatOpenAI
 from langchain.chains.summarize import load_summarize_chain
 from langchain.docstore.document import Document
+from langchain.callbacks import get_openai_callback
 
 from fastapi import HTTPException
 from config import settings
@@ -82,7 +83,7 @@ def create_message_with_ai(db: Session, message: MessageCreate, message_context:
 
         **Instruction**:
         - Respond to work-related queries professionally.
-        - Decline inappropriate requests (insults, hate speech, NSFW content, etc.).
+        - Decline inappropriate requests (insults, hate speech, NSFW content, sex, nudity, intimacy etc.).
         - Adapt responses based on the user's role, department, and coding preferences.
 
         **Steps**:
@@ -186,29 +187,58 @@ def summarize_conversation(messages: list[MessagePair]) -> str:
     summary = summary_chain.run([doc])
     return summary
 
-def summarize_conversation_incremental(messages: list[MessagePair], previous_summary: str) -> str:
+def summarize_conversation_incremental(messages: list[MessagePair], previous_summary: str) -> tuple[str, int]:
     if not messages:
-        return previous_summary
+        return previous_summary, 0
 
-    # Get the last message pair
     last_message = messages[-1]
-    new_content = f"Previous Summary:\n{previous_summary}\n\nNew Message:\nUser: {last_message.user}\nAI: {last_message.ai}"
+    new_content = (
+        f"Previous Summary:\n{previous_summary}\n\n"
+        f"New Message:\nUser: {last_message.user}\nAI: {last_message.ai}"
+    )
 
-    # Create a Document with the combined content
     doc = Document(page_content=new_content)
 
-    # Generate updated summary
-    response = summary_chain.invoke({"input_documents": [doc]}, return_only_outputs=False)
+    # Optional: Get token usage
+    # from langchain.callbacks import get_openai_callback
 
-    print(response)
+    with get_openai_callback() as cb:
+        # updated_summary = summary_chain.invoke({"input_documents": [doc]})
+        updated_summary = summary_chain.run([doc])
 
-    updated_summary = response['output']
-    token_usage = response['llm_output']['token_usage']['total_tokens']
+        # print(updated_summary)
+        # updated_summary = updated_summary['output_text']
+        print(f"Final Summary -> {updated_summary}")
+        token_usage = cb.total_tokens
 
-    print(f"updated_summary -> {updated_summary}")
-    print(f"token_usage -> {token_usage}")
+    print(token_usage)
 
     return updated_summary, token_usage
+
+
+# def summarize_conversation_incremental(messages: list[MessagePair], previous_summary: str) -> str:
+#     if not messages:
+#         return previous_summary
+
+#     # Get the last message pair
+#     last_message = messages[-1]
+#     new_content = f"Previous Summary:\n{previous_summary}\n\nNew Message:\nUser: {last_message.user}\nAI: {last_message.ai}"
+
+#     # Create a Document with the combined content
+#     doc = Document(page_content=new_content)
+
+#     # Generate updated summary
+#     response = summary_chain.invoke({"input_documents": [doc]}, return_only_outputs=False)
+
+#     print(response)
+
+#     updated_summary = response['output']
+#     token_usage = response['llm_output']['token_usage']['total_tokens']
+
+#     print(f"updated_summary -> {updated_summary}")
+#     print(f"token_usage -> {token_usage}")
+
+#     return updated_summary, token_usage
 
 
 def get_summary_from_db_chat(db: Session, chat_id: int, n: int = 5) -> str:
@@ -218,7 +248,8 @@ def get_summary_from_db_chat(db: Session, chat_id: int, n: int = 5) -> str:
 def get_summary(db: Session, chat_id: int) -> str:
     messages = get_last_n_message_pairs(db, chat_id, 1)
     summary = get_chat_summary(db, chat_id)
-    return summarize_conversation_incremental(messages, summary)
+    summary, token = summarize_conversation_incremental(messages, summary)
+    return summary, token
 
 def get_last_user_message_by_chat(db: Session, chat_id: int) -> str:
     row = (
