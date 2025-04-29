@@ -11,6 +11,7 @@ class Chat(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     topic = Column(String, nullable=False)
     model = Column(String, nullable=False, default="gpt")
+    summary = Column(String, nullable=False, default="")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

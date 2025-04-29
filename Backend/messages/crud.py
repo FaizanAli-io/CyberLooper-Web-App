@@ -7,6 +7,7 @@ from config import settings
 from sqlalchemy.orm import Session
 from messages.models import Message
 from messages.schemas import MessageCreate, MessagePair
+from chats.crud import get_chat_summary
 import openai
 from datetime import datetime, timedelta
 from pytz import timezone
@@ -185,9 +186,39 @@ def summarize_conversation(messages: list[MessagePair]) -> str:
     summary = summary_chain.run([doc])
     return summary
 
+def summarize_conversation_incremental(messages: list[MessagePair], previous_summary: str) -> str:
+    if not messages:
+        return previous_summary
+
+    # Get the last message pair
+    last_message = messages[-1]
+    new_content = f"Previous Summary:\n{previous_summary}\n\nNew Message:\nUser: {last_message.user}\nAI: {last_message.ai}"
+
+    # Create a Document with the combined content
+    doc = Document(page_content=new_content)
+
+    # Generate updated summary
+    response = summary_chain.invoke({"input_documents": [doc]}, return_only_outputs=False)
+
+    print(response)
+
+    updated_summary = response['output']
+    token_usage = response['llm_output']['token_usage']['total_tokens']
+
+    print(f"updated_summary -> {updated_summary}")
+    print(f"token_usage -> {token_usage}")
+
+    return updated_summary, token_usage
+
+
 def get_summary_from_db_chat(db: Session, chat_id: int, n: int = 5) -> str:
     messages = get_last_n_message_pairs(db, chat_id, n)
     return summarize_conversation(messages)
+
+def get_summary(db: Session, chat_id: int) -> str:
+    messages = get_last_n_message_pairs(db, chat_id, 1)
+    summary = get_chat_summary(db, chat_id)
+    return summarize_conversation_incremental(messages, summary)
 
 def get_last_user_message_by_chat(db: Session, chat_id: int) -> str:
     row = (
@@ -219,3 +250,18 @@ def time_until_midnight_karachi():
     minutes, _ = divmod(remainder, 60)
     
     return hours, minutes
+
+def delete_last_message(db: Session, chat_id: int):
+    last_message = (
+        db.query(Message)
+        .filter(Message.chat_id == chat_id)
+        .order_by(Message.created_at.desc())
+        .first()
+    )
+
+    if not last_message:
+        return False  # Nothing to delete
+
+    db.delete(last_message)
+    db.commit()
+    return True
