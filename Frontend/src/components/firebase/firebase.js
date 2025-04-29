@@ -92,10 +92,29 @@ const signInWithMicrosoft = async () => {
 };
 
 // ✅ Sign out function to clear session
+// const logoutUser = async () => {
+//   try {
+//     await signOut(auth);
+//     console.log("User signed out successfully.");
+//   } catch (error) {
+//     console.error("Logout Error:", error);
+//   }
+// };
 const logoutUser = async () => {
   try {
-    await signOut(auth);
-    console.log("User signed out successfully.");
+    // Check if the user is logged in via Firebase (Firebase Auth)
+    if (auth.currentUser) {
+      // Sign out the user from Firebase
+      await signOut(auth);
+      console.log("User signed out from Firebase.");
+    }
+    // If no Firebase user is logged in, handle normal JWT-based logout
+    console.log("User signed out from normal auth.");
+    localStorage.removeItem("user_token"); // Remove JWT token from localStorage
+    sessionStorage.removeItem("user_token"); // Remove JWT token from sessionStorage
+
+    // After logout, navigate to the login page
+    navigate("/login");
   } catch (error) {
     console.error("Logout Error:", error);
   }

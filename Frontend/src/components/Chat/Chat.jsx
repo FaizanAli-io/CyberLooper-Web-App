@@ -4,6 +4,14 @@ import ReactMarkdown from "react-markdown";
 import { useNavigate } from "react-router-dom";
 import "./Chat.css";
 import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
+import { logoutUser, auth } from "../firebase/firebase.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  OAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
@@ -263,11 +271,27 @@ const ChatPage = () => {
     navigate('/signup');
   };
 
-  const handleSignOut = () => {
-    localStorage.removeItem("user_token");
-    setIsAuthenticated(false);
-    setChats([]);
-    startNewChat();
+  const handleSignOut = async () => {
+    try {
+      // Check if the user is logged in via Firebase (Firebase Auth)
+      if (auth.currentUser) {
+        // Sign out the user from Firebase
+        await signOut(auth);
+        console.log("User signed out from Firebase.");
+      }
+      // If no Firebase user is logged in, handle normal JWT-based logout
+      console.log("User signed out from normal auth.");
+      localStorage.removeItem("user_token"); // Remove JWT token from localStorage
+      sessionStorage.removeItem("user_token"); // Remove JWT token from sessionStorage
+      setIsAuthenticated(false);
+      setChats([]);
+      startNewChat();
+
+      // After logout, navigate to the login page
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout Error:", error);
+    }
   };
 
   const navigateTo = (path) => {

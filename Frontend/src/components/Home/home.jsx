@@ -3,10 +3,12 @@ import "./Home.css";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
+import { logoutUser } from "../firebase/firebase.js";
 
 export default function Home() {
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem("user_token");
+
   return (
     <div className="home-wrapper">
       {/* === Hero Section === */}
@@ -15,7 +17,7 @@ export default function Home() {
           <img src={logo} alt="Cyberlooper Logo" className="home-logo" />
         </div>
         {isLoggedIn ? (
-          <button className="home-login-btn" onClick={handleLogout}>
+          <button className="home-login-btn" onClick={logoutUser}>
             Logout
           </button>
         ) : (
