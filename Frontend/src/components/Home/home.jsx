@@ -13,22 +13,21 @@ export default function Home() {
     <div className="home-wrapper">
       {/* === Hero Section === */}
       <div className="home-hero-section">
-        <div className="home-logo-container">
-          <img src={logo} alt="Cyberlooper Logo" className="home-logo" />
-        </div>
-        {isLoggedIn ? (
-          <button className="home-login-btn" onClick={logoutUser}>
-            Logout
-          </button>
-        ) : (
-          <>
-            <button className="home-login-btn" onClick={() => navigate("/login")}>
-              Log in
-            </button>
-            <div className="home-try-button" onClick={() => navigate("/signup")}>
-              <span className="try-text">Try it free</span>
-              <i className="pi pi-arrow-up-right icon-arrow"></i>
-            </div>
+         <div className="home-logo-container">
+            <img src={logo} alt="Cyberlooper Logo" className="home-logo" />
+          </div>
+          {isLoggedIn ? (
+            <p className="home-login-btn">
+            </p>
+          ) : (
+            <>
+              <button className="home-login-btn" onClick={() => navigate("/login")}>
+                Log in
+              </button>
+              <div className="home-try-button" onClick={() => navigate("/signup")}>
+                <span className="try-text">Try it free</span>
+                <i className="pi pi-arrow-up-right icon-arrow"></i>
+              </div>
           </>
         )}
         <div className="home-content">

@@ -359,7 +359,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1500px) {
   .home-logo-container {
     left: 20px;
     top: 30px;

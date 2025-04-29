@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import "./FAQPage.css";
 import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 import axios from "axios";
+import { logoutUser } from "../firebase/firebase.js";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 const FAQPage = () => {
+  const isLoggedIn = !!localStorage.getItem("user_token");
   const [activeItem, setActiveItem] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -112,16 +114,23 @@ const FAQPage = () => {
 
   return (
     <>
-      <div className="home-logo-container">
-        <img src={logo} alt="Cyberlooper Logo" className="home-logo" />
-      </div>
-      <button className="home-login-btn" onClick={() => navigate("/login")}>
-        Log in
-      </button>
-      <div className="home-try-button" onClick={() => navigate("/signup")}>
-        <span className="try-text">Try it free</span>
-        <i className="pi pi-arrow-up-right icon-arrow"></i>
-      </div>
+         <div className="home-logo-container">
+            <img src={logo} alt="Cyberlooper Logo" className="home-logo" />
+          </div>
+          {isLoggedIn ? (
+            <p className="home-login-btn">
+            </p>
+          ) : (
+            <>
+              <button className="home-login-btn" onClick={() => navigate("/login")}>
+                Log in
+              </button>
+              <div className="home-try-button" onClick={() => navigate("/signup")}>
+                <span className="try-text">Try it free</span>
+                <i className="pi pi-arrow-up-right icon-arrow"></i>
+              </div>
+          </>
+        )}
 
       <div className="faq-page">
         <div className="faq-container">
