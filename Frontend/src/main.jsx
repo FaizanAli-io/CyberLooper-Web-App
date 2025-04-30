@@ -17,7 +17,7 @@ import Chat from "./components/Chat/Chat.jsx";
 import Blogs from "./components/Blogs/Blogs.jsx";
 import About from "./components/About/About.jsx";
 import Pricing from './components/Pricing/Pricing.jsx';
-import Profile from './components/Profile/profile.jsx';
+// import Profile from './components/Profile/profile.jsx';
 import ChangePassword from './components/Profile/changePassword.jsx';
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 
@@ -82,10 +82,10 @@ const router = createBrowserRouter([
             path: "/blogs",
             element: <Blogs />,
           },
-          {
-            path: "/profile",
-            element: <Profile />,
-          },
+          // {
+          //   path: "/profile",
+          //   element: <Profile />,
+          // },
           {
             path: "/changePassword",
             element: <ChangePassword />,

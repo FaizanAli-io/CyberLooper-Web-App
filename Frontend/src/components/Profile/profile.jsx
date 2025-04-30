@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { handleSignOut } from "../Chat/Chat.jsx";
+// import { handleSignOut } from "../Chat/Chat.jsx";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
@@ -58,7 +58,7 @@ function Profile() {
             alert("Account deleted successfully.");
 
             // Call sign-out function after successful deletion
-            await handleSignOut();
+            // await handleSignOut();
         } catch (err) {
             console.error("Delete Account Error:", err);
             alert("Failed to delete account.");

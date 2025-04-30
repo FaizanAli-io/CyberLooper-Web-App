@@ -1,176 +1,170 @@
-.pricing-page {
-    width: 100%;
-    min-height: 100vh;
-    color: #FFFFFF;
-    padding: 120px 20px 100px;
-    display: flex;
+.pp-pricing-container {
+  width: 100%;
+  min-height: 100vh;
+  color: #FFFFFF;
+  padding: 120px 20px 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 200px;
+}
+
+/* Hero Section */
+.pp-hero-title {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 69.73px;
+  line-height: 87px;
+  text-align: center;
+  color: #FFFFFF;
+  max-width: 601px;
+  margin: 0 auto 40px;
+}
+
+.pp-hero-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  text-align: center;
+  letter-spacing: -0.005em;
+  color: #ffffff;
+  max-width: 1002px;
+  margin: 0 auto 100px;
+}
+
+/* Content Sections */
+.pp-section-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 89px;
+  width: 100%;
+  max-width: 1240.43px;
+  margin-bottom: 60px;
+}
+
+/* Section Titles */
+.pp-section-title {
+  width: 100%;
+  max-width: 575.71px;
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 44.2857px;
+  line-height: 48px;
+  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
+  color: #ffffff;
+  flex: 1;
+}
+
+/* Content Div */
+.pp-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 7.38095px;
+  width: 100%;
+  max-width: 575.71px;
+  flex: 1;
+}
+
+/* Content Text */
+.pp-content-text {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: justify;
+  letter-spacing: -0.005em;
+  letter-spacing: -0.005em;
+  color: #ffffff;
+  max-width: 534px;
+}
+
+/* Dividers */
+.pp-divider {
+  width: 100%;
+  max-width: 1240px;
+  height: 0px;
+  border: 0.5px solid #FFFFFF;
+  margin: 0 auto 60px;
+}
+
+/* Responsive styles */
+@media (max-width: 1280px) {
+  .pp-section-container {
+    max-width: 90%;
+    gap: 60px;
+  }
+}
+
+@media (max-width: 992px) {
+  .pp-hero-title {
+    font-size: 50px;
+    line-height: 62px;
+    max-width: 90%;
+  }
+  
+  .pp-hero-subtitle {
+    font-size: 18px;
+    line-height: 28px;
+    max-width: 90%;
+    margin-bottom: 70px;
+  }
+
+  .pp-section-title {
+    font-size: 36px;
+    line-height: 42px;
+  }
+  
+  .pp-content-text {
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pp-section-container {
     flex-direction: column;
-    align-items: center;
-    margin-top: 200px;
+    gap: 30px;
   }
   
-  /* Hero Section */
-  .hero-title {
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 69.73px;
-    line-height: 87px;
-    text-align: center;
-    color: #FFFFFF;
-    max-width: 601px;
-    margin: 0 auto 40px;
+  .pp-section-title {
+    margin-bottom: 10px;
   }
   
-  .hero-subtitle {
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 30px;
-    text-align: center;
-    letter-spacing: -0.005em;
-    color: #ffffff;
-    max-width: 1002px;
-    margin: 0 auto 100px;
+  .pp-hero-title {
+    font-size: 42px;
+    line-height: 52px;
   }
   
-  /* Content Sections */
-  .frame-1171275828,
-  .frame-1171275829,
-  .frame-1171275830 {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 89px;
-    width: 100%;
-    max-width: 1240.43px;
-    margin-bottom: 60px;
+  .pp-content-text {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .pp-pricing-container {
+    padding: 100px 15px 80px;
   }
   
-  /* Section Titles */
-  .section-title {
-    width: 100%;
-    max-width: 575.71px;
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 44.2857px;
-    line-height: 48px;
-    letter-spacing: -0.01em;
-    letter-spacing: -0.005em;
-    color: #ffffff;
-    flex: 1;
+  .pp-hero-title {
+    font-size: 36px;
+    line-height: 44px;
   }
   
-  /* Content Div */
-  .content-div {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 7.38095px;
-    width: 100%;
-    max-width: 575.71px;
-    flex: 1;
-  }
-  
-  /* Content Text */
-  .content-text {
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
+  .pp-hero-subtitle {
+    font-size: 16px;
     line-height: 24px;
-    text-align: justify;
-    letter-spacing: -0.005em;
-    letter-spacing: -0.005em;
-    color: #ffffff;
-    max-width: 534px;
   }
   
-  /* Dividers */
-  .divider {
-    width: 100%;
-    max-width: 1240px;
-    height: 0px;
-    border: 0.5px solid #FFFFFF;
-    margin: 0 auto 60px;
+  .pp-section-title {
+    font-size: 30px;
+    line-height: 36px;
   }
-  
-  /* Responsive styles */
-  @media (max-width: 1280px) {
-    .frame-1171275828,
-    .frame-1171275829,
-    .frame-1171275830 {
-      max-width: 90%;
-      gap: 60px;
-    }
-  }
-  
-  @media (max-width: 992px) {
-    .hero-title {
-      font-size: 50px;
-      line-height: 62px;
-      max-width: 90%;
-    }
-    
-    .hero-subtitle {
-      font-size: 18px;
-      line-height: 28px;
-      max-width: 90%;
-      margin-bottom: 70px;
-    }
-  
-    .section-title {
-      font-size: 36px;
-      line-height: 42px;
-    }
-    
-    .content-text {
-      font-size: 18px;
-      line-height: 22px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .frame-1171275828,
-    .frame-1171275829,
-    .frame-1171275830 {
-      flex-direction: column;
-      gap: 30px;
-    }
-    
-    .section-title {
-      margin-bottom: 10px;
-    }
-    
-    .hero-title {
-      font-size: 42px;
-      line-height: 52px;
-    }
-    
-    .content-text {
-      max-width: 100%;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .pricing-page {
-      padding: 100px 15px 80px;
-    }
-    
-    .hero-title {
-      font-size: 36px;
-      line-height: 44px;
-    }
-    
-    .hero-subtitle {
-      font-size: 16px;
-      line-height: 24px;
-    }
-    
-    .section-title {
-      font-size: 30px;
-      line-height: 36px;
-    }
-  }
+}
