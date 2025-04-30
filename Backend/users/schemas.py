@@ -25,7 +25,7 @@ class UserRole(str, Enum):
 class UserBase(BaseModel):
     email: EmailStr
     firstname: str
-    role: UserRole
+    role: Optional[UserRole] = UserRole.STANDARD
 
 
 class UserCreate(UserBase):
