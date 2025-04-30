@@ -16,6 +16,7 @@ import FAQ from "./components/FAQ/FAQPage.jsx";
 import Chat from "./components/Chat/Chat.jsx";
 import Blogs from "./components/Blogs/Blogs.jsx";
 import About from "./components/About/About.jsx";
+import Pricing from './components/Pricing/Pricing.jsx';
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/Pricing",
+        element:<Pricing/>,
       },
       // {
       //   path: "/faq",
