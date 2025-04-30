@@ -1,7 +1,10 @@
-from langchain.chat_models import ChatOpenAI
+# from langchain.chat_models import ChatOpenAI
 from langchain.chains.summarize import load_summarize_chain
 from langchain.docstore.document import Document
-from langchain.callbacks import get_openai_callback
+# from langchain.callbacks import get_openai_callback
+
+from langchain_community.chat_models import ChatOpenAI
+from langchain_community.callbacks.manager import get_openai_callback
 
 from fastapi import HTTPException
 from config import settings

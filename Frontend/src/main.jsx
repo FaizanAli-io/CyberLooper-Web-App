@@ -17,6 +17,8 @@ import Chat from "./components/Chat/Chat.jsx";
 import Blogs from "./components/Blogs/Blogs.jsx";
 import About from "./components/About/About.jsx";
 import Pricing from './components/Pricing/Pricing.jsx';
+import Profile from './components/Profile/profile.jsx';
+import ChangePassword from './components/Profile/changePassword.jsx';
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
@@ -35,7 +37,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/Pricing",
-        element:<Pricing/>,
+        element: <Pricing />,
       },
       // {
       //   path: "/faq",
@@ -55,19 +57,19 @@ const router = createBrowserRouter([
       },
       {
         path: "ForgotPassword",
-        element:<ForgotPassword/>
+        element: <ForgotPassword />
       },
       {
         path: "About",
-        element:<About/>
+        element: <About />
       },
       {
         path: "verify-email",
-        element:<VerifyEmail/>
+        element: <VerifyEmail />
       },
       {
         path: "reset-password",
-        element:<ResetPassword/>
+        element: <ResetPassword />
       },
       {
         element: <ProtectedRoute />,
@@ -79,6 +81,14 @@ const router = createBrowserRouter([
           {
             path: "/blogs",
             element: <Blogs />,
+          },
+          {
+            path: "/profile",
+            element: <Profile />,
+          },
+          {
+            path: "/changePassword",
+            element: <ChangePassword />,
           },
         ],
       },
