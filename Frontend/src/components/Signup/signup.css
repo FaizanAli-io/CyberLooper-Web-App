@@ -17,13 +17,13 @@
 .su-layout {
   display: flex;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 /* Left section - Security Note */
 .su-security-section {
   width: 45%;
-  height: 100vh;
+  min-height: 100vh;
   position: relative;
   display: flex;
   align-items: center;
@@ -527,7 +527,7 @@
   
   .su-form-section {
     padding: 3rem 2rem;
-    height: 100vh;
+    min-height: 100vh;
   }
   
   .su-form-wrapper {
@@ -571,4 +571,275 @@ input:-webkit-autofill:hover {
 input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #121B1C inset !important;
   -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Height-based media queries for signup page */
+
+/* For shorter laptop screens */
+@media (max-height: 950px) {
+  .su-welcome-container {
+    margin-bottom: 1rem;
+  }
+  
+  .su-heading {
+    font-size: 2.8rem;
+  }
+  
+  .su-productive-text {
+    width: 220px;
+    height: 50px;
+    font-size: 32px;
+    line-height: 50px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .su-description {
+    font-size: 0.9rem;
+    margin: 10px 0 1rem;
+  }
+  
+  .su-fullname-field,
+  .su-email-field,
+  .su-password-field,
+  .su-confirm-password-field {
+    margin-bottom: 1rem;
+  }
+  
+  .su-input {
+    padding: 0.8rem 1.25rem;
+  }
+  
+  .su-options-row {
+    margin-bottom: 1rem;
+  }
+  
+  .su-submit-button {
+    height: 45px;
+    margin-bottom: 1rem;
+  }
+  
+  .su-social-login {
+    margin-top: 0.25rem;
+  }
+  
+  .su-divider {
+    margin: 1rem 0;
+  }
+  
+  .su-social-buttons {
+    margin-top: 0.75rem;
+  }
+  
+  .su-social-btn {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .su-security-note-container {
+    padding: 2rem;
+  }
+  
+  .su-security-text-container {
+    margin-bottom: 1rem;
+  }
+}
+
+/* For very short laptop screens */
+@media (max-height: 810px) {
+  .su-logo-section {
+    top: 20px;
+  }
+  
+  .su-welcome-container {
+    margin-bottom: 0.75rem;
+  }
+  
+  .su-welcome-text {
+    font-size: 0.9rem;
+  }
+  
+  .su-heading {
+    font-size: 2.2rem;
+  }
+  
+  .su-productive-text {
+    width: 180px;
+    height: 40px;
+    font-size: 26px;
+    line-height: 40px;
+    border-radius: 18px;
+    border-width: 2px;
+  }
+  
+  .su-description {
+    font-size: 0.85rem;
+    margin: 5px 0 0.75rem;
+    line-height: 1.4;
+  }
+  
+  .su-label {
+    margin-bottom: 0.3rem;
+    font-size: 0.8rem;
+  }
+  
+  .su-input {
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .su-fullname-field,
+  .su-email-field,
+  .su-password-field,
+  .su-confirm-password-field {
+    margin-bottom: 0.75rem;
+  }
+  
+  .su-options-row {
+    margin-bottom: 0.75rem;
+  }
+  
+  .su-checkbox {
+    width: 36px;
+    height: 18px;
+  }
+  
+  .su-checkbox .su-knob {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .su-checkbox.su-checked .su-knob {
+    left: 20px;
+  }
+  
+  .su-remember-text, .su-help-link {
+    font-size: 0.8rem;
+  }
+  
+  .su-submit-button {
+    height: 40px;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .su-login-redirect {
+    margin-bottom: 1rem;
+  }
+  
+  .su-redirect-text, .su-login-link {
+    font-size: 0.8rem;
+  }
+  
+  .su-divider {
+    margin: 0.75rem 0;
+  }
+  
+  .su-divider-text {
+    font-size: 0.8rem;
+  }
+  
+  .su-social-buttons {
+    gap: 1rem;
+  }
+  
+  .su-social-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .su-security-label {
+    font-size: 1.3rem;
+  }
+  
+  .su-security-description {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+/* For extremely short height (like small laptops) */
+@media (max-height: 600px) {
+  .su-logo-section {
+    top: 10px;
+  }
+  
+  .su-logo-container {
+    transform: scale(0.8);
+  }
+  
+  .su-welcome-text {
+    font-size: 0.8rem;
+  }
+  
+  .su-heading {
+    font-size: 1.8rem;
+  }
+  
+  .su-productive-text {
+    width: 150px;
+    height: 35px;
+    font-size: 22px;
+    line-height: 35px;
+    margin: 2px 0 5px;
+  }
+  
+  .su-description {
+    font-size: 0.8rem;
+    margin: 5px 0 0.5rem;
+    max-width: 380px;
+  }
+  
+  .su-form-wrapper {
+    margin-top: -10px;
+  }
+  
+  .su-fullname-field,
+  .su-email-field,
+  .su-password-field,
+  .su-confirm-password-field {
+    margin-bottom: 0.5rem;
+  }
+  
+  .su-input {
+    padding: 0.6rem 0.9rem;
+  }
+  
+  .su-options-row {
+    margin-bottom: 0.5rem;
+  }
+  
+  .su-submit-button {
+    height: 36px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .su-login-redirect {
+    margin-bottom: 0.5rem;
+  }
+  
+  .su-divider {
+    margin: 0.5rem 0;
+  }
+  
+  .su-error-message {
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+  }
+  
+  .su-security-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .su-security-label {
+    font-size: 1.2rem;
+  }
+  
+  .su-flash-circle {
+    width: 40px;
+    height: 40px;
+  }
 }

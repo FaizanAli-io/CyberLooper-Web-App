@@ -34,7 +34,7 @@ body {
   justify-content: center;
   flex-direction: row;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 /* Left section styles */
@@ -415,7 +415,7 @@ body {
 /* Right section styles */
 .right-section {
   width: 45%;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #030B0C;
   position: relative;
   overflow: hidden;
@@ -583,7 +583,7 @@ body {
   .left-section {
     padding: 3rem 2rem;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
   }
   
   .form-container {
@@ -644,4 +644,232 @@ input:-webkit-autofill:hover {
 input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #121B1C inset !important;
   -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Height-based media queries for laptop screens */
+
+/* For shorter laptop screens */
+@media (max-height: 800px) {
+  .welcome-container {
+    margin-bottom: 1rem;
+  }
+  
+  .time-to-get {
+    font-size: 2.8rem;
+  }
+  
+  .productive-text {
+    width: 220px;
+    height: 50px;
+    font-size: 32px;
+    line-height: 50px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .description {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .input-field {
+    padding: 0.8rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .email-container, .password-container {
+    margin-bottom: 1rem;
+  }
+  
+  .remember-forgot-container {
+    margin-bottom: 1rem;
+  }
+  
+  .login-button {
+    height: 45px;
+    margin-bottom: 1rem;
+  }
+  
+  .social-login-container {
+    margin-top: 0.25rem;
+  }
+  
+  .divider-container {
+    margin: 1rem 0;
+  }
+  
+  .social-buttons {
+    margin-top: 0.75rem;
+  }
+  
+  .social-button {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+/* For very short laptop screens */
+@media (max-height: 700px) {
+  .login-logo-container {
+    bottom: 20px;
+  }
+  
+  .welcome-container {
+    margin-bottom: 0.75rem;
+  }
+  
+  .time-to-get {
+    font-size: 2.2rem;
+  }
+  
+  .productive-text {
+    width: 180px;
+    height: 40px;
+    font-size: 26px;
+    line-height: 40px;
+    border-radius: 18px;
+    border-width: 2px;
+  }
+  
+  .description {
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+  }
+  
+  .input-label {
+    margin-bottom: 0.3rem;
+    font-size: 0.8rem;
+  }
+  
+  .input-field {
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .email-container, .password-container {
+    margin-bottom: 0.75rem;
+  }
+  
+  .remember-forgot-container {
+    margin-bottom: 0.75rem;
+  }
+  
+  .checkbox {
+    width: 36px;
+    height: 18px;
+  }
+  
+  .checkbox .knob {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .checkbox.checked .knob {
+    left: 20px;
+  }
+  
+  .remember-text, .forgot-password {
+    font-size: 0.8rem;
+  }
+  
+  .login-button {
+    height: 40px;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .signup-container {
+    margin-bottom: 1rem;
+  }
+  
+  .signup-text, .signup-link {
+    font-size: 0.8rem;
+  }
+  
+  .divider-container {
+    margin: 0.75rem 0;
+  }
+  
+  .divider-text {
+    font-size: 0.8rem;
+  }
+  
+  .social-buttons {
+    gap: 1rem;
+  }
+  
+  .social-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}
+
+/* For extremely short height (like small laptops) */
+@media (max-height: 600px) {
+  .login-logo-container {
+    transform: scale(0.8);
+    bottom: 10px;
+  }
+  
+  .welcome-text {
+    font-size: 0.9rem;
+  }
+  
+  .time-to-get {
+    font-size: 1.8rem;
+  }
+  
+  .productive-text {
+    width: 150px;
+    height: 35px;
+    font-size: 22px;
+    line-height: 35px;
+    margin-top: 2px;
+    margin-bottom: 5px;
+  }
+  
+  .form-container {
+    margin-top: -10px;
+  }
+  
+  .description {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    max-width: 450px;
+  }
+  
+  .input-field {
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .remember-forgot-container {
+    margin-bottom: 0.5rem;
+  }
+  
+  .login-button {
+    height: 36px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .signup-container {
+    margin-bottom: 0.5rem;
+  }
+  
+  .security-note-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .security-label {
+    font-size: 1.2rem;
+  }
+  
+  .flash-circle {
+    width: 40px;
+    height: 40px;
+  }
 }
