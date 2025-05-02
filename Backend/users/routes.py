@@ -245,7 +245,6 @@ def update_existing_user(
 
 @router.delete("")
 def delete_existing_user(
-    user_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):

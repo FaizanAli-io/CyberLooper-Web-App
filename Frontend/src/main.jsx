@@ -20,8 +20,8 @@ import Pricing from './components/Pricing/Pricing.jsx';
 import TermsOfServicePage from './components/TermsOfService/TermsOfService.jsx';
 import PrivacyPolicy from './components/PrivacyPolicy/PrivacyPolicy.jsx';
 import SecurityPolicy from './components/SecurityPolicy/SecurityPolicy.jsx';
-// import Profile from './components/Profile/profile.jsx';
-import ChangePassword from './components/Profile/changePassword.jsx';
+import ChangePassword from './components/Profile/ChangePassword.jsx';
+import Profile from './components/Profile/Profile.jsx';
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 import ContactUs from './components/ContactUs/ContactUs.jsx';
 import NotFound from './components/NotFound/NotFound.jsx';
@@ -46,24 +46,24 @@ const router = createBrowserRouter([
         element: <Pricing />,
       },
       {
-        path:"/TermsOfService",
-        element: <TermsOfServicePage/>
+        path: "/TermsOfService",
+        element: <TermsOfServicePage />
       },
       {
-        path:"/PrivacyPolicy",
-        element: <PrivacyPolicy/>
+        path: "/PrivacyPolicy",
+        element: <PrivacyPolicy />
       },
       {
-        path:"/SecurityPolicy",
-        element: <SecurityPolicy/>
+        path: "/SecurityPolicy",
+        element: <SecurityPolicy />
       },
       {
-        path:"/ContactUs",
-        element: <ContactUs/>
+        path: "/ContactUs",
+        element: <ContactUs />
       },
       {
-        path:"/Dashboard",
-        element: <DashboardPage/>
+        path: "/Dashboard",
+        element: <DashboardPage />
       },
       // {
       //   path: "/faq",
@@ -108,18 +108,19 @@ const router = createBrowserRouter([
             path: "/blogs",
             element: <Blogs />,
           },
-          // {
-          //   path: "/profile",
-          //   element: <Profile />,
-          // },
+          {
+            path: "/profile",
+            element: <Profile />,
+          },
           {
             path: "/changePassword",
             element: <ChangePassword />,
           },
         ],
       },
-      {path:"*",
-        element:<NotFound/>
+      {
+        path: "*",
+        element: <NotFound />
       },
 
       // Protected Routes
