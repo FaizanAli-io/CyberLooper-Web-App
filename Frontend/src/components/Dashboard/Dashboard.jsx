@@ -81,7 +81,7 @@ const DashboardPage = () => {
                     <div className="dashboard-stats-row">
                         <div className="dashboard-stat-card">
                             <div className="dashboard-stat-header">
-                                <h3 className="dashboard-stat-title">Total Orders</h3>
+                                <h3 className="dashboard-stat-title">AI Responses</h3>
                                 <div className="dashboard-stat-icon order-icon"></div>
                             </div>
                             <p className="dashboard-stat-value">10293</p>
@@ -92,10 +92,10 @@ const DashboardPage = () => {
                         </div>
                         <div className="dashboard-stat-card">
                             <div className="dashboard-stat-header">
-                                <h3 className="dashboard-stat-title">Total Sales</h3>
+                                <h3 className="dashboard-stat-title">Active Conversation</h3>
                                 <div className="dashboard-stat-icon sales-icon"></div>
                             </div>
-                            <p className="dashboard-stat-value">$89,000</p>
+                            <p className="dashboard-stat-value">20</p>
                             <p className="dashboard-stat-change negative">
                                 <span className="dashboard-trend-icon down"></span>
                                 4.3% Down from yesterday
@@ -104,7 +104,7 @@ const DashboardPage = () => {
 
                         <div className="dashboard-stat-card">
                             <div className="dashboard-stat-header">
-                                <h3 className="dashboard-stat-title">Total Pending</h3>
+                                <h3 className="dashboard-stat-title">Avg. Response Time</h3>
                                 <div className="dashboard-stat-icon pending-icon"></div>
                             </div>
                             <p className="dashboard-stat-value">2040</p>
