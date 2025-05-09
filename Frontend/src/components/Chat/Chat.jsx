@@ -16,7 +16,8 @@ import assistantIcon from '../../assets/images/assistant.png';
 import discoveryIcon from '../../assets/images/discovery.png';
 import communicationIcon from '../../assets/images/communication.png';
 import codingIcon from '../../assets/images/coding.png';
-
+import hamburgerIcon from "../../assets/images/hamburger-icon.png";
+import closeIcon from "../../assets/images/hamburger-icon.png";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
@@ -33,7 +34,7 @@ const ChatPage = () => {
   const [waitingResponse, setWaitingResponse] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showOtherMenu, setShowOtherMenu] = useState(false);
-
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [userRole, setUserRole] = useState("");
   const [userDepartment, setUserDepartment] = useState("");
   const [userLanguage, setuserLanguage] = useState("");
@@ -55,10 +56,14 @@ const ChatPage = () => {
   }, []);
 
   function formatTimestamp(timestamp) {
-    if (!timestamp) return "Just now"; // fallback if no timestamp exists
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const date = timestamp ? new Date(timestamp) : new Date();
+    return date.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
   }
+
 
 
   const fetchChats = async (token) => {
@@ -379,7 +384,18 @@ const ChatPage = () => {
 
       <div className="chat-container">
         {/* Sidebar */}
-        <div className="chat-sidebar">
+        <button
+          className="hamburger-toggle"
+          onClick={() => setSidebarVisible(!sidebarVisible)}
+        >
+          <img
+            src={sidebarVisible ? closeIcon : hamburgerIcon}
+            alt="Toggle Sidebar"
+            className="hamburger-icon"
+          />
+        </button>
+
+        <div className={`chat-sidebar ${sidebarVisible ? "expanded" : ""}`}>
           <div className="sidebar-logo-section">
             <div className="chat-logo-container">
               <img src={logo} alt="Cyberlooper Logo" className="chat-logo" />
@@ -573,55 +589,68 @@ const ChatPage = () => {
                     <span className="dot"></span>
                   </div>
                 ) : (
-                  messages.map((msg, index) => (
-                    <div className="message-wrapper" key={index}>
-                      {/* User message with avatar and actions */}
-                      <div className="user-message-container">
-                        <div className="user-avatar-container">
-                          <div className="user-avatar"></div>
-                        </div>
-                        <div className="user-content">
-                          <div className="user-bubble">{msg.request}</div>
-                          <div className="user-actions">
-                            <button className="action-btn">Edit</button>
-                            <span className="timestamp">{formatTimestamp(msg.timestamp)}</span>
+                  messages.map((msg, index) => {
+                    // Check if this is the latest message
+                    const isLatestMessage = index === messages.length - 1;
+                    
+                    return (
+                      <div className="message-wrapper" key={index}>
+                        {/* User message with avatar and actions */}
+                        <div className="user-message-container">
+                          <div className="user-avatar-container">
+                            <div className="user-avatar"></div>
+                          </div>
+                          <div className="user-content">
+                            <div className="user-bubble">{msg.request}</div>
+                            <div className="user-actions">
+                              {isLatestMessage && (
+                                <button className="action-btn">Edit</button>
+                              )}
+                              {
+                                isLatestMessage&&(<span className="timestamp">{formatTimestamp(msg.timestamp)}</span>)
+                              }
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Bot message with avatar and actions */}
-                      {msg.response && (
-                        <div className="bot-message-container">
-                          <div className="bot-avatar-container">
-                            <div className="bot-avatar"></div>
-                          </div>
-                          <div className="bot-content">
-                            <div className="bot-bubble">
-                              <ReactMarkdown>{msg.response}</ReactMarkdown>
+                        {/* Bot message with avatar and actions */}
+                        {msg.response && (
+                          <div className="bot-message-container">
+                            <div className="bot-avatar-container">
+                              <div className="bot-avatar"></div>
                             </div>
-                            <div className="bot-actions">
-                              <button
-                                className="action-btn"
-                                onClick={() => handleCopyText(msg.response)}
-                              >
-                                Copy
-                              </button>
-                              <button className="action-btn" onClick={regenerateResponse}>
-                                Regenerate response
-                              </button>
-                              <button className="action-btn" onClick={switchModel}>
-                                Use Another LLM
-                              </button>
-                              <span className="timestamp">{formatTimestamp(msg.timestamp)}</span>
+                            <div className="bot-content">
+                              <div className="bot-bubble">
+                                <ReactMarkdown>{msg.response}</ReactMarkdown>
+                              </div>
+                              <div className="bot-actions">
+                                {isLatestMessage && (
+                                  <>
+                                    <button
+                                      className="action-btn"
+                                      onClick={() => handleCopyText(msg.response)}
+                                    >
+                                      Copy
+                                    </button>
+                                    <button className="action-btn" onClick={regenerateResponse}>
+                                      Regenerate response
+                                    </button>
+                                    <button className="action-btn" onClick={switchModel}>
+                                      Use Another LLM
+                                    </button>
+                                    <span className="timestamp">{formatTimestamp(msg.timestamp)}</span>
+                                  </>
+                                )}
+                                
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  ))
+                        )}
+                      </div>
+                    );
+                  })
                 )}
               </div>
-
 
               <div className="chat-input-form">
                 <div className="chat-input-container">
@@ -649,7 +678,7 @@ const ChatPage = () => {
           )}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

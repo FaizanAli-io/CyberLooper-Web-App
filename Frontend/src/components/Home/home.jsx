@@ -6,6 +6,12 @@ import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 import { logoutUser } from "../firebase/firebase.js";
 import quote_up from "../../assets/images/quote-up.png";
 import up_right from "../../assets/images/up_right.png";
+import tools from "../../assets/logos/tools.png"
+import zap from "../../assets/images/zap.png"
+import bar from "../../assets/images/bar-chart.png"
+import editt from "../../assets/images/edit.png"
+import lock from "../../assets/images/lock.png"
+import info from "../../assets/images/info-circle.png"
 
 export default function Home() {
   const navigate = useNavigate();
@@ -109,7 +115,7 @@ export default function Home() {
           <div className="value-prop-row">
             <div className="value-prop-block">
               <div className="prop-icon">
-                <img src="/zap-icon.svg" alt="Lightning fast" className="icon-svg" />
+                <img src={zap} alt="Lightning fast" className="icon-svg" />
               </div>
               <p className="prop-text">
                 Lightning-Fast Answers: Get near-instant responses tailored to your specific work tasks.
@@ -118,7 +124,7 @@ export default function Home() {
 
             <div className="value-prop-block">
               <div className="prop-icon">
-                <img src="/bar-chart-icon.svg" alt="Data visualization" className="icon-svg" />
+                <img src={bar} alt="Data visualization" className="icon-svg" />
               </div>
               <p className="prop-text">
                 Excel, Power BI, and Tableau: Instantly know the right formula or data visualization trick.
@@ -127,7 +133,7 @@ export default function Home() {
 
             <div className="value-prop-block">
               <div className="prop-icon">
-                <img src="/edit-icon.svg" alt="Brainstorming" className="icon-svg" />
+                <img src={editt} alt="Brainstorming" className="icon-svg" />
               </div>
               <p className="prop-text">
                 Brainstorm Better: Spark ideas, share best practices, and transform how work gets done.
@@ -139,7 +145,7 @@ export default function Home() {
           <div className="value-prop-row">
             <div className="value-prop-block">
               <div className="prop-icon">
-                <img src="/info-circle-icon.svg" alt="Natural language" className="icon-svg" />
+                <img src={lock} alt="Natural language" className="icon-svg" />
               </div>
               <p className="prop-text">
                 Natural Language Processing: Talk to me like a real colleague.
@@ -148,7 +154,7 @@ export default function Home() {
 
             <div className="value-prop-block">
               <div className="prop-icon">
-                <img src="/lock-icon.svg" alt="Data privacy" className="icon-svg" />
+                <img src={lock} alt="Data privacy" className="icon-svg" />
               </div>
               <p className="prop-text">
                 Data Privacy: Your data stays private—always.
@@ -157,7 +163,7 @@ export default function Home() {
 
             <div className="value-prop-block">
               <div className="prop-icon">
-                <img src="/tools-icon.svg" alt="Streamlined workflow" className="icon-svg" />
+                <img src={tools} alt="Streamlined workflow" className="icon-svg" />
               </div>
               <p className="prop-text">
                 Streamlined Workflow: No complex setup, just jump right in.
