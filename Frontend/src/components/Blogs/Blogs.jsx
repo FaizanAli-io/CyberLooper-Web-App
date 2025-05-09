@@ -242,6 +242,7 @@ const Blogs = () => {
       </div>
     </>
   )}
+  <div className="kb-blog-background">
     <div className="kb-blog-page">
       {/* Hero Section */}
       <div className="kb-hero-section">
@@ -507,7 +508,10 @@ const Blogs = () => {
           )}
         </div>
       )}
-      <div className="join-future-section">
+
+    </div>
+    </div>
+    <div className="join-future-section">
         <div className="join-future-content">
           <h2 className="join-title">Join the Future of Work</h2>
           <p className="join-subtitle">Sign up now to experience the AI advantage.</p>
@@ -516,7 +520,6 @@ const Blogs = () => {
           Join for free
         </button>
       </div>
-    </div>
     </>
   );
 };

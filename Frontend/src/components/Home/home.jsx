@@ -4,32 +4,36 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 import { logoutUser } from "../firebase/firebase.js";
+import quote_up from "../../assets/images/quote-up.png";
+import up_right from "../../assets/images/up_right.png";
 
 export default function Home() {
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem("user_token");
 
   return (
+
     <div className="home-wrapper">
       {/* === Hero Section === */}
+      
       <div className="home-hero-section">
          <div className="home-logo-container">
-            <img src={logo} alt="Cyberlooper Logo" className="home-logo" />
-          </div>
-          {isLoggedIn ? (
-            <p className="home-login-btn">
-            </p>
-          ) : (
-            <>
-              <button className="home-login-btn" onClick={() => navigate("/login")}>
-                Log in
-              </button>
-              <div className="home-try-button" onClick={() => navigate("/signup")}>
-                <span className="try-text">Try it free</span>
-                <i className="pi pi-arrow-up-right icon-arrow"></i>
-              </div>
-          </>
-        )}
+                  <img src={logo} alt="Cyberlooper Logo" className="home-logo" />
+                </div>
+                {isLoggedIn ? (
+                  <p className="home-login-btn">
+                  </p>
+                ) : (
+                  <>
+                    <button className="home-login-btn" onClick={() => navigate("/login")}>
+                      Log in
+                    </button>
+                    <div className="home-try-button" onClick={() => navigate("/signup")}>
+                      <span className="try-text">Try it free</span>
+                      <i className="pi pi-arrow-up-right icon-arrow"></i>
+                    </div>
+                </>
+              )}
         <div className="home-content">
           <h2 className="elevate-heading">Elevate Your Workday!</h2>
           <div className="ai-banner">
@@ -39,7 +43,7 @@ export default function Home() {
           <p className="sub-heading">Having a Personal Technology Assistant</p>
           <div className="quote-section">
             <div className="quote-icon">
-              <img src="/quote-icon.svg" alt="quote icon" />
+              <img src={quote_up} alt="quote icon" />
             </div>
             <p className="quote-text">
               Experience faster decision-making, effortless collaboration, and unwavering data privacy—
@@ -48,18 +52,19 @@ export default function Home() {
           </div>
           <button className="join-button">
             <span>Join for Free</span>
-            <img src="/arrow-icon.svg" alt="arrow" className="arrow-icon" />
+            <img src={up_right} alt="arrow" className="arrow-icon" />
           </button>
         </div>
-      </div>
-
-      {/* === Scroll Down Prompt === */}
+              {/* === Scroll Down Prompt === */}
       <div className="home-scroll-down">
         <span className="scroll-text">Scroll down</span>
         <div className="scroll-circle">
           <div className="scroll-arrow"></div>
         </div>
       </div>
+      </div>
+
+
 
       {/* === Features Section === */}
       <div className="home-feature-section">
@@ -94,7 +99,7 @@ export default function Home() {
           <h2 className="why-choose-title">Why Choose Us</h2>
           <button className="join-free-button">
             <span>Join for Free</span>
-            <img src="/arrow-icon.svg" alt="arrow" className="arrow-icon" />
+            <img src={up_right} alt="arrow" className="arrow-icon" />
           </button>
         </div>
 
@@ -160,7 +165,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="divider"></div>
+
         </div>
       </div>
 
@@ -253,6 +258,7 @@ export default function Home() {
       </div>
 
       {/* === Pricing Section === */}
+      <div className="pricing-background">
       <div className="pricing-section">
         <div className="pricing-container">
           <div className="pricing-logo-container">
@@ -282,7 +288,7 @@ export default function Home() {
           Join for free
         </button>
       </div>
-
+      </div>
       {/* === Additional Sections can continue below === */}
     </div>
   );

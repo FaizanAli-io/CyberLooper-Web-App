@@ -30,7 +30,7 @@ const TermsOfServicePage = () => {
 
       <div className="tos-container">
         {/* Hero Title */}
-        <h1 className="tos-hero-title">Terms of Service</h1>
+        <div className="tos-hero-title">Terms of Service</div>
         
         {/* Hero Subtitle */}
         <p className="tos-hero-subtitle">

@@ -5,6 +5,7 @@
   color: #FFFFFF;
   font-family: 'Montserrat', sans-serif;
   padding-bottom: 60px;
+
 }
 
 
@@ -15,22 +16,28 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  background-image: url("../../assets/images/background_image_5.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+
+}
+
+.dashboard-welcome-text { 
+  font-weight: 400;
+  font-size: 70px;
+  text-align: center;
+  color: #FFFFFF;
   padding: 6.68px 10px;
   gap: 6.68px;
   max-width: 1013px;
   min-height: 100px;
   margin: 120px auto 50px;
   border: 5px solid #28F68B;
+  margin-top: 300px;
   border-radius: 25px;
-  margin-top: 250px;
-  margin-bottom: 250px;
-}
-
-.dashboard-welcome-text {
-  font-weight: 400;
-  font-size: 70px;
-  text-align: center;
-  color: #FFFFFF;
+  margin-bottom: 200px;
 }
 
 /* Plan Status */
@@ -48,6 +55,7 @@
   display: flex;
   align-items: center;
   padding: 0 20px;
+  margin-top: 60px;
 }
 
 .dashboard-plan-status {
@@ -105,14 +113,22 @@
   color: #B7B7B7;
 }
 
+.dashboard-second-background{
+   background-image: url("../../assets/images/dashboard_logo_image.png");
+  background-size: contain;
+  background-position: right;
+  background-repeat: no-repeat;
+  width: 100%;
+}
 
 /* Dashboard Content */
 .dashboard-content {
   display: flex;
-  width: 90%;
+  width: 100%;
   max-width: 1240px;
   margin: 0 auto;
   gap: 30px;
+
 }
 
 /* Main Dashboard Area */
@@ -168,15 +184,19 @@
   position: relative;
 }
 
+
 .order-icon::after {
   content: "";
   position: absolute;
-  width: 60%;
-  height: 60%;
-  background-color: #FEC53D;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-4h2v4zm0-6h-2V7h2v4z'/%3E%3C/svg%3E") no-repeat center / contain;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-4h2v4zm0-6h-2V7h2v4z'/%3E%3C/svg%3E") no-repeat center / contain;
+  width: 100%;
+  height: 100%;
+  background-color: transparent; /* Set to transparent or your desired background */
+  background-image: url("../../assets/logos/dashboard_icon_ai.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
+
 
 .sales-icon {
   background-color: rgba(130, 128, 255, 0.21);
@@ -184,13 +204,15 @@
 }
 
 .sales-icon::after {
-  content: "";
+    content: "";
   position: absolute;
-  width: 60%;
-  height: 60%;
-  background-color: #4AD991;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21 18v1c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h9zm-9-2h10V8H12v8z'/%3E%3C/svg%3E") no-repeat center / contain;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21 18v1c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h9zm-9-2h10V8H12v8z'/%3E%3C/svg%3E") no-repeat center / contain;
+  width: 100%;
+  height: 100%;
+  background-color: transparent; /* Set to transparent or your desired background */
+  background-image: url("../../assets/logos/dashboard_icon_active.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .pending-icon {
@@ -199,13 +221,15 @@
 }
 
 .pending-icon::after {
-  content: "";
+    content: "";
   position: absolute;
-  width: 60%;
-  height: 60%;
-  background-color: #FF9066;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E") no-repeat center / contain;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E") no-repeat center / contain;
+  width: 100%;
+  height: 100%;
+  background-color: transparent; /* Set to transparent or your desired background */
+  background-image: url("../../assets/logos/dashboard_icon_time.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .dashboard-stat-value {

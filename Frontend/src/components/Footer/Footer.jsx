@@ -19,10 +19,10 @@ const Footer = () => {
           <div className="footer-social">
             <p className="footer-social-text">Follow us on:</p>
             <div className="footer-social-icons">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon facebook"></a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon twitter"></a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon linkedin"></a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon instagram"></a>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon_facebook"></a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon_twitter"></a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon_linkedin"></a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon_youtube"></a>
             </div>
           </div>
         </div>

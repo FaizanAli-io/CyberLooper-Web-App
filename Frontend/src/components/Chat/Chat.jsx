@@ -12,6 +12,11 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
+import assistantIcon from '../../assets/images/assistant.png';
+import discoveryIcon from '../../assets/images/discovery.png';
+import communicationIcon from '../../assets/images/communication.png';
+import codingIcon from '../../assets/images/coding.png';
+
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
@@ -327,30 +332,32 @@ const ChatPage = () => {
     }
   ];
 
+  const iconMap = {
+    assistant: assistantIcon,
+    discovery: discoveryIcon,
+    communication: communicationIcon,
+    coding: codingIcon
+  };
+
+
   const renderCategoryIcon = (iconName) => {
-    // A placeholder for the icons - in a real app you'd use actual icons
+    const backgroundImage = iconMap[iconName];
+
     return (
-      <div className="card-icon">
-        {/* Icon placeholder */}
-      </div>
+      <div
+        className="card-icon"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          width: "60px",
+          height: "60px"
+        }}
+      />
     );
   };
 
-  // Render the user avatar
-  const renderUserAvatar = () => (
-    <div className="avatar-container">
-      <div className="user-avatar"></div>
-    </div>
-  );
-
-  // Render the bot avatar
-  const renderBotAvatar = () => (
-    <div className="avatar-container">
-      <div className="bot-avatar">
-        {/* You can add an SVG icon here */}
-      </div>
-    </div>
-  );
 
   return (
     <div className="app-container">

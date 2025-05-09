@@ -8,7 +8,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 200px;
+
+    background-image: url("../../assets/images/background_image.png");
+    background-size: contain;
+    background-position: top;
+    background-repeat: repeat;
+    width: 100%;
   }
   
   /* Hero Title */
@@ -23,6 +28,7 @@
     color: #FFFFFF;
     max-width: 762px;
     margin: 0 auto 20px;
+    margin-top: 200px;
   }
   
   /* Effective Date */

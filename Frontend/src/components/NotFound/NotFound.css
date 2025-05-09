@@ -11,6 +11,11 @@
     padding: 40px 20px;
     text-align: center;
     box-sizing: border-box;
+  background-image: url("../../assets/images/background_image.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
   }
   
   .not-found-image {

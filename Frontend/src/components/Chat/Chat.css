@@ -11,6 +11,13 @@ body {
   color: #FFFFFF;
 }
 
+.chat-container{
+  background-image: url("../../assets/images/dashboard_logo_image.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+}
 
 
 /* Navbar */
@@ -422,11 +429,10 @@ body {
   margin-bottom: 40px;
   width: 45px;
   height: 45px;
-  background: linear-gradient(90deg, #329866 14.18%, #004737 21.58%);
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-image: url("../../assets/images/assistant.png");
 }
 
 .card-title {

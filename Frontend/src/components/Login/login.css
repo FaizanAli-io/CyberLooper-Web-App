@@ -52,6 +52,12 @@ body {
   background-color: #080F10;
   min-height: 100vh;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  background-image: url("../../assets/images/login_page_logo.png");
+  background-size: contain;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  width: 100%;
+
 }
 
 .login-logo-section {
@@ -470,6 +476,7 @@ body {
   margin-right: 1rem;
   position: relative;
   box-shadow: 0 0 15px rgba(40, 246, 139, 0.5);
+  
 }
 
 .flash-circle:before {
@@ -526,6 +533,7 @@ body {
   filter: blur(80px);
   z-index: 0;
   animation: pulse 10s infinite alternate ease-in-out;
+
 }
 
 /* Pulse animation */

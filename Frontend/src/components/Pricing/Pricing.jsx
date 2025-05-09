@@ -18,6 +18,7 @@ const PricingPage = () => {
         </p>
       ) : (
         <>
+        
           <button className="home-login-btn" onClick={() => navigate("/login")}>
             Log in
           </button>

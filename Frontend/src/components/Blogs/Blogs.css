@@ -1,4 +1,13 @@
-Main Blog Page Styles
+
+.kb-blog-background{
+  background-image: url("../../assets/images/background_image.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100%;
+}
+
 .kb-blog-page {
     width: 100%;
     max-width: 1440px;
@@ -6,6 +15,7 @@ Main Blog Page Styles
     font-family: 'Inter', sans-serif;
     color: #FFFFFF;
     min-height: 100vh;
+
   }
   
   /* Hero Section Styles */
@@ -18,13 +28,14 @@ Main Blog Page Styles
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 100px;
+    
   }
   
   .kb-hero-title {
     width: 100%;
     max-width: 1344px;
     margin: 0 auto 20px;
+    margin-top: 100px;
     font-family: 'Montserrat', sans-serif;
     font-style: normal;
     font-weight: 500;
@@ -83,20 +94,26 @@ Main Blog Page Styles
   .kb-search-icon {
     width: 20px;
     height: 20px;
-    border: 2.2px solid rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
+
+
     position: relative;
   }
   
   .kb-search-icon::after {
-    content: '';
-    position: absolute;
-    width: 10px;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.7);
-    bottom: -4px;
-    right: -6px;
-    transform: rotate(45deg);
+
+      left: 8.33%;
+  right: 8.33%;
+  top: 8.33%;
+  bottom: 8.33%;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: transparent; /* Set to transparent or your desired background */
+  background-image: url("../../assets/logos/search.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
   }
   
   /* Admin Toggle Styles */

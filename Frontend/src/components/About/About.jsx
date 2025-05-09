@@ -3,6 +3,7 @@ import "./About.css";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 import { logoutUser } from "../firebase/firebase.js";
+import quote_up from "../../assets/images/quote-up.png";
 
 
 export default function About() {
@@ -28,18 +29,13 @@ export default function About() {
             </div>
         </>
       )}
-      <div className="about-container">
-        {/* Main Content */}
-        <div className="about-content">
-          {/* About Section */}
-          <section className="about-section">
+      <div className="about-section">
             <h1 className="section-title">About Cyberlooper</h1>
 
             <div className="about-description-box">
-              <div className="quote-icon">
-                <div className="quote-vector"></div>
-                <div className="quote-vector-2"></div>
-              </div>
+            <div className="quote-icon">
+              <img src={quote_up} alt="quote icon" />
+            </div>
               <p className="description-text">
                 Founded in San Antonio, Texas, Cyberlooper is a forward-thinking technology firm dedicated to empowering organizations with streamlined, data-driven solutions. Our team of seasoned professionals boasts decades of experience in corporate America, bringing together a wealth of knowledge in data analytics, software development, and process optimization.
               </p>
@@ -53,7 +49,12 @@ export default function About() {
               <h2 className="signature-name">Aurelia Voss</h2>
               <p className="signature-title">CEO</p>
             </div>
-          </section>
+          </div>
+      <div className="about-container">
+        {/* Main Content */}
+        <div className="about-content">
+          {/* About Section */}
+          
 
           {/* Empowering Section */}
           <section className="empowering-section">
@@ -139,11 +140,11 @@ export default function About() {
             </p>
           </section>
           {/* Why Choose Section */}
-          <section className="why-choose-section">
-            <div className="why-choose-container">
-              <h2 className="why-choose-title">Why Choose Cyberlooper?</h2>
+          <section className="why-choose-about-section">
+            <div className="why-choose-about-container">
+              <h2 className="why-choose-about-title">Why Choose Cyberlooper?</h2>
 
-              <div className="why-choose-description">
+              <div className="why-choose-about-description">
                 <p>From data strategy and consulting to robust software tools, our broad expertise means you can rely on us as a one-stop solution provider.</p>
               </div>
             </div>

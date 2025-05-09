@@ -68,14 +68,38 @@
     gap: 10px;
   }
   
-  .social-icon {
+  .social-icon_twitter {
     width: 29.05px;
     height: 29.05px;
-    background: #FFFFFF;
-    border-radius: 50%;
+    background-image: url("../../assets/images/twitter.png");
     display: block;
     position: relative;
   }
+
+    .social-icon_facebook {
+    width: 29.05px;
+    height: 29.05px;
+    background-image: url("../../assets/images/facebook.png");
+    display: block;
+    position: relative;
+  }
+
+   .social-icon_linkedin {
+    width: 29.05px;
+    height: 29.05px;
+    background-image: url("../../assets/images/linkedin.png");
+    display: block;
+    position: relative;
+  }
+
+   .social-icon_youtube {
+    width: 29.05px;
+    height: 29.05px;
+    background-image: url("../../assets/images/youtube.png");
+    display: block;
+    position: relative;
+  }
+  
   
   .social-icon:hover {
     opacity: 0.8;
@@ -167,19 +191,20 @@
   }
   
   .location-icon {
-    background-image: url('/location.png');
+  background-image: url("../../assets/images/location_2.png");
   }
   
   .phone-icon {
-    background-image: url('/126509.png');
+    background-image: url("../../assets/images/call.png");
   }
   
   .email-icon {
-    background-image: url('/482138.png');
+    background-image: url("../../assets/images/mail.png");
     width: 22px;
     height: 22px;
   }
   
+
   .contact-item span {
     font-family: 'Montserrat', sans-serif;
     font-style: normal;

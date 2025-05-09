@@ -4,17 +4,25 @@
   color: #FFFFFF;
   font-family: 'Montserrat', 'Lato', sans-serif;
   padding: 40px 0;
-  margin-top: 200px;
+    background-image: url("../../assets/images/background_image.png");
+    background-size: contain;
+    background-position: top;
+    background-repeat: repeat;
+    width: 100%;
 }
 
 .faq-container {
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 100px;
+  
 }
+
+
 
 /* Header Section */
 .faq-header {
+  margin-top: 200px;
   text-align: center;
   margin-bottom: 60px;
 }
@@ -88,7 +96,7 @@
 
 /* Contact Section */
 .contact-section {
-  margin-top: 100px;
+  margin-top: 200px;
 }
 
 .contact-header {

@@ -136,6 +136,11 @@
   background-color: #080F10;
   min-height: 100vh;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  background-image: url("../../assets/images/login_page_logo.png");
+  background-size: contain;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  width: 100%;
 }
 
 .su-logo-section {
