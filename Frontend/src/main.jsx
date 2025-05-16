@@ -20,7 +20,7 @@ import Pricing from './components/Pricing/Pricing.jsx';
 import TermsOfServicePage from './components/TermsOfService/TermsOfService.jsx';
 import PrivacyPolicy from './components/PrivacyPolicy/PrivacyPolicy.jsx';
 import SecurityPolicy from './components/SecurityPolicy/SecurityPolicy.jsx';
-import ChangePassword from './components/Profile/ChangePassword.jsx';
+import ChangePassword from './components/Profile/changePassword.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 import ContactUs from './components/ContactUs/ContactUs.jsx';
