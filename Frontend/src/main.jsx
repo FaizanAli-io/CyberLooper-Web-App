@@ -21,7 +21,7 @@ import TermsOfServicePage from './components/TermsOfService/TermsOfService.jsx';
 import PrivacyPolicy from './components/PrivacyPolicy/PrivacyPolicy.jsx';
 import SecurityPolicy from './components/SecurityPolicy/SecurityPolicy.jsx';
 import ChangePassword from './components/Profile/changePassword.jsx';
-import Profile from './components/Profile/Profile.jsx';
+import Profile from './components/Profile/profile.jsx';
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 import ContactUs from './components/ContactUs/ContactUs.jsx';
 import NotFound from './components/NotFound/NotFound.jsx';
