@@ -485,14 +485,14 @@ const ChatPage = () => {
                 <button className="other-menu-item" onClick={() => navigateTo('/About')}>
                   About
                 </button>
-                <button className="other-menu-item" onClick={() => navigateTo('/FAQPage')}>
+                <button className="other-menu-item" onClick={() => navigateTo('/faq')}>
                   FAQ
                 </button>
                 <button className="other-menu-item" onClick={() => navigateTo('/Blogs')}>
                   Blogs
                 </button>
-                <button className="other-menu-item" onClick={() => navigateTo('/help')}>
-                  Help Center
+                <button className="other-menu-item" onClick={() => navigateTo('/TermsOfService')}>
+                  Terms Of Service
                 </button>
               </div>
             )}

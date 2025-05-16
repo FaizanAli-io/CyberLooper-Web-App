@@ -38,60 +38,12 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/",
-        element: <Chat />,
-      },
-      {
-        path: "/home",
-        element: <Home />,
-      },
-      {
-        path: "/Pricing",
-        element: <Pricing />,
-      },
-      {
-        path: "/TermsOfService",
-        element: <TermsOfServicePage />
-      },
-      {
-        path: "/PrivacyPolicy",
-        element: <PrivacyPolicy />
-      },
-      {
-        path: "/SecurityPolicy",
-        element: <SecurityPolicy />
-      },
-      {
-        path: "/ContactUs",
-        element: <ContactUs />
-      },
-      {
-        path: "/Dashboard",
-        element: <DashboardPage />
-      },
-      // {
-      //   path: "/faq",
-      //   element: <FAQ />,
-      // },
-      {
-        path: "/chat",
-        element: <Chat />,
-      },
-      // {
-      //   path: "/blogs",
-      //   element: <Blogs />,
-      // },
-      {
         path: "signup",
         element: <Signup />,
       },
       {
         path: "ForgotPassword",
         element: <ForgotPassword />
-      },
-      {
-        path: "About",
-        element: <About />
       },
       {
         path: "verify-email",
@@ -104,6 +56,42 @@ const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
+          {
+            path: "/",
+            element: <Chat />,
+          },
+          {
+            path: "/home",
+            element: <Home />,
+          },
+          {
+            path: "/Pricing",
+            element: <Pricing />,
+          },
+          {
+            path: "/TermsOfService",
+            element: <TermsOfServicePage />
+          },
+          {
+            path: "/PrivacyPolicy",
+            element: <PrivacyPolicy />
+          },
+          {
+            path: "/SecurityPolicy",
+            element: <SecurityPolicy />
+          },
+          {
+            path: "/ContactUs",
+            element: <ContactUs />
+          },
+          {
+            path: "/Dashboard",
+            element: <DashboardPage />
+          },
+          {
+            path: "/chat",
+            element: <Chat />,
+          },
           {
             path: "faq",
             element: <FAQ />,
@@ -120,14 +108,16 @@ const router = createBrowserRouter([
             path: "/changePassword",
             element: <ChangePassword />,
           },
+          {
+            path: "About",
+            element: <About />
+          },
         ],
       },
       {
         path: "*",
         element: <NotFound />
       },
-
-      // Protected Routes
       {},
       {},
 
