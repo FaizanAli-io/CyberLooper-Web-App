@@ -44,10 +44,10 @@ export default function Header() {
     {
       label: "Home",
       command: () => {
-        navigate("/");
+        navigate("/home");
         setShowMobileMenu(false);
       },
-      className: location.pathname === "/" ? "active-item" : "",
+      className: location.pathname === "/home" ? "active-item" : "",
     },
     {
       label: "Chat",

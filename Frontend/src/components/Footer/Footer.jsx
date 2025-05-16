@@ -31,7 +31,7 @@ const Footer = () => {
         <div className="footer-links">
           <h3 className="footer-heading">Quick Links</h3>
           <ul className="footer-links-list">
-            <li><a href="/" onClick={(e) => { e.preventDefault(); navigate("/"); }}>Home</a></li>
+            <li><a href="/home" onClick={(e) => { e.preventDefault(); navigate("/"); }}>Home</a></li>
             <li><a href="/about" onClick={(e) => { e.preventDefault(); navigate("/about"); }}>About Us</a></li>
             <li><a href="/faq" onClick={(e) => { e.preventDefault(); navigate("/faq"); }}>FAQs</a></li>
             <li><a href="/contact" onClick={(e) => { e.preventDefault(); navigate("/contact"); }}>Contact Us</a></li>

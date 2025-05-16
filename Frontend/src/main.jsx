@@ -39,6 +39,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/",
+        element: <Chat />,
+      },
+      {
+        path: "/home",
         element: <Home />,
       },
       {
