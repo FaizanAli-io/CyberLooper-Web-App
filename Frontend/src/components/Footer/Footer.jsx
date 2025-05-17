@@ -31,10 +31,10 @@ const Footer = () => {
         <div className="footer-links">
           <h3 className="footer-heading">Quick Links</h3>
           <ul className="footer-links-list">
-            <li><a href="/home" onClick={(e) => { e.preventDefault(); navigate("/"); }}>Home</a></li>
+            <li><a href="/home" onClick={(e) => { e.preventDefault(); navigate("/home"); }}>Home</a></li>
             <li><a href="/about" onClick={(e) => { e.preventDefault(); navigate("/about"); }}>About Us</a></li>
             <li><a href="/faq" onClick={(e) => { e.preventDefault(); navigate("/faq"); }}>FAQs</a></li>
-            <li><a href="/contact" onClick={(e) => { e.preventDefault(); navigate("/contact"); }}>Contact Us</a></li>
+            <li><a href="/ContactUs" onClick={(e) => { e.preventDefault(); navigate("/ContactUs"); }}>Contact Us</a></li>
           </ul>
         </div>
         
@@ -61,9 +61,9 @@ const Footer = () => {
         <div className="footer-terms">
           <h3 className="footer-heading">Terms and Policies</h3>
           <ul className="footer-terms-list">
-            <li><a href="/privacy-policy" onClick={(e) => { e.preventDefault(); navigate("/privacy-policy"); }}>Privacy policy</a></li>
-            <li><a href="/terms" onClick={(e) => { e.preventDefault(); navigate("/terms"); }}>Terms and Conditions</a></li>
-            <li><a href="/safety" onClick={(e) => { e.preventDefault(); navigate("/safety"); }}>Safety</a></li>
+            <li><a href="/privacy-policy" onClick={(e) => { e.preventDefault(); navigate("/PrivacyPolicy"); }}>Privacy policy</a></li>
+            <li><a href="/terms" onClick={(e) => { e.preventDefault(); navigate("/TermsOfService"); }}>Terms Of Service</a></li>
+            <li><a href="/safety" onClick={(e) => { e.preventDefault(); navigate("/SecurityPolicy"); }}>Security</a></li>
           </ul>
         </div>
       </div>

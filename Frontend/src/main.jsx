@@ -105,10 +105,6 @@ const router = createBrowserRouter([
             element: <Profile />,
           },
           {
-            path: "/changePassword",
-            element: <ChangePassword />,
-          },
-          {
             path: "About",
             element: <About />
           },

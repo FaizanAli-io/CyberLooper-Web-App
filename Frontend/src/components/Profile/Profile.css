@@ -318,6 +318,6 @@
     }
     
     .profile-page-toggle-switch.profile-page-toggle-active .profile-page-toggle-handle {
-        transform: translateX(40px);
+        transform: translateX(10px);
     }
 }
