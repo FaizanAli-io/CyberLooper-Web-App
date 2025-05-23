@@ -7,6 +7,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 from utilities.email import send_email
 
+
 def send_emailverification_email(recipient_email: str, message: str):
 
     subject = "Cyberlooper – Verify Your Email Address"
@@ -31,6 +32,7 @@ def send_emailverification_email(recipient_email: str, message: str):
     except Exception as e:
         print(f"❌ Failed to send email: {e}")
 
+
 def send_forgotpassword_email(recipient_email: str, message: str):
 
     subject = "Cyberlooper - Reset Your Password"
@@ -54,6 +56,7 @@ def send_forgotpassword_email(recipient_email: str, message: str):
         send_email(recipient_email, subject, body)
     except Exception as e:
         print(f"❌ Failed to send email: {e}")
+
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
@@ -85,7 +88,9 @@ def create_user(db: Session, user_data: UserCreate):
     return user
 
 
-def get_or_create_firebase_user(db: Session, firebase_uid: str, email: str, provider: str, name: str):
+def get_or_create_firebase_user(
+    db: Session, firebase_uid: str, email: str, provider: str, name: str
+):
     user = db.query(User).filter(User.email == email).first()
 
     if user:
@@ -110,6 +115,7 @@ def get_or_create_firebase_user(db: Session, firebase_uid: str, email: str, prov
     db.commit()
     db.refresh(user)
     return user
+
 
 def get_user(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()

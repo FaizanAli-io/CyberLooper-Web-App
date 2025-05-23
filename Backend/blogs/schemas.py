@@ -2,9 +2,11 @@ from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
 
+
 class BlogBase(BaseModel):
     caption: str
     title: str
+
 
 class BlogResponse(BlogBase):
     id: int

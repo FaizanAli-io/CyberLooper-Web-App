@@ -9,6 +9,7 @@ load_dotenv()
 sender_email = os.getenv("SENDER_EMAIL")
 sender_password = os.getenv("SENDER_PASSWORD")
 
+
 def send_email(recipient_email: str, subject: str, body: str):
     if not sender_email or not sender_password:
         raise RuntimeError("Email credentials not set in environment variables.")

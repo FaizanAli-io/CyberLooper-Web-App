@@ -1,249 +1,249 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from database import get_db
-from messages.crud import (
-    create_message_with_ai,
-    get_message,
-    get_messages_by_chat,
-    delete_message,
-    get_summary_from_db_chat,
-    get_summary,
-    get_last_user_message_by_chat,
-    summarize_conversation,
-    get_last_n_message_pairs,
-    time_until_midnight_karachi,
-    delete_last_message,
-)
-from messages.schemas import MessageCreate, MessageResponse, SwitchModel
-from chats.models import Chat
-from datetime import datetime
-from users.auth import get_current_user
-from users.models import User
-from chats.crud import get_chat, get_chat_summary, set_chat_summary
-
 import os
+from database import get_db
 from dotenv import load_dotenv
+from sqlalchemy.orm import Session
+from datetime import datetime, timezone
+from fastapi import APIRouter, HTTPException, Depends
+
+from chats.models import Chat
+from chats.crud import (
+    get_chat,
+    get_chat_summary,
+    set_chat_summary,
+)
+
+from users.models import User
+from users.auth import get_current_user
+
+from messages.schemas import (
+    SwitchModel,
+    MessageCreate,
+    MessageResponse,
+)
+from messages.crud import (
+    get_message,
+    get_summary,
+    delete_message,
+    delete_last_message,
+    get_messages_by_chat,
+    create_message_with_ai,
+    time_until_midnight_karachi,
+    get_last_user_message_by_chat,
+)
+
+
 load_dotenv()
+
 TOKEN_LIMIT = int(os.getenv("TOKEN_LIMIT"))
 
 router = APIRouter()
 
-@router.post("/switchmodel", response_model=MessageResponse)  # ✅ Returns correct schema
-def send_message(
+
+def _generate_response(
+    db: Session,
+    user: User,
+    chat: Chat,
+    request_text: str,
+    message_context: str,
+    user_role: str,
+    department: str,
+    language: str,
+) -> MessageResponse:
+    model = chat.model
+    saved_message, tokens = create_message_with_ai(
+        db,
+        MessageCreate(
+            user_id=user.id,
+            chat_id=chat.id,
+            request=request_text,
+            user_role=user_role,
+            department=department,
+            language=language,
+            model=model,
+        ),
+        message_context,
+    )
+    if isinstance(saved_message, dict) and "error" in saved_message:
+        raise HTTPException(status_code=502, detail=saved_message["error"])
+
+    user.token_used += tokens
+    print(f"User Tokens: {user.token_used}")
+
+    db.commit()
+    db.refresh(user)
+
+    return MessageResponse(
+        id=saved_message.id,
+        chat_id=saved_message.chat_id,
+        request=saved_message.request,
+        response=saved_message.response,
+        created_at=saved_message.created_at,
+        updated_at=saved_message.updated_at,
+    )
+
+
+@router.post("/switchmodel", response_model=MessageResponse)
+def send_message_switchmodel(
     message_data: SwitchModel,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Handle user message, create chat if necessary, and return AI response."""
     user_id = current_user.id
-    chat_id = message_data.chat_id
-    user_role = message_data.user_role
-    department = message_data.department
-    language = message_data.language
-    old_chat = get_chat(db, chat_id)
-    if old_chat is None:
-        raise HTTPException(status_code=404, detail="Chat not found")
-    if old_chat.user_id != current_user.id:
+    old_chat = get_chat(db, message_data.chat_id)
+    if old_chat is None or old_chat.user_id != user_id:
         raise HTTPException(
-            status_code=403, detail="Not authorized to access this chat"
+            status_code=404 if old_chat is None else 403,
+            detail="Chat not found" if old_chat is None else "Not authorized",
         )
-    model_name = "gpt"
-    if old_chat.model == "gpt":
-        model_name = "grok"
 
-    # messages = get_last_n_message_pairs(db, chat_id, 6)
-    # messages = messages[:-1]
-
-    request_text = get_last_user_message_by_chat(db, chat_id)
-    # message_context = summarize_conversation(messages)
-    message_context = get_chat_summary(db, chat_id)
+    model_name = "grok" if old_chat.model == "gpt" else "gpt"
+    request_text = get_last_user_message_by_chat(db, old_chat.id)
+    message_context = get_chat_summary(db, old_chat.id)
 
     if not user_id or not request_text:
         raise HTTPException(
-            status_code=400, detail="User ID and request text are required."
+            status_code=400,
+            detail="User ID and request text are required.",
         )
 
     if current_user.token_used >= TOKEN_LIMIT:
-        hours, minutes = time_until_midnight_karachi()
+        h, m = time_until_midnight_karachi()
         raise HTTPException(
-            status_code=400, detail=f"Token limit reached. Come after {hours} hours {minutes} minutes."
+            status_code=400,
+            detail=f"Token limit reached.\nPlease try again after {h} hours and {m} minutes.",
         )
 
     new_chat = Chat(
-        user_id=user_id, topic=request_text[:30], created_at=datetime.utcnow(), model=model_name
+        user_id=user_id,
+        topic=request_text[:30],
+        created_at=datetime.now(timezone.utc),
+        model=model_name,
     )
+
     db.add(new_chat)
     db.commit()
     db.refresh(new_chat)
-    chat_id = new_chat.id  # Assign the new chat_id
 
-    db_chat = get_chat(db, chat_id)
-    if db_chat is None:
-        raise HTTPException(status_code=404, detail="Chat not found")
-    if db_chat.user_id != current_user.id:
-        raise HTTPException(
-            status_code=403, detail="Not authorized to access this chat"
-        )
-    model = db_chat.model
-    # ✅ Generate AI response and store message
-    saved_message, tokens = create_message_with_ai(
-        db, MessageCreate(user_id=user_id, chat_id=chat_id, request=request_text, user_role=user_role, department=department,language=language, model=model), message_context
+    return _generate_response(
+        db,
+        current_user,
+        new_chat,
+        request_text,
+        message_context,
+        message_data.user_role,
+        message_data.department,
+        message_data.language,
     )
 
-    if not saved_message:
-        raise HTTPException(status_code=500, detail="Failed to generate AI response.")
 
-    current_user.token_used += tokens
-    db.commit()
-    db.refresh(current_user)
-
-    # ✅ Return the response in `MessageResponse` format
-    return MessageResponse(
-        id=saved_message.id,
-        chat_id=saved_message.chat_id,
-        request=saved_message.request,
-        response=saved_message.response,
-        created_at=saved_message.created_at,
-        updated_at=saved_message.updated_at,
-    )
-
-@router.post("/regenerate", response_model=MessageResponse)  # ✅ Returns correct schema
-def send_message(
+@router.post("/regenerate", response_model=MessageResponse)
+def send_message_regenerate(
     message_data: SwitchModel,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Handle user message, create chat if necessary, and return AI response."""
-    user_id = current_user.id
-    chat_id = message_data.chat_id
-    user_role = message_data.user_role
-    department = message_data.department
-    language = message_data.language
-    chat = get_chat(db, chat_id)
-    if chat is None:
-        raise HTTPException(status_code=404, detail="Chat not found")
-    if chat.user_id != current_user.id:
+    chat = get_chat(db, message_data.chat_id)
+    if chat is None or chat.user_id != current_user.id:
         raise HTTPException(
-            status_code=403, detail="Not authorized to access this chat"
+            status_code=404 if chat is None else 403,
+            detail="Chat not found" if chat is None else "Not authorized",
         )
 
-    # messages = get_last_n_message_pairs(db, chat_id, 6)
-    # messages = messages[:-1]
+    request_text = get_last_user_message_by_chat(db, chat.id)
+    message_context = get_chat_summary(db, chat.id)
 
-    request_text = get_last_user_message_by_chat(db, chat_id)
-    # message_context = summarize_conversation(messages)
-    message_context = get_chat_summary(db, chat_id)
-
-    if not user_id or not request_text:
+    if not current_user.id or not request_text:
         raise HTTPException(
-            status_code=400, detail="User ID and request text are required."
+            status_code=400,
+            detail="User ID and request text are required.",
         )
 
     if current_user.token_used >= TOKEN_LIMIT:
-        hours, minutes = time_until_midnight_karachi()
+        h, m = time_until_midnight_karachi()
         raise HTTPException(
-            status_code=400, detail=f"Token limit reached. Come after {hours} hours {minutes} minutes."
+            status_code=400,
+            detail=f"Token limit reached.\nPlease try again after {h} hours and {m} minutes.",
         )
 
-    model = chat.model
-    delete_last_message(db, chat_id)
-    # ✅ Generate AI response and store message
-    saved_message, tokens = create_message_with_ai(
-        db, MessageCreate(user_id=user_id, chat_id=chat_id, request=request_text, user_role=user_role, department=department,language=language, model=model), message_context
+    delete_last_message(db, chat.id)
+    return _generate_response(
+        db,
+        current_user,
+        chat,
+        request_text,
+        message_context,
+        message_data.user_role,
+        message_data.department,
+        message_data.language,
     )
 
-    if not saved_message:
-        raise HTTPException(status_code=500, detail="Failed to generate AI response.")
 
-    current_user.token_used += tokens
-    db.commit()
-    db.refresh(current_user)
-
-    # ✅ Return the response in `MessageResponse` format
-    return MessageResponse(
-        id=saved_message.id,
-        chat_id=saved_message.chat_id,
-        request=saved_message.request,
-        response=saved_message.response,
-        created_at=saved_message.created_at,
-        updated_at=saved_message.updated_at,
-    )
-
-@router.post("", response_model=MessageResponse)  # ✅ Returns correct schema
+@router.post("", response_model=MessageResponse)
 def send_message(
     message_data: MessageCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Handle user message, create chat if necessary, and return AI response."""
     user_id = current_user.id
-    chat_id = message_data.chat_id
-    request_text = message_data.request
-    user_role = message_data.user_role
-    department = message_data.department
-    language = message_data.language
-
-    if not user_id or not request_text:
+    if not user_id or not message_data.request:
         raise HTTPException(
-            status_code=400, detail="User ID and request text are required."
+            status_code=400,
+            detail="User ID and request text are required.",
         )
 
     if current_user.token_used >= TOKEN_LIMIT:
-        hours, minutes = time_until_midnight_karachi()
+        h, m = time_until_midnight_karachi()
         raise HTTPException(
-            status_code=400, detail=f"Token limit reached. Come after {hours} hours {minutes} minutes."
+            status_code=400,
+            detail=f"Token limit reached.\nPlease try again after {h} hours and {m} minutes.",
         )
-    
-    message_context = ""
+
     summary_tokens = 0
+    message_context = ""
+    chat_id = message_data.chat_id
+
     if chat_id:
         message_context, summary_tokens = get_summary(db, chat_id)
         set_chat_summary(db, chat_id, message_context)
+        print(f"Summary Tokens: {summary_tokens}")
 
-    # ✅ If no chat_id, create a new chat
+    current_user.token_used += summary_tokens
+
     if not chat_id:
         new_chat = Chat(
-            user_id=user_id, topic=request_text[:30], created_at=datetime.utcnow(), model=message_data.model
+            user_id=user_id,
+            topic=message_data.request[:30],
+            created_at=datetime.now(timezone.utc),
+            model=message_data.model,
         )
         db.add(new_chat)
         db.commit()
         db.refresh(new_chat)
-        chat_id = new_chat.id  # Assign the new chat_id
+        chat_id = new_chat.id
 
-    db_chat = get_chat(db, chat_id)
-    if db_chat is None:
-        raise HTTPException(status_code=404, detail="Chat not found")
-    if db_chat.user_id != current_user.id:
+    chat = get_chat(db, chat_id)
+    if chat is None or chat.user_id != current_user.id:
         raise HTTPException(
-            status_code=403, detail="Not authorized to access this chat"
+            status_code=404 if chat is None else 403,
+            detail="Chat not found" if chat is None else "Not authorized",
         )
-    model = db_chat.model
-    print(model)
-    # message_context = get_summary_from_db_chat(db, chat_id, 5)
 
-    print(message_context)
-    # ✅ Generate AI response and store message
-    saved_message, tokens = create_message_with_ai(
-        db, MessageCreate(user_id=user_id, chat_id=chat_id, request=request_text, user_role=user_role, department=department,language=language, model=model), message_context
+    response = _generate_response(
+        db,
+        current_user,
+        chat,
+        message_data.request,
+        message_context,
+        message_data.user_role,
+        message_data.department,
+        message_data.language,
     )
 
-    if not saved_message:
-        raise HTTPException(status_code=500, detail="Failed to generate AI response.")
-
-    totalTokens = tokens + summary_tokens
-    current_user.token_used += totalTokens
     db.commit()
     db.refresh(current_user)
 
-    # ✅ Return the response in `MessageResponse` format
-    return MessageResponse(
-        id=saved_message.id,
-        chat_id=saved_message.chat_id,
-        request=saved_message.request,
-        response=saved_message.response,
-        created_at=saved_message.created_at,
-        updated_at=saved_message.updated_at,
-    )
+    return response
+
 
 @router.get("/{message_id}", response_model=MessageResponse)
 def read_message(
@@ -264,6 +264,7 @@ def read_message(
         )
 
     return db_message
+
 
 @router.delete("/{message_id}")
 def delete_existing_message(

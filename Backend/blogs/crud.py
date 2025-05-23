@@ -1,12 +1,23 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from datetime import datetime, timezone
+
 from blogs.models import Blog
 from blogs.schemas import BlogResponse
-from datetime import datetime
-from utilities.cloudinary import upload_image_to_cloudinary, delete_image_from_cloudinary
+
+from utilities.cloudinary import (
+    upload_image_to_cloudinary,
+    delete_image_from_cloudinary,
+)
+
 
 def create_blog(db: Session, title: str, caption: str, image_file=None):
-    image_url, public_id = upload_image_to_cloudinary(image_file) if image_file else (None, None)
-    blog = Blog(caption=caption, title=title, image_url=image_url, image_public_id=public_id)
+    image_url, public_id = (
+        upload_image_to_cloudinary(image_file) if image_file else (None, None)
+    )
+    blog = Blog(
+        caption=caption, title=title, image_url=image_url, image_public_id=public_id
+    )
     db.add(blog)
     db.commit()
     db.refresh(blog)
@@ -21,7 +32,9 @@ def get_blogs(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Blog).offset(skip).limit(limit).all()
 
 
-def update_blog(db: Session, blog_id: int, caption: str = None, title: str = None, image_file=None):
+def update_blog(
+    db: Session, blog_id: int, caption: str = None, title: str = None, image_file=None
+):
     blog = db.query(Blog).filter(Blog.id == blog_id).first()
     if not blog:
         return None
@@ -41,10 +54,11 @@ def update_blog(db: Session, blog_id: int, caption: str = None, title: str = Non
         blog.image_url = new_url
         blog.image_public_id = new_pid
 
-    blog.updated_at = datetime.utcnow()
+    blog.updated_at = datetime.now(timezone.utc)
     db.commit()
     db.refresh(blog)
     return blog
+
 
 def delete_blog(db: Session, blog_id: int):
     blog = db.query(Blog).filter(Blog.id == blog_id).first()

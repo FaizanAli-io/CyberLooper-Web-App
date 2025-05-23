@@ -14,6 +14,7 @@ from users.models import User
 
 router = APIRouter()
 
+
 @router.post("", response_model=ChatResponse)
 def create_new_chat(
     chat: ChatCreate,
@@ -37,6 +38,7 @@ def read_chat(
             status_code=403, detail="Not authorized to access this chat"
         )
     return db_chat
+
 
 @router.put("/{chat_id}", response_model=ChatResponse)
 def update_existing_chat(

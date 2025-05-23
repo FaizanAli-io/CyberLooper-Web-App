@@ -42,13 +42,18 @@ def get_current_user(
         firebase_user = verify_firebase_token(token)
         if firebase_user:
             user = get_or_create_firebase_user(
-                db, firebase_user["uid"], firebase_user["email"], firebase_user["firebase"]["sign_in_provider"], firebase_user["name"]
+                db,
+                firebase_user["uid"],
+                firebase_user["email"],
+                firebase_user["firebase"]["sign_in_provider"],
+                firebase_user["name"],
             )
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
         )
     return user
+
 
 def get_current_admin(
     token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
@@ -67,9 +72,11 @@ def get_current_admin(
     print(user.role)
     if user.role != UserRole.ADMIN:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials - Not an Admin"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials - Not an Admin",
         )
     return user
+
 
 def verify_firebase_token(token: str):
     try:

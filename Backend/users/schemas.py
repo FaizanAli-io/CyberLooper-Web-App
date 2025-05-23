@@ -3,19 +3,24 @@ from datetime import datetime
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
+
 class ResetPasswordRequest(BaseModel):
     token: str
     new_password: str
 
+
 class ForgotPassword(BaseModel):
     email: str
+
 
 class VerifyEmail(BaseModel):
     token: str
 
+
 class PasswordChangeRequest(BaseModel):
     old_password: str
     new_password: str
+
 
 class UserRole(str, Enum):
     ADMIN = "ADMIN"

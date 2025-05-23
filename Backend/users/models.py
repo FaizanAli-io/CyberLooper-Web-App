@@ -35,4 +35,6 @@ class User(Base):
     email_verified = Column(Boolean, default=False)
 
     chats = relationship("Chat", back_populates="user", cascade="all, delete-orphan")
-    contactform = relationship("ContactForm", back_populates="user", cascade="all, delete-orphan")
+    contactform = relationship(
+        "ContactForm", back_populates="user", cascade="all, delete-orphan"
+    )

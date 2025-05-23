@@ -4,6 +4,7 @@ from contactform.schemas import ContactFormCreate, ContactFormResponse
 from sqlalchemy.orm import joinedload
 from utilities.email import send_email
 
+
 def send_ack_email(recipient_email: str, message: str):
 
     subject = "Cyberlooper - We’ve received your message"
@@ -27,10 +28,7 @@ def send_ack_email(recipient_email: str, message: str):
 
 
 def create_contactform(db: Session, contactform: ContactFormCreate, current_user):
-    contact = ContactForm(
-        user_id=current_user.id,
-        message=contactform.message
-    )
+    contact = ContactForm(user_id=current_user.id, message=contactform.message)
     db.add(contact)
     db.commit()
     db.refresh(contact)
@@ -44,6 +42,7 @@ def create_contactform(db: Session, contactform: ContactFormCreate, current_user
         created_at=contact.created_at,
         updated_at=contact.updated_at,
     )
+
 
 def get_all_contactforms(db: Session):
     contactforms = db.query(ContactForm).options(joinedload(ContactForm.user)).all()

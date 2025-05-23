@@ -8,6 +8,7 @@ from users.models import User
 
 router = APIRouter()
 
+
 @router.post("", response_model=BlogResponse)
 def create_new_blog(
     title: str = Form(...),
@@ -20,7 +21,12 @@ def create_new_blog(
         raise HTTPException(status_code=422, detail="Title cannot be empty")
     if not caption.strip():
         raise HTTPException(status_code=422, detail="Caption cannot be empty")
-    return create_blog(db=db, title=title, caption=caption, image_file=image_file.file if image_file else None)
+    return create_blog(
+        db=db,
+        title=title,
+        caption=caption,
+        image_file=image_file.file if image_file else None,
+    )
 
 
 @router.get("/{blog_id}", response_model=BlogResponse)
@@ -61,7 +67,7 @@ def update_existing_blog(
         blog_id=blog_id,
         title=title,
         caption=caption,
-        image_file=image_file.file if image_file else None
+        image_file=image_file.file if image_file else None,
     )
     if updated_blog is None:
         raise HTTPException(status_code=404, detail="Blog not found")
