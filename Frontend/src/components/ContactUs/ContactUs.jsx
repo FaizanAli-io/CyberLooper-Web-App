@@ -24,7 +24,12 @@ const ContactUs = () => {
 
   const sendMessage = async () => {
     // Basic Form Validations
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !message.trim()) {
+    if (
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !email.trim() ||
+      !message.trim()
+    ) {
       alert("Please fill out all the fields.");
       return;
     }
@@ -44,7 +49,7 @@ const ContactUs = () => {
           first_name: firstName,
           last_name: lastName,
           email: email,
-          message: message
+          message: message,
         },
         {
           headers: {
@@ -55,7 +60,9 @@ const ContactUs = () => {
       );
 
       if (response.status === 200) {
-        alert("Contact form submitted! Please check your email for acknowledgement.");
+        alert(
+          "Contact form submitted! Please check your email for acknowledgement."
+        );
         // Clear fields after successful submit
         setFirstName("");
         setLastName("");
@@ -83,8 +90,7 @@ const ContactUs = () => {
         <img src={logo} alt="Cyberlooper Logo" className="home-logo" />
       </div>
       {isLoggedIn ? (
-        <p className="home-login-btn">
-        </p>
+        <p className="home-login-btn"></p>
       ) : (
         <>
           <button className="home-login-btn" onClick={() => navigate("/login")}>
@@ -103,23 +109,26 @@ const ContactUs = () => {
           <div className="contact-section">
             <div className="contact-header">
               <h2>Get in Touch</h2>
-              <p>We would love to hear from you. Please fill out this form and we will get in touch with you shortly.</p>
+              <p>
+                We would love to hear from you. Please fill out this form and we
+                will get in touch with you shortly.
+              </p>
             </div>
 
             <div className="contact-form">
               <div className="form-row">
                 <div className="input-standard">
-                  <input 
-                    type="text" 
-                    placeholder="First name" 
+                  <input
+                    type="text"
+                    placeholder="First name"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
                 <div className="input-standard">
-                  <input 
-                    type="text" 
-                    placeholder="Last name" 
+                  <input
+                    type="text"
+                    placeholder="Last name"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                   />
@@ -127,9 +136,9 @@ const ContactUs = () => {
               </div>
 
               <div className="input-standard full-width">
-                <input 
-                  type="email" 
-                  placeholder="Email" 
+                <input
+                  type="email"
+                  placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -144,8 +153,8 @@ const ContactUs = () => {
               </div>
 
               <div className="submit-button-container">
-                <button 
-                  className="submit-button" 
+                <button
+                  className="submit-button"
                   onClick={sendMessage}
                   disabled={sendingMessage}
                 >

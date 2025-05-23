@@ -1,75 +1,121 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
 import "./Footer.css";
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 
 const Footer = () => {
   const navigate = useNavigate();
-  
+
+  const handleNavigation = (e, path) => {
+    e.preventDefault();
+    navigate(path);
+  };
+
+  const mainLinks = [
+    { label: "Chat", path: "/chat" },
+    { label: "FAQ", path: "/faq" },
+    { label: "Blogs", path: "/blogs" },
+    { label: "About", path: "/about" },
+    { label: "More About Us", path: "/more-about" },
+  ];
+
+  const userLinks = [
+    { label: "Profile", path: "/profile" },
+    { label: "Pricing", path: "/pricing" },
+    { label: "Dashboard", path: "/dashboard" },
+    { label: "Contact Us", path: "/contact-us" },
+  ];
+
   return (
     <footer className="footer">
       <div className="footer-content">
-        {/* Logo and Tagline */}
         <div className="footer-logo-section">
           <div className="footer-logo-container">
             <img src={logo} alt="Cyberlooper Logo" className="footer-logo" />
           </div>
-          <p className="footer-tagline">Looking into the future of AI Technology</p>
-          
+          <p className="footer-tagline">
+            Looking into the future of AI Technology
+          </p>
           <div className="footer-social">
             <p className="footer-social-text">Follow us on:</p>
             <div className="footer-social-icons">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon_facebook"></a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon_twitter"></a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon_linkedin"></a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon_youtube"></a>
+              {[
+                {
+                  href: "https://facebook.com",
+                  className: "social-icon_facebook",
+                },
+                {
+                  href: "https://twitter.com",
+                  className: "social-icon_twitter",
+                },
+                {
+                  href: "https://linkedin.com",
+                  className: "social-icon_linkedin",
+                },
+                {
+                  href: "https://instagram.com",
+                  className: "social-icon_youtube",
+                },
+              ].map(({ href, className }) => (
+                <a
+                  key={className}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={className}
+                />
+              ))}
             </div>
           </div>
         </div>
-        
-        {/* Quick Links */}
+
         <div className="footer-links">
-          <h3 className="footer-heading">Quick Links</h3>
-          <ul className="footer-links-list">
-            <li><a href="/home" onClick={(e) => { e.preventDefault(); navigate("/home"); }}>Home</a></li>
-            <li><a href="/about" onClick={(e) => { e.preventDefault(); navigate("/about"); }}>About Us</a></li>
-            <li><a href="/faq" onClick={(e) => { e.preventDefault(); navigate("/faq"); }}>FAQs</a></li>
-            <li><a href="/ContactUs" onClick={(e) => { e.preventDefault(); navigate("/ContactUs"); }}>Contact Us</a></li>
-          </ul>
+          <div>
+            <h3 className="footer-heading">Main Links</h3>
+            <ul className="footer-links-list">
+              {mainLinks.map(({ label, path }) => (
+                <li key={path}>
+                  <a href={path} onClick={(e) => handleNavigation(e, path)}>
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="footer-heading">User Links</h3>
+            <ul className="footer-links-list">
+              {userLinks.map(({ label, path }) => (
+                <li key={path}>
+                  <a href={path} onClick={(e) => handleNavigation(e, path)}>
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        
-        {/* Contact Us */}
-        <div className="footer-contact">
-          <h3 className="footer-heading">Contact Us</h3>
-          <ul className="footer-contact-list">
-            <li className="contact-item">
-              <div className="contact-icon location-icon"></div>
-              <span>Address: 123, 456789</span>
-            </li>
-            <li className="contact-item">
-              <div className="contact-icon phone-icon"></div>
-              <span>Phone: +1234567890</span>
-            </li>
-            <li className="contact-item">
-              <div className="contact-icon email-icon"></div>
-              <span>Email: cyberlooper.com</span>
-            </li>
-          </ul>
-        </div>
-        
-        {/* Terms and Policies */}
+
         <div className="footer-terms">
           <h3 className="footer-heading">Terms and Policies</h3>
           <ul className="footer-terms-list">
-            <li><a href="/privacy-policy" onClick={(e) => { e.preventDefault(); navigate("/PrivacyPolicy"); }}>Privacy policy</a></li>
-            <li><a href="/terms" onClick={(e) => { e.preventDefault(); navigate("/TermsOfService"); }}>Terms Of Service</a></li>
-            <li><a href="/safety" onClick={(e) => { e.preventDefault(); navigate("/SecurityPolicy"); }}>Security</a></li>
+            {[
+              { label: "Privacy Policy", path: "/privacy-policy" },
+              { label: "Security Policy", path: "/security-policy" },
+              { label: "Terms of Service", path: "/terms-of-service" },
+            ].map(({ label, path }) => (
+              <li key={path}>
+                <a href={path} onClick={(e) => handleNavigation(e, path)}>
+                  {label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
-      
-      <div className="footer-divider"></div>
-      
+
+      <div className="footer-divider" />
+
       <div className="footer-copyright">
         <p>Copyright ©2025 CYBERLOOPER All rights reserved.</p>
       </div>

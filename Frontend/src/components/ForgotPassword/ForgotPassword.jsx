@@ -52,7 +52,8 @@ function ForgotPassword() {
               <p className="productive-text">On Track</p>
             </div>
             <p className="description">
-              Just enter your email, and we'll send you instructions to reset your password in no time.
+              Just enter your email, and we'll send you instructions to reset
+              your password in no time.
             </p>
           </div>
 
@@ -74,11 +75,7 @@ function ForgotPassword() {
                 />
               </div>
 
-              <button 
-                type="submit" 
-                className="login-button"
-                disabled={loading}
-              >
+              <button type="submit" className="login-button" disabled={loading}>
                 {loading ? "Sending..." : "Reset Password"}
               </button>
 
@@ -105,7 +102,8 @@ function ForgotPassword() {
               </div>
             </div>
             <p className="security-note-description">
-              We'll verify your identity and help you regain access to your account
+              We'll verify your identity and help you regain access to your
+              account
             </p>
           </div>
         </div>

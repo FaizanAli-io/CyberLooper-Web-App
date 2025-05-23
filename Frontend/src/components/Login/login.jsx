@@ -37,7 +37,9 @@ function Login() {
       }
     } catch (err) {
       setError(
-        err.response?.data?.message || err.response?.data?.detail || "Failed to log in. Please try again."
+        err.response?.data?.message ||
+          err.response?.data?.detail ||
+          "Failed to log in. Please try again."
       );
     }
   };
@@ -63,9 +65,7 @@ function Login() {
 
   return (
     <div className="login-container">
-
       <div className="login-layout">
-
         {/* Left section with login form */}
         <div className="left-section">
           <div className="su-logo-section">
@@ -80,7 +80,8 @@ function Login() {
               <p className="productive-text">Productive</p>
             </div>
             <p className="description">
-              Log in to your account and start managing your projects efficiently
+              Log in to your account and start managing your projects
+              efficiently
             </p>
           </div>
 
@@ -124,7 +125,7 @@ function Login() {
               <div className="remember-forgot-container">
                 <div className="remember-me-container">
                   <div
-                    className={`checkbox ${rememberMe ? 'checked' : ''}`}
+                    className={`checkbox ${rememberMe ? "checked" : ""}`}
                     onClick={toggleRememberMe}
                   >
                     <div className="knob"></div>

@@ -186,7 +186,7 @@ def summarize_conversation_incremental(
     doc = Document(page_content=new_content)
 
     with get_openai_callback() as cb:
-        updated_summary = summary_chain.run([doc])
+        updated_summary = summary_chain.invoke([doc])["output_text"]
         print(f"Final Summary -> {updated_summary}")
         token_usage = cb.total_tokens
 

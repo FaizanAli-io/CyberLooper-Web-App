@@ -1,7 +1,7 @@
 .pp-pricing-container {
   width: 100%;
   min-height: 100vh;
-  color: #FFFFFF;
+  color: #ffffff;
   padding: 120px 20px 100px;
   display: flex;
   flex-direction: column;
@@ -17,22 +17,20 @@
 
 /* Hero Section */
 .pp-hero-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 69.73px;
   line-height: 87px;
   text-align: center;
-  color: #FFFFFF;
+  color: #ffffff;
   max-width: 601px;
   margin: 0 auto 40px;
   margin-top: 100px;
 }
 
-
-
 .pp-hero-subtitle {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
@@ -59,7 +57,7 @@
 .pp-section-title {
   width: 100%;
   max-width: 575.71px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 44.2857px;
@@ -83,7 +81,7 @@
 
 /* Content Text */
 .pp-content-text {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -100,7 +98,7 @@
   width: 100%;
   max-width: 1240px;
   height: 0px;
-  border: 0.5px solid #FFFFFF;
+  border: 0.5px solid #ffffff;
   margin: 0 auto 60px;
 }
 
@@ -118,7 +116,7 @@
     line-height: 62px;
     max-width: 90%;
   }
-  
+
   .pp-hero-subtitle {
     font-size: 18px;
     line-height: 28px;
@@ -130,7 +128,7 @@
     font-size: 36px;
     line-height: 42px;
   }
-  
+
   .pp-content-text {
     font-size: 18px;
     line-height: 22px;
@@ -142,16 +140,16 @@
     flex-direction: column;
     gap: 30px;
   }
-  
+
   .pp-section-title {
     margin-bottom: 10px;
   }
-  
+
   .pp-hero-title {
     font-size: 42px;
     line-height: 52px;
   }
-  
+
   .pp-content-text {
     max-width: 100%;
   }
@@ -161,17 +159,17 @@
   .pp-pricing-container {
     padding: 100px 15px 80px;
   }
-  
+
   .pp-hero-title {
     font-size: 36px;
     line-height: 44px;
   }
-  
+
   .pp-hero-subtitle {
     font-size: 16px;
     line-height: 24px;
   }
-  
+
   .pp-section-title {
     font-size: 30px;
     line-height: 36px;

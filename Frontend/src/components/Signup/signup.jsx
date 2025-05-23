@@ -50,7 +50,7 @@ function Signup() {
       setError("Passwords do not match.");
       return;
     }
-    setLoading(true)
+    setLoading(true);
 
     try {
       // Remove confirmPassword before sending to API
@@ -72,10 +72,12 @@ function Signup() {
       }
     } catch (err) {
       setError(
-        err.response?.data?.message || err.response?.data?.detail || "Failed to sign up. Please try again."
+        err.response?.data?.message ||
+          err.response?.data?.detail ||
+          "Failed to sign up. Please try again."
       );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -113,8 +115,10 @@ function Signup() {
               <h2 className="su-security-label">Security Note</h2>
             </div>
             <p className="su-security-description">
-              We use industry-leading encryption and security practices to ensure your data remains protected.
-              Your credentials are never stored in plain text, and all communications are encrypted end-to-end.
+              We use industry-leading encryption and security practices to
+              ensure your data remains protected. Your credentials are never
+              stored in plain text, and all communications are encrypted
+              end-to-end.
             </p>
           </div>
           <div className="su-cyberlooper">
@@ -124,8 +128,6 @@ function Signup() {
 
         {/* Right section - Signup Form */}
         <div className="su-form-section">
-
-
           <div className="su-welcome-container">
             <p className="su-welcome-text">GET STARTED NOW</p>
             <h1 className="su-heading">Boost Your Work Day</h1>
@@ -167,7 +169,6 @@ function Signup() {
               </div>
 
               <div className="su-password-field">
-
                 <div className="su-password-input-wrapper">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -179,14 +180,16 @@ function Signup() {
                     onChange={handleChange}
                     required
                   />
-                  <span className="su-password-toggle" onClick={togglePasswordVisibility}>
+                  <span
+                    className="su-password-toggle"
+                    onClick={togglePasswordVisibility}
+                  >
                     <MDBIcon icon={showPassword ? "eye-slash" : "eye"} />
                   </span>
                 </div>
               </div>
 
               <div className="su-confirm-password-field">
-
                 <div className="su-password-input-wrapper">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
@@ -198,7 +201,10 @@ function Signup() {
                     onChange={handleChange}
                     required
                   />
-                  <span className="su-password-toggle" onClick={toggleConfirmPasswordVisibility}>
+                  <span
+                    className="su-password-toggle"
+                    onClick={toggleConfirmPasswordVisibility}
+                  >
                     <MDBIcon icon={showConfirmPassword ? "eye-slash" : "eye"} />
                   </span>
                 </div>
@@ -207,22 +213,29 @@ function Signup() {
               <div className="su-options-row">
                 <div className="su-remember-container">
                   <div
-                    className={`su-checkbox ${rememberMe ? 'su-checked' : ''}`}
+                    className={`su-checkbox ${rememberMe ? "su-checked" : ""}`}
                     onClick={toggleRememberMe}
                   >
                     <div className="su-knob"></div>
                   </div>
                   <span className="su-remember-text">Remember me</span>
                 </div>
-                <a href="#" className="su-help-link">Need help?</a>
+                <a href="#" className="su-help-link">
+                  Need help?
+                </a>
               </div>
 
-              <button type="submit" className="su-submit-button">Sign Up</button>
+              <button type="submit" className="su-submit-button">
+                Sign Up
+              </button>
             </form>
 
             <div className="su-login-redirect">
               <p className="su-redirect-text">
-                Already have an account? <a href="/login" className="su-login-link">Login</a>
+                Already have an account?{" "}
+                <a href="/login" className="su-login-link">
+                  Login
+                </a>
               </p>
             </div>
 
@@ -234,10 +247,16 @@ function Signup() {
               </div>
 
               <div className="su-social-buttons">
-                <div className="su-social-btn su-microsoft" onClick={() => handleSocialLogin("microsoft")}>
+                <div
+                  className="su-social-btn su-microsoft"
+                  onClick={() => handleSocialLogin("microsoft")}
+                >
                   <MDBIcon fab icon="microsoft" />
                 </div>
-                <div className="su-social-btn su-google" onClick={() => handleSocialLogin("google")}>
+                <div
+                  className="su-social-btn su-google"
+                  onClick={() => handleSocialLogin("google")}
+                >
                   <MDBIcon fab icon="google" />
                 </div>
               </div>

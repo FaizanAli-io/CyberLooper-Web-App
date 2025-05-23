@@ -15,7 +15,8 @@ const NotFound = () => {
 
       <div className="description-container">
         <p className="description-text">
-          The page you are looking for does not exist. It might have been moved or deleted unfortunately.
+          The page you are looking for does not exist. It might have been moved
+          or deleted unfortunately.
         </p>
       </div>
 

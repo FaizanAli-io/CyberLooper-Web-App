@@ -2,9 +2,9 @@
 .footer {
   position: relative;
   width: 100%;
-  background: #030B0C;
-  font-family: 'Montserrat', sans-serif;
-  color: #FFFFFF;
+  background: #030b0c;
+  font-family: "Montserrat", sans-serif;
+  color: #ffffff;
   padding-bottom: 60px;
 }
 
@@ -40,12 +40,12 @@
   position: relative;
   max-width: 235px;
   margin-top: 36px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
   line-height: 119%;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .footer-social {
@@ -54,12 +54,12 @@
 }
 
 .footer-social-text {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 300;
   font-size: 15px;
   line-height: 22px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 15px;
 }
 
@@ -111,13 +111,13 @@
 }
 
 .footer-heading {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
   line-height: 27px;
   text-transform: uppercase;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 30px 0;
 }
 
@@ -131,12 +131,12 @@
 }
 
 .footer-links-list li a {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 300;
   font-size: 15px;
   line-height: 22px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-decoration: none;
   transition: all 0.2s ease;
 }
@@ -193,12 +193,12 @@
 }
 
 .contact-item span {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
   line-height: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
   word-break: break-word;
 }
 
@@ -219,12 +219,12 @@
 }
 
 .footer-terms-list li a {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 300;
   font-size: 15px;
   line-height: 22px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-decoration: none;
   transition: all 0.2s ease;
 }
@@ -239,7 +239,7 @@
   position: relative;
   width: 100%;
   height: 1px;
-  background: #FFFFFF;
+  background: #ffffff;
   margin-top: 40px;
 }
 
@@ -252,12 +252,12 @@
 }
 
 .footer-copyright p {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 300;
   font-size: 12px;
   line-height: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0;
   padding: 10px 0;
 }
@@ -274,12 +274,14 @@
     padding: 50px 30px 0;
     justify-content: space-around;
   }
-  
+
   .footer-logo-section {
     max-width: 45%;
   }
-  
-  .footer-links, .footer-contact, .footer-terms {
+
+  .footer-links,
+  .footer-contact,
+  .footer-terms {
     max-width: 45%;
   }
 }
@@ -288,27 +290,29 @@
   .footer-content {
     padding: 40px 20px 0;
   }
-  
+
   .footer-logo-section {
     max-width: 100%;
     text-align: center;
     margin-bottom: 50px;
   }
-  
+
   .footer-tagline {
     max-width: 100%;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
   }
-  
+
   .footer-social {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-  
-  .footer-links, .footer-contact, .footer-terms {
+
+  .footer-links,
+  .footer-contact,
+  .footer-terms {
     max-width: 45%;
     margin-bottom: 30px;
   }
@@ -318,36 +322,51 @@
   .footer {
     padding-bottom: 40px;
   }
-  
+
   .footer-content {
-    flex-direction: column;
-    align-items: center;
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
   }
-  
-  .footer-logo-section, .footer-links, .footer-contact, .footer-terms {
-    max-width: 100%;
-    width: 100%;
-    text-align: center;
-    margin-bottom: 40px;
+
+  .footer-logo-section,
+  .footer-contact,
+  .footer-links,
+  .footer-terms {
+    flex: 1 1 30%;
+    min-width: 200px;
   }
-  
+
   .footer-heading {
     text-align: center;
   }
-  
-  .footer-links-list, .footer-contact-list, .footer-terms-list {
+
+  .footer-links-list,
+  .footer-contact-list,
+  .footer-terms-list {
     align-items: center;
   }
-  
+
   .contact-item {
     justify-content: center;
   }
-  
+
   .footer-divider {
     margin-top: 0;
   }
-  
+
   .footer-copyright p {
     padding: 15px 20px;
   }
+}
+
+.footer-links {
+  display: flex;
+  gap: 8rem;
+  justify-content: space-between;
+  max-width: 420px;
+}
+
+.footer-links > div {
+  flex: 1;
 }

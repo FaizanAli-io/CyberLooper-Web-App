@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./FAQPage.css";
-import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
+import "./FAQ.css";
 import axios from "axios";
-import { logoutUser } from "../firebase/firebase.js";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
@@ -26,7 +25,12 @@ const FAQPage = () => {
 
   const sendMessage = async () => {
     // Basic Form Validations
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !message.trim()) {
+    if (
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !email.trim() ||
+      !message.trim()
+    ) {
       alert("Please fill out all the fields.");
       return;
     }
@@ -46,7 +50,7 @@ const FAQPage = () => {
           first_name: firstName,
           last_name: lastName,
           email: email,
-          message: message
+          message: message,
         },
         {
           headers: {
@@ -57,7 +61,9 @@ const FAQPage = () => {
       );
 
       if (response.status === 200) {
-        alert("Contact form submitted! Please check your email for acknowledgement.");
+        alert(
+          "Contact form submitted! Please check your email for acknowledgement."
+        );
         // Clear fields after successful submit
         setFirstName("");
         setLastName("");
@@ -114,23 +120,22 @@ const FAQPage = () => {
 
   return (
     <>
-         <div className="home-logo-container">
-            <img src={logo} alt="Cyberlooper Logo" className="home-logo" />
+      <div className="home-logo-container">
+        <img src={logo} alt="Cyberlooper Logo" className="home-logo" />
+      </div>
+      {isLoggedIn ? (
+        <p className="home-login-btn"></p>
+      ) : (
+        <>
+          <button className="home-login-btn" onClick={() => navigate("/login")}>
+            Log in
+          </button>
+          <div className="home-try-button" onClick={() => navigate("/signup")}>
+            <span className="try-text">Try it free</span>
+            <i className="pi pi-arrow-up-right icon-arrow"></i>
           </div>
-          {isLoggedIn ? (
-            <p className="home-login-btn">
-            </p>
-          ) : (
-            <>
-              <button className="home-login-btn" onClick={() => navigate("/login")}>
-                Log in
-              </button>
-              <div className="home-try-button" onClick={() => navigate("/signup")}>
-                <span className="try-text">Try it free</span>
-                <i className="pi pi-arrow-up-right icon-arrow"></i>
-              </div>
-          </>
-        )}
+        </>
+      )}
 
       <div className="faq-page">
         <div className="faq-container">
@@ -138,7 +143,10 @@ const FAQPage = () => {
           <div className="faq-header">
             <h2>Still Have Questions?</h2>
             <p>
-              If you can't find what you're looking for here, feel free to reach out to our support team or consult our Knowledge Base for more detailed guides. We're here to help make your workday simpler and more efficient!
+              If you can't find what you're looking for here, feel free to reach
+              out to our support team or consult our Knowledge Base for more
+              detailed guides. We're here to help make your workday simpler and
+              more efficient!
             </p>
           </div>
 
@@ -170,23 +178,26 @@ const FAQPage = () => {
           <div className="contact-section">
             <div className="contact-header">
               <h2>Get in Touch</h2>
-              <p>We would love to hear from you. Please fill out this form and we will get in touch with you shortly.</p>
+              <p>
+                We would love to hear from you. Please fill out this form and we
+                will get in touch with you shortly.
+              </p>
             </div>
 
             <div className="contact-form">
               <div className="form-row">
                 <div className="input-standard">
-                  <input 
-                    type="text" 
-                    placeholder="First name" 
+                  <input
+                    type="text"
+                    placeholder="First name"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
                 <div className="input-standard">
-                  <input 
-                    type="text" 
-                    placeholder="Last name" 
+                  <input
+                    type="text"
+                    placeholder="Last name"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                   />
@@ -194,9 +205,9 @@ const FAQPage = () => {
               </div>
 
               <div className="input-standard full-width">
-                <input 
-                  type="email" 
-                  placeholder="Email" 
+                <input
+                  type="email"
+                  placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -211,8 +222,8 @@ const FAQPage = () => {
               </div>
 
               <div className="submit-button-container">
-                <button 
-                  className="submit-button" 
+                <button
+                  className="submit-button"
                   onClick={sendMessage}
                   disabled={sendingMessage}
                 >

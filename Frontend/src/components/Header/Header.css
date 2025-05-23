@@ -1,10 +1,10 @@
 .mobile-menu-item a.signup-item {
   color: white;
-  background: linear-gradient(90deg, #17A05C 0%, #02291B 100%);
+  background: linear-gradient(90deg, #17a05c 0%, #02291b 100%);
   border-radius: 6px;
   margin: 0 5px;
   font-weight: 600;
-}/* Hamburger Menu Styling */
+} /* Hamburger Menu Styling */
 
 .hamburger-container-mobile {
   position: fixed;
@@ -19,7 +19,7 @@
   width: 30px;
   height: 30px;
   object-fit: contain;
-}/* Header Component Scoped Styles */
+} /* Header Component Scoped Styles */
 
 .header-container {
   position: absolute;
@@ -103,11 +103,11 @@
 
 .header-login-btn {
   margin-right: 30px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
-  color: #D6DDE6;
+  color: #d6dde6;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -128,7 +128,7 @@
   gap: 10px;
   padding: 12px 32px;
   box-sizing: border-box;
-  background: linear-gradient(90deg, #17A05C 0%, #02291B 100%);
+  background: linear-gradient(90deg, #17a05c 0%, #02291b 100%);
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -152,42 +152,42 @@
   .header-container.mobile-hidden {
     display: none;
   }
-  
+
   .header-container {
     width: 90%;
     height: auto;
     min-height: 52px;
     padding: 5px 15px;
   }
-  
+
   .header-logo-container {
     width: 180px;
     height: auto;
     left: 20px;
     top: 20px;
   }
-  
+
   /* Auth buttons are hidden in mobile view as they're replaced by menu items */
   .header-auth-buttons {
     display: none;
   }
-  
+
   /* Add login and signup to mobile menu */
   .mobile-menu {
     margin-top: 10px;
   }
 }
 
-  .header-menubar.mobile-view {
-    padding: 0;
-    justify-content: flex-start;
-  }
+.header-menubar.mobile-view {
+  padding: 0;
+  justify-content: flex-start;
+}
 
-  /* Hamburger is now handled separately */
+/* Hamburger is now handled separately */
 
-  .header-menubar.mobile-view .p-menubar-root-list {
-    display: none;
-  }
+.header-menubar.mobile-view .p-menubar-root-list {
+  display: none;
+}
 
 /* Mobile Menu Styling */
 .mobile-menu {
@@ -230,13 +230,12 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-  .header-menubar .p-menuitem-link {
-    font-size: 1rem;
-    padding: 12px 20px;
-    width: 100%;
-    text-align: center;
-  }
-
+.header-menubar .p-menuitem-link {
+  font-size: 1rem;
+  padding: 12px 20px;
+  width: 100%;
+  text-align: center;
+}
 
 @media (max-width: 480px) {
   .header-container {
@@ -250,7 +249,9 @@
 }
 
 /* Optional: Typography override (can be moved to global styles if needed) */
-body, html, * {
-  font-family: 'Montserrat', sans-serif;
+body,
+html,
+* {
+  font-family: "Montserrat", sans-serif;
   font-weight: 100;
 }

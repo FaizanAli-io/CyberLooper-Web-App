@@ -71,7 +71,8 @@ function ResetPassword() {
               <p className="productive-text">Securely</p>
             </div>
             <p className="description">
-              Enter a new password below to regain access to your account safely.
+              Enter a new password below to regain access to your account
+              safely.
             </p>
           </div>
 
@@ -93,11 +94,7 @@ function ResetPassword() {
                 />
               </div>
 
-              <button 
-                type="submit" 
-                className="login-button"
-                disabled={loading}
-              >
+              <button type="submit" className="login-button" disabled={loading}>
                 {loading ? "Resetting..." : "Reset Password"}
               </button>
 
@@ -124,7 +121,8 @@ function ResetPassword() {
               </div>
             </div>
             <p className="security-note-description">
-              We'll verify your identity and help you regain access to your account
+              We'll verify your identity and help you regain access to your
+              account
             </p>
           </div>
         </div>

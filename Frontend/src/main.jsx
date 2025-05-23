@@ -1,38 +1,42 @@
-import './assets/fonts/fonts.css';
-import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
+
+import "./assets/fonts/fonts.css";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
-import Login from "./components/Login/login.jsx";
-import ForgotPassword from "./components/ForgotPassword/ForgotPassword.jsx";
-import ResetPassword from "./components/ForgotPassword/resetPassword.jsx";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
 import Layout from "./Layout.jsx";
+import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
+
+import Login from "./components/Login/login.jsx";
 import Signup from "./components/Signup/signup.jsx";
 import VerifyEmail from "./components/Signup/verifyEmail.jsx";
-import Home from "./components/Home/home.jsx";
-import FAQ from "./components/FAQ/FAQPage.jsx";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword.jsx";
+import ResetPassword from "./components/ForgotPassword/resetPassword.jsx";
+
+import FAQ from "./components/FAQ/FAQ.jsx";
 import Chat from "./components/Chat/Chat.jsx";
 import Blogs from "./components/Blogs/Blogs.jsx";
 import About from "./components/About/About.jsx";
-import Pricing from './components/Pricing/Pricing.jsx';
-import TermsOfServicePage from './components/TermsOfService/TermsOfService.jsx';
-import PrivacyPolicy from './components/PrivacyPolicy/PrivacyPolicy.jsx';
-import SecurityPolicy from './components/SecurityPolicy/SecurityPolicy.jsx';
-import ChangePassword from './components/Profile/changePassword.jsx';
-import Profile from './components/Profile/profile.jsx';
-import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
-import ContactUs from './components/ContactUs/ContactUs.jsx';
-import NotFound from './components/NotFound/NotFound.jsx';
-import DashboardPage from './components/Dashboard/Dashboard.jsx';
+import Profile from "./components/Profile/profile.jsx";
+import Pricing from "./components/Pricing/Pricing.jsx";
+import NotFound from "./components/NotFound/NotFound.jsx";
+import MoreAbout from "./components/MoreAbout/MoreAbout.jsx";
+import ContactUs from "./components/ContactUs/ContactUs.jsx";
+import Dashboard from "./components/Dashboard/Dashboard.jsx";
+import PrivacyPolicy from "./components/PrivacyPolicy/PrivacyPolicy.jsx";
+import SecurityPolicy from "./components/SecurityPolicy/SecurityPolicy.jsx";
+import TermsOfService from "./components/TermsOfService/TermsOfService.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-      // Public Routes
       {
         path: "Login",
         element: <Login />,
@@ -43,57 +47,37 @@ const router = createBrowserRouter([
       },
       {
         path: "ForgotPassword",
-        element: <ForgotPassword />
+        element: <ForgotPassword />,
       },
       {
         path: "verify-email",
-        element: <VerifyEmail />
+        element: <VerifyEmail />,
       },
       {
         path: "reset-password",
-        element: <ResetPassword />
+        element: <ResetPassword />,
       },
       {
         element: <ProtectedRoute />,
         children: [
           {
             path: "/",
-            element: <Chat />,
-          },
-          {
-            path: "/home",
-            element: <Home />,
-          },
-          {
-            path: "/Pricing",
-            element: <Pricing />,
-          },
-          {
-            path: "/TermsOfService",
-            element: <TermsOfServicePage />
-          },
-          {
-            path: "/PrivacyPolicy",
-            element: <PrivacyPolicy />
-          },
-          {
-            path: "/SecurityPolicy",
-            element: <SecurityPolicy />
-          },
-          {
-            path: "/ContactUs",
-            element: <ContactUs />
-          },
-          {
-            path: "/Dashboard",
-            element: <DashboardPage />
+            element: <Navigate to="/chat" replace />,
           },
           {
             path: "/chat",
             element: <Chat />,
           },
           {
-            path: "faq",
+            path: "/about",
+            element: <About />,
+          },
+          {
+            path: "/more-about",
+            element: <MoreAbout />,
+          },
+          {
+            path: "/faq",
             element: <FAQ />,
           },
           {
@@ -105,20 +89,35 @@ const router = createBrowserRouter([
             element: <Profile />,
           },
           {
-            path: "About",
-            element: <About />
+            path: "/pricing",
+            element: <Pricing />,
+          },
+          {
+            path: "/dashboard",
+            element: <Dashboard />,
+          },
+          {
+            path: "/contact-us",
+            element: <ContactUs />,
+          },
+          {
+            path: "/privacy-policy",
+            element: <PrivacyPolicy />,
+          },
+          {
+            path: "/security-policy",
+            element: <SecurityPolicy />,
+          },
+          {
+            path: "/terms-of-service",
+            element: <TermsOfService />,
           },
         ],
       },
       {
         path: "*",
-        element: <NotFound />
+        element: <NotFound />,
       },
-      {},
-      {},
-
-      {},
-      {},
     ],
   },
 ]);

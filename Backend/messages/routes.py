@@ -82,6 +82,21 @@ def _generate_response(
     )
 
 
+def _validate_request(current_user: User, request_text: str):
+    if not current_user.id or not request_text:
+        raise HTTPException(
+            status_code=400,
+            detail="User ID and request text are required.",
+        )
+
+    if current_user.token_used >= TOKEN_LIMIT:
+        h, m = time_until_midnight_karachi()
+        raise HTTPException(
+            status_code=400,
+            detail=f"Token limit reached.\nPlease try again after {h} hours and {m} minutes.",
+        )
+
+
 @router.post("/switchmodel", response_model=MessageResponse)
 def send_message_switchmodel(
     message_data: SwitchModel,
@@ -100,18 +115,7 @@ def send_message_switchmodel(
     request_text = get_last_user_message_by_chat(db, old_chat.id)
     message_context = get_chat_summary(db, old_chat.id)
 
-    if not user_id or not request_text:
-        raise HTTPException(
-            status_code=400,
-            detail="User ID and request text are required.",
-        )
-
-    if current_user.token_used >= TOKEN_LIMIT:
-        h, m = time_until_midnight_karachi()
-        raise HTTPException(
-            status_code=400,
-            detail=f"Token limit reached.\nPlease try again after {h} hours and {m} minutes.",
-        )
+    _validate_request(current_user, request_text)
 
     new_chat = Chat(
         user_id=user_id,
@@ -152,20 +156,10 @@ def send_message_regenerate(
     request_text = get_last_user_message_by_chat(db, chat.id)
     message_context = get_chat_summary(db, chat.id)
 
-    if not current_user.id or not request_text:
-        raise HTTPException(
-            status_code=400,
-            detail="User ID and request text are required.",
-        )
-
-    if current_user.token_used >= TOKEN_LIMIT:
-        h, m = time_until_midnight_karachi()
-        raise HTTPException(
-            status_code=400,
-            detail=f"Token limit reached.\nPlease try again after {h} hours and {m} minutes.",
-        )
+    _validate_request(current_user, request_text)
 
     delete_last_message(db, chat.id)
+
     return _generate_response(
         db,
         current_user,
@@ -184,19 +178,7 @@ def send_message(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    user_id = current_user.id
-    if not user_id or not message_data.request:
-        raise HTTPException(
-            status_code=400,
-            detail="User ID and request text are required.",
-        )
-
-    if current_user.token_used >= TOKEN_LIMIT:
-        h, m = time_until_midnight_karachi()
-        raise HTTPException(
-            status_code=400,
-            detail=f"Token limit reached.\nPlease try again after {h} hours and {m} minutes.",
-        )
+    _validate_request(current_user, message_data.request)
 
     summary_tokens = 0
     message_context = ""
@@ -211,7 +193,7 @@ def send_message(
 
     if not chat_id:
         new_chat = Chat(
-            user_id=user_id,
+            user_id=current_user.id,
             topic=message_data.request[:30],
             created_at=datetime.now(timezone.utc),
             model=message_data.model,

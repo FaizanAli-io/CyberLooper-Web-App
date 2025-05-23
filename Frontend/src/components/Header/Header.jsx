@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import "./Header.css";
+
+import { useState, useEffect } from "react";
 import { Menubar } from "primereact/menubar";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./Header.css";
+
 import hamburger_icon from "../../assets/images/hamburger-icon.png";
-import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 
 export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-  const isLoggedIn = !!localStorage.getItem("user_token"); // Check if user is logged in
   const [mobileView, setMobileView] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const isLoggedIn = !!localStorage.getItem("user_token");
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
@@ -24,31 +25,18 @@ export default function Header() {
     navigate("/login");
   };
 
-  // Check screen size on component mount and resize
   useEffect(() => {
     const checkScreenSize = () => {
       setMobileView(window.innerWidth <= 768);
     };
-    
-    // Initial check
+
     checkScreenSize();
-    
-    // Add event listener
-    window.addEventListener('resize', checkScreenSize);
-    
-    // Cleanup
-    return () => window.removeEventListener('resize', checkScreenSize);
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   const items = [
-    {
-      label: "Home",
-      command: () => {
-        navigate("/home");
-        setShowMobileMenu(false);
-      },
-      className: location.pathname === "/home" ? "active-item" : "",
-    },
     {
       label: "Chat",
       command: () => {
@@ -58,7 +46,15 @@ export default function Header() {
       className: location.pathname === "/chat" ? "active-item" : "",
     },
     {
-      label: "About",
+      label: "FAQs",
+      command: () => {
+        navigate("/faq");
+        setShowMobileMenu(false);
+      },
+      className: location.pathname === "/faq" ? "active-item" : "",
+    },
+    {
+      label: "About Us",
       command: () => {
         navigate("/about");
         setShowMobileMenu(false);
@@ -66,12 +62,12 @@ export default function Header() {
       className: location.pathname === "/about" ? "active-item" : "",
     },
     {
-      label: "FAQ",
+      label: "More About Us",
       command: () => {
-        navigate("/faq");
+        navigate("/more-about");
         setShowMobileMenu(false);
       },
-      className: location.pathname === "/faq" ? "active-item" : "",
+      className: location.pathname === "/more-about" ? "active-item" : "",
     },
     isLoggedIn
       ? {
@@ -91,30 +87,22 @@ export default function Header() {
         },
   ];
 
-  // Toggle mobile menu
   const toggleMobileMenu = () => {
     setShowMobileMenu(!showMobileMenu);
   };
-
-  // Start component for mobile view is no longer needed
-  // Mobile hamburger is now handled separately
 
   return (
     <>
       {mobileView && (
         <div className="hamburger-container-mobile" onClick={toggleMobileMenu}>
-          <img 
-            src={hamburger_icon} 
-            alt="Menu" 
-            className="hamburger-icon" 
-          />
+          <img src={hamburger_icon} alt="Menu" className="hamburger-icon" />
           {showMobileMenu && (
             <div className="mobile-menu">
               <ul className="mobile-menu-list">
                 {items.map((item, index) => (
                   <li key={index} className="mobile-menu-item">
-                    <a 
-                      href="#" 
+                    <a
+                      href="#"
                       onClick={(e) => {
                         e.preventDefault();
                         item.command && item.command();
@@ -130,11 +118,8 @@ export default function Header() {
           )}
         </div>
       )}
-      <div className={`header-container ${mobileView ? 'mobile-hidden' : ''}`}>
-        <Menubar 
-          model={items} 
-          className="header-menubar"
-        />
+      <div className={`header-container ${mobileView ? "mobile-hidden" : ""}`}>
+        <Menubar model={items} className="header-menubar" />
       </div>
     </>
   );

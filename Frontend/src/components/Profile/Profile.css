@@ -1,323 +1,336 @@
 /* Profile Container */
-.profile-page-background{
-    background-image: url("../../assets/images/background_image.png");
-    background-size: contain;
-    background-position: top;
-    background-repeat: repeat;
-    width: 100%;
+.profile-page-background {
+  background-image: url("../../assets/images/background_image.png");
+  background-size: contain;
+  background-position: top;
+  background-repeat: repeat;
+  width: 100%;
 }
 
 .profile-page-container {
-    width: 100%;
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    font-family: 'Montserrat', sans-serif;
-    color: #FFFFFF;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: "Montserrat", sans-serif;
+  color: #ffffff;
 }
 
 /* Header Styling */
-.profile-page-header, .profile-page-security-header {
-    text-align: center;
-    margin-bottom: 50px;
-    margin-top: 200px;
+.profile-page-header,
+.profile-page-security-header {
+  text-align: center;
+  margin-bottom: 50px;
+  margin-top: 200px;
 }
 
-.profile-page-header h1, .profile-page-security-header h1 {
-    font-weight: 500;
-    font-size: 60px;
-    line-height: 73px;
-    margin-bottom: 20px;
+.profile-page-header h1,
+.profile-page-security-header h1 {
+  font-weight: 500;
+  font-size: 60px;
+  line-height: 73px;
+  margin-bottom: 20px;
 }
 
-.profile-page-header p, .profile-page-security-header p {
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 24px;
-    max-width: 641px;
-    margin: 0 auto;
-    color: #FFFFFF;
+.profile-page-header p,
+.profile-page-security-header p {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  max-width: 641px;
+  margin: 0 auto;
+  color: #ffffff;
 }
 
 /* Main Content */
 .profile-page-content {
-    display: flex;
-    flex-direction: column;
-    gap: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
 }
 
 /* Form Container */
 .profile-page-form-container {
-    width: 100%;
+  width: 100%;
 }
 
 .profile-page-details-form {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 }
 
 /* Input Groups */
 .profile-page-input-group-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
 }
 
 .profile-page-input-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  width: 100%;
 }
 
 .profile-page-form-field {
-    flex: 1;
-    min-width: 300px;
+  flex: 1;
+  min-width: 300px;
 }
 
 /* Input Styling */
-.profile-page-input-field, .profile-page-password-field {
-    box-sizing: border-box;
-    width: 100%;
-    height: 106px;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 15px;
-    padding: 0 36px;
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 21px;
-    line-height: 22px;
-    color: #FFFFFF;
+.profile-page-input-field,
+.profile-page-password-field {
+  box-sizing: border-box;
+  width: 100%;
+  height: 106px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 0 36px;
+  font-family: "Montserrat", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 22px;
+  color: #ffffff;
 }
 
 /* Bio Text Area */
 .profile-page-bio-container {
-    width: 100%;
+  width: 100%;
 }
 
 .profile-page-bio-field {
-    box-sizing: border-box;
-    width: 100%;
-    height: 259px;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 15px;
-    padding: 36px;
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 21px;
-    line-height: 22px;
-    color: #FFFFFF;
-    resize: none;
+  box-sizing: border-box;
+  width: 100%;
+  height: 259px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 36px;
+  font-family: "Montserrat", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 22px;
+  color: #ffffff;
+  resize: none;
 }
 
 /* Button Styling */
 .profile-page-button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.profile-page-update-button, .profile-page-password-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px 154px;
-    width: auto;
-    min-width: 240px;
-    height: 66px;
-    background: #030B0C;
-    box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.05);
-    border-radius: 15px;
-    border: none;
-    cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 150%;
-    color: #FFFFFF;
-    transition: all 0.3s ease;
+.profile-page-update-button,
+.profile-page-password-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 154px;
+  width: auto;
+  min-width: 240px;
+  height: 66px;
+  background: #030b0c;
+  box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 150%;
+  color: #ffffff;
+  transition: all 0.3s ease;
 }
 
-.profile-page-update-button:hover, .profile-page-password-button:hover {
-    background: #0a1d1f;
+.profile-page-update-button:hover,
+.profile-page-password-button:hover {
+  background: #0a1d1f;
 }
 
 /* Password Section */
 .profile-page-security-section {
-    margin-top: 80px;
+  margin-top: 80px;
 }
 
 /* Toggle Switch */
 .profile-page-password-toggle-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
 .profile-page-toggle-header h3 {
-    font-weight: 500;
-    font-size: 23px;
-    line-height: 33px;
-    margin: 0 0 6px 0;
+  font-weight: 500;
+  font-size: 23px;
+  line-height: 33px;
+  margin: 0 0 6px 0;
 }
 
 .profile-page-toggle-header p {
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 28px;
-    color: rgba(255, 255, 255, 0.6);
-    margin: 0;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 28px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
 }
 
 .profile-page-toggle-switch {
-    width: 99px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.16);
-    border-radius: 25px;
-    position: relative;
-    cursor: pointer;
-    transition: background 0.3s ease;
+  width: 99px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 25px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .profile-page-toggle-switch.profile-page-toggle-active {
-    background: rgba(0, 255, 157, 0.16);
+  background: rgba(0, 255, 157, 0.16);
 }
 
 .profile-page-toggle-handle {
-    position: absolute;
-    width: 39px;
-    height: 39px;
-    left: 5.5px;
-    top: 5.5px;
-    background: #000000;
-    border-radius: 50%;
-    transition: transform 0.3s ease;
+  position: absolute;
+  width: 39px;
+  height: 39px;
+  left: 5.5px;
+  top: 5.5px;
+  background: #000000;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
 }
 
-.profile-page-toggle-switch.profile-page-toggle-active .profile-page-toggle-handle {
-    transform: translateX(50px);
-    background: #00FF9D;
+.profile-page-toggle-switch.profile-page-toggle-active
+  .profile-page-toggle-handle {
+  transform: translateX(50px);
+  background: #00ff9d;
 }
 
 /* Password Form */
 .profile-page-password-form-container {
-    margin-top: 30px;
-    margin-bottom: 40px;
+  margin-top: 30px;
+  margin-bottom: 40px;
 }
 
 .profile-page-password-message {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #00FF9D;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #00ff9d;
 }
 
 .profile-page-password-form {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .profile-page-password-inputs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
 }
 
 /* Danger Zone */
 .profile-page-danger-zone {
-    margin-top: 60px;
-    padding-top: 30px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .profile-page-danger-zone h3 {
-    font-weight: 500;
-    font-size: 23px;
-    color: #ff4d4d;
-    margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 23px;
+  color: #ff4d4d;
+  margin-bottom: 20px;
 }
 
 .profile-page-delete-button {
-    padding: 15px 30px;
-    background: rgba(231, 76, 60, 0.1);
-    border: 1px solid #e74c3c;
-    border-radius: 15px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    font-size: 18px;
-    color: #e74c3c;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  padding: 15px 30px;
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid #e74c3c;
+  border-radius: 15px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #e74c3c;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .profile-page-delete-button:hover {
-    background: rgba(231, 76, 60, 0.2);
+  background: rgba(231, 76, 60, 0.2);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .profile-page-header h1, .profile-page-security-header h1 {
-        font-size: 40px;
-        line-height: 50px;
-    }
+  .profile-page-header h1,
+  .profile-page-security-header h1 {
+    font-size: 40px;
+    line-height: 50px;
+  }
 
-    .profile-page-header p, .profile-page-security-header p {
-        font-size: 16px;
-        line-height: 20px;
-    }
+  .profile-page-header p,
+  .profile-page-security-header p {
+    font-size: 16px;
+    line-height: 20px;
+  }
 
-    .profile-page-update-button, .profile-page-password-button {
-        padding: 15px 40px;
-        font-size: 18px;
-    }
-    
-    .profile-page-input-field, .profile-page-password-field {
-        height: 85px;
-        font-size: 18px;
-    }
-    
-    .profile-page-bio-field {
-        height: 200px;
-        font-size: 18px;
-    }
-    
-    .profile-page-toggle-header h3 {
-        font-size: 20px;
-    }
-    
-    .profile-page-toggle-header p {
-        font-size: 16px;
-    }
+  .profile-page-update-button,
+  .profile-page-password-button {
+    padding: 15px 40px;
+    font-size: 18px;
+  }
+
+  .profile-page-input-field,
+  .profile-page-password-field {
+    height: 85px;
+    font-size: 18px;
+  }
+
+  .profile-page-bio-field {
+    height: 200px;
+    font-size: 18px;
+  }
+
+  .profile-page-toggle-header h3 {
+    font-size: 20px;
+  }
+
+  .profile-page-toggle-header p {
+    font-size: 16px;
+  }
 }
 
 /* Additional responsiveness for very small screens */
 @media (max-width: 480px) {
-    .profile-page-header h1, .profile-page-security-header h1 {
-        font-size: 32px;
-        line-height: 40px;
-    }
-    
-    .profile-page-toggle-switch {
-        width: 80px;
-        height: 40px;
-    }
-    
+  .profile-page-header h1,
+  .profile-page-security-header h1 {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .profile-page-toggle-switch {
+    width: 80px;
+    height: 40px;
+  }
+
+  .profile-page-toggle-handle {
+    width: 30px;
+    height: 30px;
+    top: 5px;
+    left: 5px;
+  }
+
+  .profile-page-toggle-switch.profile-page-toggle-active
     .profile-page-toggle-handle {
-        width: 30px;
-        height: 30px;
-        top: 5px;
-        left: 5px;
-    }
-    
-    .profile-page-toggle-switch.profile-page-toggle-active .profile-page-toggle-handle {
-        transform: translateX(10px);
-    }
+    transform: translateX(10px);
+  }
 }
