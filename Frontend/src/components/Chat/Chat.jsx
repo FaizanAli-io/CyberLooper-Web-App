@@ -38,10 +38,103 @@ const ChatPage = () => {
   const [userRole, setUserRole] = useState("");
   const [userDepartment, setUserDepartment] = useState("");
   const [userLanguage, setuserLanguage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // const isRegenerating = useRef(false);
 
+  const TypingResponse = ({ response, isLoading, onTypingComplete }) => {
+    const [displayedText, setDisplayedText] = useState('');
+    const [isTyping, setIsTyping] = useState(false);
+
+    useEffect(() => {
+      if (isLoading) {
+        setDisplayedText('');
+        setIsTyping(false);
+        return;
+      }
+
+      if (response && response !== displayedText) {
+        setIsTyping(true);
+        let currentIndex = 0;
+        const typingSpeed = 20; // milliseconds between characters
+
+        const typeText = () => {
+          if (currentIndex < response.length) {
+            setDisplayedText(response.slice(0, currentIndex + 1));
+            currentIndex++;
+            setTimeout(typeText, typingSpeed);
+          } else {
+            setIsTyping(false);
+            if (onTypingComplete) {
+              onTypingComplete();
+            }
+          }
+        };
+
+        // Small delay before starting to type
+        setTimeout(typeText, 100);
+      }
+    }, [response, isLoading, displayedText, onTypingComplete]);
+
+    if (isLoading) {
+      return (
+        <div className="typing-indicator">
+          <span className="typing-indicator-text">AI is thinking</span>
+          <div className="typing-dots">
+            <div className="typing-dot"></div>
+            <div className="typing-dot"></div>
+            <div className="typing-dot"></div>
+          </div>
+        </div>
+      );
+    }
+
+    // Return the displayed text (either typing or complete response)
+    return displayedText ? <ReactMarkdown>{displayedText}</ReactMarkdown> : null;
+  };
   const navigate = useNavigate();
+
+  const handleApiError = (error, context = "operation") => {
+    console.error(`Error in ${context}:`, error);
+
+    if (error.response) {
+      const status = error.response.status;
+      const data = error.response.data;
+
+      switch (status) {
+        case 401:
+          setErrorMessage("Your session has expired. Please sign in again.");
+          handleSignOut();
+          break;
+        case 403:
+          setErrorMessage("You don't have permission to perform this action.");
+          break;
+        case 429:
+          if (data?.message?.includes("token") || data?.message?.includes("quota")) {
+            setErrorMessage("⚠️ Chat limit reached! Your tokens have been exhausted. Please try again later or upgrade your plan.");
+          } else {
+            setErrorMessage("Too many requests. Please wait a moment before trying again.");
+          }
+          break;
+        case 500:
+          setErrorMessage("Server error occurred. Please try again in a few moments.");
+          break;
+        case 502:
+        case 503:
+        case 504:
+          setErrorMessage("Service temporarily unavailable. Please try again later.");
+          break;
+        default:
+          setErrorMessage(data?.message || `An error occurred (${status}). Please try again.`);
+      }
+    } else if (error.request) {
+      setErrorMessage("Network error. Please check your connection and try again.");
+    } else {
+      setErrorMessage("An unexpected error occurred. Please try again.");
+    }
+
+    // Clear error message after 10 seconds
+    setTimeout(() => setErrorMessage(""), 10000);
+  };
 
   // Get token and check authentication
   useEffect(() => {
@@ -126,7 +219,14 @@ const ChatPage = () => {
 
     const userMessage = input;
     setInput("");
-    setMessages((prev) => [...prev, { request: userMessage, response: "..." }]);
+    setErrorMessage("");
+
+    // Add user message and loading indicator
+    setMessages((prev) => [...prev, {
+      request: userMessage,
+      response: null,
+      isLoading: true
+    }]);
     setWaitingResponse(true);
 
     const token = localStorage.getItem("user_token");
@@ -152,8 +252,7 @@ const ChatPage = () => {
       setMessages((prev) =>
         prev.map((msg, idx) =>
           idx === prev.length - 1
-            // ? { ...msg, response: response.data.response }
-            ? response.data
+            ? { ...response.data, isLoading: false }
             : msg
         )
       );
@@ -166,7 +265,9 @@ const ChatPage = () => {
         setSelectedChatId(response.data.chat_id);
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      // Remove the loading message and show error
+      setMessages((prev) => prev.slice(0, -1));
+      handleApiError(error, "sending message");
     } finally {
       setWaitingResponse(false);
     }
@@ -174,6 +275,7 @@ const ChatPage = () => {
 
   const switchModel = async () => {
     setWaitingResponse(true);
+    setErrorMessage("");
 
     const token = localStorage.getItem("user_token");
 
@@ -195,9 +297,7 @@ const ChatPage = () => {
       );
 
       // Since switching model creates a NEW chat, reset messages to only the new message
-      setMessages([
-        response.data
-      ]);
+      setMessages([response.data]);
 
       // Update chats list (prepend new chat)
       setChats((prev) => [
@@ -209,13 +309,24 @@ const ChatPage = () => {
       setSelectedChatId(response.data.chat_id);
 
     } catch (error) {
-      console.error("Error switching model:", error);
+      handleApiError(error, "switching model");
     } finally {
       setWaitingResponse(false);
     }
   };
+
   const regenerateResponse = async () => {
     setWaitingResponse(true);
+    setErrorMessage("");
+
+    // Add loading indicator to the last message
+    setMessages((prev) =>
+      prev.map((msg, idx) =>
+        idx === prev.length - 1
+          ? { ...msg, isLoading: true }
+          : msg
+      )
+    );
 
     const token = localStorage.getItem("user_token");
 
@@ -239,21 +350,28 @@ const ChatPage = () => {
       setMessages((prev) =>
         prev.map((msg, idx) =>
           idx === prev.length - 1
-            // ? { ...msg, response: response.data.response }
-            ? response.data
+            ? { ...response.data, isLoading: false }
             : msg
         )
       );
 
       if (!selectedChatId && token) {
         setChats((prev) => [
-          { id: response.data.chat_id, topic: userMessage.slice(0, 30) },
+          { id: response.data.chat_id, topic: response.data.request.slice(0, 30) },
           ...prev,
         ]);
         setSelectedChatId(response.data.chat_id);
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      // Remove loading state from the message
+      setMessages((prev) =>
+        prev.map((msg, idx) =>
+          idx === prev.length - 1
+            ? { ...msg, isLoading: false }
+            : msg
+        )
+      );
+      handleApiError(error, "regenerating response");
     } finally {
       setWaitingResponse(false);
     }
@@ -263,6 +381,7 @@ const ChatPage = () => {
     setMessages([]);
     setSelectedChatId(null);
     setShowOtherMenu(false);
+    setErrorMessage("");
   };
 
   const handleSearch = (e) => {
@@ -295,6 +414,7 @@ const ChatPage = () => {
       sessionStorage.removeItem("user_token"); // Remove JWT token from sessionStorage
       setIsAuthenticated(false);
       setChats([]);
+      setErrorMessage("");
       startNewChat();
 
       // After logout, navigate to the login page
@@ -344,7 +464,6 @@ const ChatPage = () => {
     coding: codingIcon
   };
 
-
   const renderCategoryIcon = (iconName) => {
     const backgroundImage = iconMap[iconName];
 
@@ -362,7 +481,6 @@ const ChatPage = () => {
       />
     );
   };
-
 
   return (
     <div className="app-container">
@@ -501,6 +619,21 @@ const ChatPage = () => {
 
         {/* Main Chat Area */}
         <div className="chat-main">
+          {/* Error Message Display */}
+          {errorMessage && (
+            <div className="error-message-container">
+              <div className="error-message">
+                {errorMessage}
+                <button
+                  className="error-close-btn"
+                  onClick={() => setErrorMessage("")}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          )}
+
           {!messages.length && !selectedChatId ? (
             <>
               <div className="hero-section">
@@ -592,7 +725,7 @@ const ChatPage = () => {
                   messages.map((msg, index) => {
                     // Check if this is the latest message
                     const isLatestMessage = index === messages.length - 1;
-                    
+
                     return (
                       <div className="message-wrapper" key={index}>
                         {/* User message with avatar and actions */}
@@ -607,29 +740,37 @@ const ChatPage = () => {
                                 <button className="action-btn">Edit</button>
                               )}
                               {
-                                isLatestMessage&&(<span className="timestamp">{formatTimestamp(msg.timestamp)}</span>)
+                                isLatestMessage && (<span className="timestamp">{formatTimestamp(msg.timestamp)}</span>)
                               }
                             </div>
                           </div>
                         </div>
 
                         {/* Bot message with avatar and actions */}
-                        {msg.response && (
+                        {(msg.response || msg.isLoading) && (
                           <div className="bot-message-container">
                             <div className="bot-avatar-container">
                               <div className="bot-avatar"></div>
                             </div>
                             <div className="bot-content">
                               <div className="bot-bubble">
-                                <ReactMarkdown>{msg.response}</ReactMarkdown>
+                                {msg.isLoading ? (
+                                  <div className="typing-indicator">
+                                    <span className="typing-indicator-text">AI is thinking</span>
+                                    <div className="typing-dots">
+                                      <div className="typing-dot"></div>
+                                      <div className="typing-dot"></div>
+                                      <div className="typing-dot"></div>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <ReactMarkdown>{msg.response}</ReactMarkdown>
+                                )}
                               </div>
                               <div className="bot-actions">
-                                {isLatestMessage && (
+                                {isLatestMessage && !msg.isLoading && msg.response && (
                                   <>
-                                    <button
-                                      className="action-btn"
-                                      onClick={() => handleCopyText(msg.response)}
-                                    >
+                                    <button className="action-btn" onClick={() => handleCopyText(msg.response)}>
                                       Copy
                                     </button>
                                     <button className="action-btn" onClick={regenerateResponse}>
@@ -641,7 +782,6 @@ const ChatPage = () => {
                                     <span className="timestamp">{formatTimestamp(msg.timestamp)}</span>
                                   </>
                                 )}
-                                
                               </div>
                             </div>
                           </div>
