@@ -134,6 +134,7 @@ const ChatPage = () => {
 
   return (
     <div className="app-container">
+      <div className="chat-navbar-container">
       <TopNavbar
         isAuthenticated={isAuthenticated}
         onSignIn={handleSignIn}
@@ -141,6 +142,7 @@ const ChatPage = () => {
         onSignOut={handleSignOut}
         onNavigateTo={navigateTo}
       />
+      </div>
       <div className="chat-container">
         <ChatSidebar
           sidebarVisible={sidebarVisible}
