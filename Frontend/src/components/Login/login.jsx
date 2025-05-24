@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { MDBIcon } from "mdb-react-ui-kit";
 import { signInWithGoogle, signInWithMicrosoft } from "../firebase/firebase.js";
-import "./Login.css";
+import "./login.css";
 import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
