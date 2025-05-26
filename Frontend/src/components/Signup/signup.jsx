@@ -94,13 +94,54 @@ function Signup() {
 
     if (user) {
       console.log(`${provider} Logged-in User:`, user);
-      localStorage.setItem("user_token", user.accessToken);
-      navigate("/Chat");
+
+      const idToken = await user.getIdToken();
+
+      console.log(idToken)
+
+      const response = await fetch(`${API_ENDPOINT}/users/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firebase_token: idToken }),
+      });
+
+      const data = await response.json();
+
+      console.log("response")
+      console.log(response)
+      console.log("data")
+      console.log(data)
+
+      if (response.status === 201 || response.status === 200) {
+        localStorage.setItem("user_token", data.accessToken);
+        navigate("/Chat");
+      }
+      else {
+        alert(data.message || data.detail);
+      }
     }
     else {
-      alert(response.data.message || response.data.detail);
+      alert("User not Found. Retry.");
     }
   };
+
+  // const handleSocialLogin = async (provider) => {
+  //   let user;
+  //   if (provider === "google") {
+  //     user = await signInWithGoogle();
+  //   } else if (provider === "microsoft") {
+  //     user = await signInWithMicrosoft();
+  //   }
+
+  //   if (user) {
+  //     console.log(`${provider} Logged-in User:`, user);
+  //     localStorage.setItem("user_token", user.accessToken);
+  //     navigate("/Chat");
+  //   }
+  //   else {
+  //     alert(response.data.message || response.data.detail);
+  //   }
+  // };
 
   return (
     <div className="su-container">

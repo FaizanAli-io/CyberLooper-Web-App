@@ -38,20 +38,6 @@ const signInWithGoogle = async () => {
     const idToken = await result.user.getIdToken();
     console.log("Firebase ID Token:", idToken);
 
-    const response = await fetch(`${API_ENDPOINT}/users/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firebase_token: idToken }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      alert(data.detail || "Login failed. Please try again.");
-      return null;
-    }
-
-    console.log(response);
     return result.user;
   } catch (error) {
     console.error("Google Sign-In Error:", error);
@@ -70,20 +56,6 @@ const signInWithMicrosoft = async () => {
     const idToken = await result.user.getIdToken();
     console.log("Firebase ID Token:", idToken);
 
-    const response = await fetch(`${API_ENDPOINT}/users/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firebase_token: idToken }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      alert(data.detail || "Login failed. Please try again.");
-      return null;
-    }
-
-    console.log("Backend Response: ", await response.json());
     return result.user;
   } catch (error) {
     console.error("Microsoft Sign-In Error:", error);
