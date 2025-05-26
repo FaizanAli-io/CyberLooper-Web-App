@@ -35,12 +35,16 @@ function Login() {
         localStorage.setItem("user_token", response.data.accessToken);
         navigate("/Chat");
       }
+      else {
+        alert(response.data.message || response.data.detail);
+      }
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          err.response?.data?.detail ||
-          "Failed to log in. Please try again."
+        err.response?.data?.detail ||
+        "Failed to log in. Please try again."
       );
+      console.log("HI! Error occurred while logging in.")
     }
   };
 
@@ -56,6 +60,9 @@ function Login() {
       console.log(`${provider} Logged-in User:`, user);
       localStorage.setItem("user_token", user.accessToken);
       navigate("/Chat");
+    }
+    else {
+      alert(response.data.message || response.data.detail);
     }
   };
 

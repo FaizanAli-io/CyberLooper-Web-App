@@ -70,11 +70,14 @@ function Signup() {
         setMessage(response.data.message); // Show "check inbox" message
         navigate("/login");
       }
+      else {
+        alert(response.data.message || response.data.detail);
+      }
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          err.response?.data?.detail ||
-          "Failed to sign up. Please try again."
+        err.response?.data?.detail ||
+        "Failed to sign up. Please try again."
       );
     } finally {
       setLoading(false);
@@ -93,6 +96,9 @@ function Signup() {
       console.log(`${provider} Logged-in User:`, user);
       localStorage.setItem("user_token", user.accessToken);
       navigate("/Chat");
+    }
+    else {
+      alert(response.data.message || response.data.detail);
     }
   };
 
