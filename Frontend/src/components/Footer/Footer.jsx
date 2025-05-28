@@ -4,10 +4,24 @@ import logo from "../../assets/logos/Cyberlooper_Logo on Dark Color.png";
 
 const Footer = () => {
   const navigate = useNavigate();
-
+  
   const handleNavigation = (e, path) => {
     e.preventDefault();
+    
+    // Scroll to top immediately
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+    
+    // Navigate to the new page
     navigate(path);
+    
+    // Force scroll to top after navigation (backup)
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 100);
   };
 
   const mainLinks = [
@@ -67,7 +81,6 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
         <div className="footer-links">
           <div>
             <h3 className="footer-heading">Main Links</h3>
@@ -81,7 +94,6 @@ const Footer = () => {
               ))}
             </ul>
           </div>
-
           <div>
             <h3 className="footer-heading">User Links</h3>
             <ul className="footer-links-list">
@@ -95,7 +107,6 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-
         <div className="footer-terms">
           <h3 className="footer-heading">Terms and Policies</h3>
           <ul className="footer-terms-list">
@@ -113,9 +124,7 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-
       <div className="footer-divider" />
-
       <div className="footer-copyright">
         <p>Copyright ©2025 CYBERLOOPER All rights reserved.</p>
       </div>

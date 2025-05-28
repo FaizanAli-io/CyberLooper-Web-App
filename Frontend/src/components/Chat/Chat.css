@@ -620,6 +620,7 @@ body {
   }
 }
 
+
 @media (max-width: 576px) {
 
   .bot-bubble,
@@ -692,7 +693,7 @@ body {
 .send-button svg {
   width: 24px;
   height: 24px;
-  fill: #48484e;
+  fill: #28f68b;
 }
 
 .send-button:hover svg {
@@ -1892,7 +1893,6 @@ body {
 
   .chat-main {
     margin-top: 60px;
-    /* leaves space for hamburger button */
     padding: 15px;
   }
 }
@@ -2251,4 +2251,99 @@ body {
   align-items: center;
   justify-content: center;
 
+}
+
+/* iPhone Logo Fix - Specific to Chat Components */
+
+/* Chat Sidebar Logo Fixes for Mobile */
+@media (max-width: 576px) {
+  .chat-sidebar .sidebar-logo-section img,
+  .chat-sidebar .sidebar-logo img,
+  .chat-container .sidebar-logo-section img {
+    max-width: 100% !important;
+    max-height: 40px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+  
+  .chat-sidebar .sidebar-logo-section,
+  .chat-sidebar .sidebar-logo,
+  .chat-container .sidebar-logo-section {
+    max-width: 200px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+}
+
+/* Top Navbar Logo Fixes for Mobile */
+@media (max-width: 576px) {
+  .chat-navbar-container .nav-logo img,
+  .chat-navbar-container .navbar-logo img,
+  .app-container .nav-logo img {
+    max-width: 120px !important;
+    max-height: 35px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+  
+  .chat-navbar-container .nav-logo,
+  .chat-navbar-container .navbar-logo,
+  .app-container .nav-logo {
+    max-width: 150px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+}
+
+/* Specific iPhone Safari fixes for Chat Components */
+@media (max-width: 576px) and (-webkit-min-device-pixel-ratio: 2) {
+  .chat-sidebar .sidebar-logo-section img,
+  .chat-navbar-container .nav-logo img,
+  .chat-container .sidebar-logo-section img {
+    -webkit-transform: scale(1) !important;
+    transform: scale(1) !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+    max-width: 150px !important;
+    max-height: 35px !important;
+  }
+  
+  .chat-sidebar .sidebar-logo-section,
+  .chat-navbar-container .nav-logo,
+  .chat-container .sidebar-logo-section {
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
+    will-change: auto !important;
+  }
+}
+
+/* iPhone X and newer (with notch) specific fixes for Chat */
+@media (max-width: 576px) and (min-height: 812px) and (-webkit-min-device-pixel-ratio: 3) {
+  .chat-sidebar .sidebar-logo-section img,
+  .chat-navbar-container .nav-logo img {
+    max-height: 32px !important;
+    max-width: 140px !important;
+  }
+}
+
+/* iPhone SE and smaller screens for Chat Components */
+@media (max-width: 375px) {
+  .chat-sidebar .sidebar-logo-section img,
+  .chat-navbar-container .nav-logo img,
+  .chat-container .sidebar-logo-section img {
+    max-height: 28px !important;
+    max-width: 120px !important;
+  }
+  
+  .chat-sidebar .sidebar-logo-section,
+  .chat-container .sidebar-logo-section {
+    padding: 10px 8px !important;
+  }
 }
